@@ -1,0 +1,19 @@
+# claim-audit fetch log, started 2026-09-23T11:44:16+08:00
+2026-09-23T11:44:17+08:00 GET crossref 10.1109/TDSC.2025.3565229 -> crossref_10.1109_TDSC.2025.3565229.json 9832B
+2026-09-23T11:44:17+08:00 GET crossref 10.1109/ACCESS.2025.3547641 -> crossref_10.1109_ACCESS.2025.3547641.json 14620B
+2026-09-23T11:44:18+08:00 GET crossref 10.1109/ACCESS.2025.3528575 -> crossref_10.1109_ACCESS.2025.3528575.json 7395B
+2026-09-23T11:44:19+08:00 GET crossref 10.1109/IEMENTech202669403.2026.11434122 -> crossref_10.1109_IEMENTech202669403.2026.11434122.json 8643B
+2026-09-23T11:44:19+08:00 GET crossref 10.1109/TPDS.2026.3729256 -> crossref_10.1109_TPDS.2026.3729256.json 4119B
+2026-09-23T11:44:22+08:00 GET crossref query 'Understanding Users' Privacy Perceptions Towards LLM's RAG-based Memory' -> crossref_q_1353bac2.json 30862B
+2026-09-23T11:44:24+08:00 GET crossref query 'The Emerged Security and Privacy of LLM Agent: A Survey with Case Studies' -> crossref_q_1267a6be.json 43666B
+2026-09-23T11:44:26+08:00 GET crossref query 'What is the patient re-identification risk from using de-identified clinical free text data for health research' -> crossref_q_c4327617.json 48070B
+2026-09-23T11:44:28+08:00 GET crossref query 'A Survey on Small Language Models in the Era of Large Language Models: Architecture, Capabilities, and Trustworthiness' -> crossref_q_c5752fb1.json 77699B
+2026-09-23T11:44:30+08:00 GET crossref query 'Fast Collaborative Inference via Distributed Speculative Decoding' -> crossref_q_7c1669c8.json 19442B
+2026-09-23T11:44:31+08:00 GET crossref query 'ICL-Router: In-Context Learned Model Representations for LLM Routing' -> crossref_q_73f61ad9.json 11201B
+2026-09-23T11:44:40+08:00 GET https://arxiv.org/html/2406.18665v4 -> arxiv.org_html_2406.18665v4.html 235142B
+2026-09-23T11:44:47+08:00 GET https://arxiv.org/html/2506.16655v1 -> arxiv.org_html_2506.16655v1.html 202039B
+2026-09-23T11:44:48+08:00 GET https://export.arxiv.org/abs/2310.09130 -> export.arxiv.org_abs_2310.09130.html 42526B
+2026-09-23T11:44:48+08:00 GET https://export.arxiv.org/abs/2411.04368 -> export.arxiv.org_abs_2411.04368.html 41055B
+2026-09-23T11:44:50+08:00 GET https://edenlab.io/blog/hipaa-compliant-ai-best-practices -> edenlab.io_blog_hipaa-compliant-ai-best-practices.html 391034B
+2026-09-23T11:45:17+08:00 GET openalex doi:10.1016/j.jiixd.2025.12.008 -> openalex_10.1016_j.jiixd.2025.12.008.json 16134B
+2026-09-23T11:45:17+08:00 GET openalex doi:10.1109/TPDS.2026.3729256 -> openalex_10.1109_TPDS.2026.3729256.json 8984B
