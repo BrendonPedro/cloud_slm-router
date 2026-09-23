@@ -1,0 +1,62 @@
+# iteration 13, 2026-09-23T03:40:42Z
+2026-09-23T03:40:43Z https://api.github.com/repos/lm-sys/RouteLLM -> gh_lm-sys_RouteLLM.json
+2026-09-23T03:40:43Z https://api.github.com/repos/hao-ai-lab/JacobiForcing -> gh_hao-ai-lab_JacobiForcing.json
+2026-09-23T03:40:44Z https://api.github.com/repos/ynulihao/LLMRouterBench -> gh_ynulihao_LLMRouterBench.json
+2026-09-23T03:40:44Z https://api.github.com/repos/lalalamdbf/ICL-Router -> gh_lalalamdbf_ICL-Router.json
+2026-09-23T03:40:44Z https://api.github.com/repos/Mercidaiha/IRT-Router -> gh_Mercidaiha_IRT-Router.json
+2026-09-23T03:40:45Z https://api.github.com/repos/katanemo/archgw -> gh_katanemo_archgw.json
+2026-09-23T03:40:46Z https://api.github.com/repos/microsoft/best-route-llm -> gh_microsoft_best-route-llm.json
+2026-09-23T03:40:46Z https://api.github.com/repos/openai/simple-evals -> gh_openai_simple-evals.json
+2026-09-23T03:40:46Z https://api.github.com/repos/ML-GSAI/LLaDA -> gh_ML-GSAI_LLaDA.json
+2026-09-23T03:40:47Z https://api.github.com/repos/inclusionAI/LLaDA-MoE -> gh_inclusionAI_LLaDA-MoE.json
+2026-09-23T03:40:47Z https://api.github.com/repos/HKUNLP/Dream -> gh_HKUNLP_Dream.json
+2026-09-23T03:40:48Z https://api.github.com/repos/NVlabs/Fast-dLLM -> gh_NVlabs_Fast-dLLM.json
+2026-09-23T03:40:48Z https://api.github.com/repos/hao-ai-lab/Consistency_LLM -> gh_hao-ai-lab_Consistency_LLM.json
+2026-09-23T03:40:49Z https://api.github.com/repos/NiuTrans/LMT -> gh_NiuTrans_LMT.json
+2026-09-23T03:40:55Z https://huggingface.co/api/models?search=gemma-4&limit=15&sort=downloads -> hf_search_gemma-4.json
+2026-09-23T03:40:55Z https://huggingface.co/api/models?search=Nemotron-3-Nano&limit=15&sort=downloads -> hf_search_Nemotron-3-Nano.json
+2026-09-23T03:40:55Z https://huggingface.co/api/models?search=LLaDA-MoE&limit=15&sort=downloads -> hf_search_LLaDA-MoE.json
+2026-09-23T03:40:55Z https://huggingface.co/api/models?search=Fast_dLLM_v2&limit=15&sort=downloads -> hf_search_Fast_dLLM_v2.json
+2026-09-23T03:40:56Z https://huggingface.co/api/models?search=Dream-v0-Instruct&limit=15&sort=downloads -> hf_search_Dream-v0-Instruct.json
+2026-09-23T03:40:56Z https://huggingface.co/api/models?search=Phi-4-mini&limit=15&sort=downloads -> hf_search_Phi-4-mini.json
+2026-09-23T03:40:56Z https://huggingface.co/api/models?search=Llama-3.3-70B-Instruct&limit=15&sort=downloads -> hf_search_Llama-3.3-70B-Instruct.json
+2026-09-23T03:40:57Z https://huggingface.co/api/models?search=Qwen3-72B&limit=15&sort=downloads -> hf_search_Qwen3-72B.json
+2026-09-23T03:40:57Z https://huggingface.co/api/models?search=JacobiForcing&limit=15&sort=downloads -> hf_search_JacobiForcing.json
+2026-09-23T03:41:05Z https://huggingface.co/api/models?author=Qwen&search=72B&limit=50 -> hf_search_Qwen_author_72B.json
+2026-09-23T03:41:06Z https://huggingface.co/api/models/google/gemma-4-E2B-it -> hf_model_google_gemma-4-E2B-it.json
+2026-09-23T03:41:06Z https://huggingface.co/api/models/google/gemma-4-E4B-it -> hf_model_google_gemma-4-E4B-it.json
+2026-09-23T03:41:06Z https://huggingface.co/api/models/google/gemma-4-12B-it -> hf_model_google_gemma-4-12B-it.json
+2026-09-23T03:41:06Z https://huggingface.co/api/models/google/gemma-4-26B-A4B-it -> hf_model_google_gemma-4-26B-A4B-it.json
+2026-09-23T03:41:07Z https://huggingface.co/api/models/microsoft/Phi-4-mini-instruct -> hf_model_microsoft_Phi-4-mini-instruct.json
+2026-09-23T03:41:07Z https://huggingface.co/api/models/meta-llama/Llama-3.3-70B-Instruct -> hf_model_meta-llama_Llama-3.3-70B-Instruct.json
+2026-09-23T03:41:07Z https://huggingface.co/api/models/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 -> hf_model_nvidia_NVIDIA-Nemotron-3-Nano-30B-A3B-BF16.json
+2026-09-23T03:41:08Z https://huggingface.co/api/models/inclusionAI/LLaDA-MoE-7B-A1B-Instruct -> hf_model_inclusionAI_LLaDA-MoE-7B-A1B-Instruct.json
+2026-09-23T03:41:08Z https://huggingface.co/api/models/Dream-org/Dream-v0-Instruct-7B -> hf_model_Dream-org_Dream-v0-Instruct-7B.json
+2026-09-23T03:41:08Z https://huggingface.co/api/models/Efficient-Large-Model/Fast_dLLM_v2_7B -> hf_model_Efficient-Large-Model_Fast_dLLM_v2_7B.json
+2026-09-23T03:41:08Z https://huggingface.co/api/models/JacobiForcing/JacobiForcing_Coder_7B_v1 -> hf_model_JacobiForcing_JacobiForcing_Coder_7B_v1.json
+2026-09-23T03:41:09Z https://huggingface.co/api/models/JacobiForcing/JacobiForcing_Math_7B_v1 -> hf_model_JacobiForcing_JacobiForcing_Math_7B_v1.json
+2026-09-23T03:41:09Z https://huggingface.co/api/models/Qwen/Qwen3-235B-A22B-Instruct-2507 -> hf_model_Qwen_Qwen3-235B-A22B-Instruct-2507.json
+2026-09-23T03:41:09Z https://huggingface.co/api/models/Qwen/Qwen2.5-72B-Instruct -> hf_model_Qwen_Qwen2.5-72B-Instruct.json
+2026-09-23T03:41:09Z https://huggingface.co/api/models/Qwen/Qwen3-32B -> hf_model_Qwen_Qwen3-32B.json
+2026-09-23T03:41:18Z https://api.github.com/repos/ynulihao/LLMRouterBench/contents -> gh_contents_ynulihao_LLMRouterBench.json
+2026-09-23T03:41:18Z https://api.github.com/repos/lalalamdbf/ICL-Router/contents -> gh_contents_lalalamdbf_ICL-Router.json
+2026-09-23T03:41:19Z https://api.github.com/repos/Mercidaiha/IRT-Router/contents -> gh_contents_Mercidaiha_IRT-Router.json
+2026-09-23T03:41:19Z https://api.github.com/repos/ML-GSAI/LLaDA/contents -> gh_contents_ML-GSAI_LLaDA.json
+2026-09-23T03:41:19Z https://api.github.com/repos/NiuTrans/LMT/contents -> gh_contents_NiuTrans_LMT.json
+2026-09-23T03:41:20Z https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents -> gh_contents_hao-ai-lab_JacobiForcing.json
+2026-09-23T03:41:20Z https://api.github.com/repos/lm-sys/RouteLLM/contents -> gh_contents_lm-sys_RouteLLM.json
+2026-09-23T03:41:27Z https://api.github.com/repos/lm-sys/RouteLLM/readme (raw) -> readme_lm-sys_RouteLLM.md 14103
+2026-09-23T03:41:27Z https://api.github.com/repos/hao-ai-lab/JacobiForcing/readme (raw) -> readme_hao-ai-lab_JacobiForcing.md 14294
+2026-09-23T03:41:28Z https://api.github.com/repos/lalalamdbf/ICL-Router/readme (raw) -> readme_lalalamdbf_ICL-Router.md 2653
+2026-09-23T03:41:28Z https://api.github.com/repos/Mercidaiha/IRT-Router/readme (raw) -> readme_Mercidaiha_IRT-Router.md 862
+2026-09-23T03:41:29Z https://api.github.com/repos/openai/simple-evals/readme (raw) -> readme_openai_simple-evals.md 13160
+2026-09-23T03:41:29Z https://api.github.com/repos/NVlabs/Fast-dLLM/readme (raw) -> readme_NVlabs_Fast-dLLM.md 10926
+2026-09-23T03:41:30Z https://api.github.com/repos/DreamLM/Dream/readme (raw) -> readme_DreamLM_Dream.md 7465
+2026-09-23T03:41:30Z https://api.github.com/repos/ML-GSAI/LLaDA/readme (raw) -> readme_ML-GSAI_LLaDA.md 12163
+2026-09-23T03:41:30Z https://api.github.com/repos/NiuTrans/LMT/readme (raw) -> readme_NiuTrans_LMT.md 8200
+2026-09-23T03:41:31Z https://api.github.com/repos/katanemo/plano/readme (raw) -> readme_katanemo_plano.md 9871
+2026-09-23T03:41:31Z https://api.github.com/repos/microsoft/best-route-llm/readme (raw) -> readme_microsoft_best-route-llm.md 9928
+2026-09-23T03:41:38Z https://raw.githubusercontent.com/openai/simple-evals/main/simpleqa_eval.py -> simpleqa_eval.py
+2026-09-23T03:41:44Z https://api.github.com/repos/NiuTrans/LMT/git/trees/HEAD?recursive=1 -> gh_tree_NiuTrans_LMT.json
+2026-09-23T03:41:55Z host check: 'which uv pipx conda nvidia-smi' -> none found; 'python3 -m venv /tmp/vtest' -> rc=1 (ensurepip not available; needs apt python3.12-venv); 'import torch' -> ModuleNotFoundError
+2026-09-23T03:43:13Z https://api.github.com/repos/idavidrein/gpqa/readme (raw) -> readme_idavidrein_gpqa.md

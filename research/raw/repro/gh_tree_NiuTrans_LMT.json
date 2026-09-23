@@ -1,0 +1,100 @@
+{
+  "sha": "d87c68a65377814827427a36645905b0bd227431",
+  "url": "https://api.github.com/repos/NiuTrans/LMT/git/trees/d87c68a65377814827427a36645905b0bd227431",
+  "tree": [
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79eb58fa9bc4d671a545be0a7f27e6fdf1bae30e",
+      "size": 8200,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/79eb58fa9bc4d671a545be0a7f27e6fdf1bae30e"
+    },
+    {
+      "path": "data",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3eaf956ccef834a1909cf37929b188b40af7a92d",
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/trees/3eaf956ccef834a1909cf37929b188b40af7a92d"
+    },
+    {
+      "path": "data/flores_mvf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2537c1bb5403b93ba0b9d89203a132cee409d2b7",
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/trees/2537c1bb5403b93ba0b9d89203a132cee409d2b7"
+    },
+    {
+      "path": "data/flores_mvf/flores.dev.en",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "54b13561f8f3b11c1f72a5837eeb2b6bd1d3fe12",
+      "size": 126287,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/54b13561f8f3b11c1f72a5837eeb2b6bd1d3fe12"
+    },
+    {
+      "path": "data/flores_mvf/flores.dev.mvf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ded06c946975e4fa7aab9a15eeaba1c300ed9a16",
+      "size": 510256,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/ded06c946975e4fa7aab9a15eeaba1c300ed9a16"
+    },
+    {
+      "path": "data/flores_mvf/flores.dev.zh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00167b0ca3ceb0426a247730e5de1a0826773140",
+      "size": 118256,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/00167b0ca3ceb0426a247730e5de1a0826773140"
+    },
+    {
+      "path": "data/flores_mvf/flores.devtest.en",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11140fb3efb291dae0d5778f3d559950f9c79152",
+      "size": 133108,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/11140fb3efb291dae0d5778f3d559950f9c79152"
+    },
+    {
+      "path": "data/flores_mvf/flores.devtest.mvf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a8cee660e4a699354f6c066abe580edb4e30b047",
+      "size": 528896,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/a8cee660e4a699354f6c066abe580edb4e30b047"
+    },
+    {
+      "path": "data/flores_mvf/flores.devtest.zh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "941563d383bb828c7c21328b3b8478d79fe9f718",
+      "size": 121818,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/941563d383bb828c7c21328b3b8478d79fe9f718"
+    },
+    {
+      "path": "src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fe3e262fef6595953ccf4f3a41eece5fb0c894e2",
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/trees/fe3e262fef6595953ccf4f3a41eece5fb0c894e2"
+    },
+    {
+      "path": "src/inference.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e6e72b59f304f526e7c8bcada8f4f82ef3ccc5b7",
+      "size": 5125,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/e6e72b59f304f526e7c8bcada8f4f82ef3ccc5b7"
+    },
+    {
+      "path": "src/utils.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d555cbca37b04fc14fed60e5237b4df688bc0d8",
+      "size": 2485,
+      "url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/9d555cbca37b04fc14fed60e5237b4df688bc0d8"
+    }
+  ],
+  "truncated": false
+}

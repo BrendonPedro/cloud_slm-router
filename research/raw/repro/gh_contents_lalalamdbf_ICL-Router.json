@@ -1,0 +1,162 @@
+[
+  {
+    "name": ".gitignore",
+    "path": ".gitignore",
+    "sha": "3a2aa483ab6ee82dc0034cfff770a1211d0571a9",
+    "size": 35,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/.gitignore?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/blob/main/.gitignore",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/3a2aa483ab6ee82dc0034cfff770a1211d0571a9",
+    "download_url": "https://raw.githubusercontent.com/lalalamdbf/ICL-Router/main/.gitignore",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/.gitignore?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/3a2aa483ab6ee82dc0034cfff770a1211d0571a9",
+      "html": "https://github.com/lalalamdbf/ICL-Router/blob/main/.gitignore"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "9b83250f222dc066779a84f682060ed8ecbbf3b5",
+    "size": 2653,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/README.md?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/9b83250f222dc066779a84f682060ed8ecbbf3b5",
+    "download_url": "https://raw.githubusercontent.com/lalalamdbf/ICL-Router/main/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/9b83250f222dc066779a84f682060ed8ecbbf3b5",
+      "html": "https://github.com/lalalamdbf/ICL-Router/blob/main/README.md"
+    }
+  },
+  {
+    "name": "data",
+    "path": "data",
+    "sha": "d564d0bc3dd917926892c55e3706cc116d5b165e",
+    "size": 0,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/data?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/tree/main/data",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/trees/d564d0bc3dd917926892c55e3706cc116d5b165e",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/data?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/trees/d564d0bc3dd917926892c55e3706cc116d5b165e",
+      "html": "https://github.com/lalalamdbf/ICL-Router/tree/main/data"
+    }
+  },
+  {
+    "name": "figures",
+    "path": "figures",
+    "sha": "cc875dce06d40cf88fa0667a7db566189300e325",
+    "size": 0,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/figures?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/tree/main/figures",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/trees/cc875dce06d40cf88fa0667a7db566189300e325",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/figures?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/trees/cc875dce06d40cf88fa0667a7db566189300e325",
+      "html": "https://github.com/lalalamdbf/ICL-Router/tree/main/figures"
+    }
+  },
+  {
+    "name": "generate_experts_information.py",
+    "path": "generate_experts_information.py",
+    "sha": "d17e6a0d2b98d9811d0749e0f151271069a16963",
+    "size": 8721,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/generate_experts_information.py?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/blob/main/generate_experts_information.py",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/d17e6a0d2b98d9811d0749e0f151271069a16963",
+    "download_url": "https://raw.githubusercontent.com/lalalamdbf/ICL-Router/main/generate_experts_information.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/generate_experts_information.py?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/d17e6a0d2b98d9811d0749e0f151271069a16963",
+      "html": "https://github.com/lalalamdbf/ICL-Router/blob/main/generate_experts_information.py"
+    }
+  },
+  {
+    "name": "icl_stage1_query_rec_training.py",
+    "path": "icl_stage1_query_rec_training.py",
+    "sha": "6997b7fddf450df200180f747e336897ae9677d3",
+    "size": 31207,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/icl_stage1_query_rec_training.py?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/blob/main/icl_stage1_query_rec_training.py",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/6997b7fddf450df200180f747e336897ae9677d3",
+    "download_url": "https://raw.githubusercontent.com/lalalamdbf/ICL-Router/main/icl_stage1_query_rec_training.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/icl_stage1_query_rec_training.py?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/6997b7fddf450df200180f747e336897ae9677d3",
+      "html": "https://github.com/lalalamdbf/ICL-Router/blob/main/icl_stage1_query_rec_training.py"
+    }
+  },
+  {
+    "name": "icl_stage2_routing_training.py",
+    "path": "icl_stage2_routing_training.py",
+    "sha": "5b041b13d8dd55c5e1b3b56589115fe34ded656b",
+    "size": 29900,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/icl_stage2_routing_training.py?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/blob/main/icl_stage2_routing_training.py",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/5b041b13d8dd55c5e1b3b56589115fe34ded656b",
+    "download_url": "https://raw.githubusercontent.com/lalalamdbf/ICL-Router/main/icl_stage2_routing_training.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/icl_stage2_routing_training.py?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/5b041b13d8dd55c5e1b3b56589115fe34ded656b",
+      "html": "https://github.com/lalalamdbf/ICL-Router/blob/main/icl_stage2_routing_training.py"
+    }
+  },
+  {
+    "name": "modeling_projector.py",
+    "path": "modeling_projector.py",
+    "sha": "da4f57b1965159585179b8e8fedafe9d8edfeaa5",
+    "size": 4576,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/modeling_projector.py?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/blob/main/modeling_projector.py",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/da4f57b1965159585179b8e8fedafe9d8edfeaa5",
+    "download_url": "https://raw.githubusercontent.com/lalalamdbf/ICL-Router/main/modeling_projector.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/modeling_projector.py?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/da4f57b1965159585179b8e8fedafe9d8edfeaa5",
+      "html": "https://github.com/lalalamdbf/ICL-Router/blob/main/modeling_projector.py"
+    }
+  },
+  {
+    "name": "requirements.txt",
+    "path": "requirements.txt",
+    "sha": "cf597a70c61f15a15f2c0a7e3d9596d9700eff89",
+    "size": 186,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/requirements.txt?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/blob/main/requirements.txt",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/cf597a70c61f15a15f2c0a7e3d9596d9700eff89",
+    "download_url": "https://raw.githubusercontent.com/lalalamdbf/ICL-Router/main/requirements.txt",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/requirements.txt?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/blobs/cf597a70c61f15a15f2c0a7e3d9596d9700eff89",
+      "html": "https://github.com/lalalamdbf/ICL-Router/blob/main/requirements.txt"
+    }
+  },
+  {
+    "name": "scripts",
+    "path": "scripts",
+    "sha": "a8e2bd54079a8951f52e328a16ffe10fc3cae506",
+    "size": 0,
+    "url": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/scripts?ref=main",
+    "html_url": "https://github.com/lalalamdbf/ICL-Router/tree/main/scripts",
+    "git_url": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/trees/a8e2bd54079a8951f52e328a16ffe10fc3cae506",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/lalalamdbf/ICL-Router/contents/scripts?ref=main",
+      "git": "https://api.github.com/repos/lalalamdbf/ICL-Router/git/trees/a8e2bd54079a8951f52e328a16ffe10fc3cae506",
+      "html": "https://github.com/lalalamdbf/ICL-Router/tree/main/scripts"
+    }
+  }
+]

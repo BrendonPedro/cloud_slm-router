@@ -1,0 +1,50 @@
+[
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "79eb58fa9bc4d671a545be0a7f27e6fdf1bae30e",
+    "size": 8200,
+    "url": "https://api.github.com/repos/NiuTrans/LMT/contents/README.md?ref=main",
+    "html_url": "https://github.com/NiuTrans/LMT/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/79eb58fa9bc4d671a545be0a7f27e6fdf1bae30e",
+    "download_url": "https://raw.githubusercontent.com/NiuTrans/LMT/main/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/NiuTrans/LMT/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/NiuTrans/LMT/git/blobs/79eb58fa9bc4d671a545be0a7f27e6fdf1bae30e",
+      "html": "https://github.com/NiuTrans/LMT/blob/main/README.md"
+    }
+  },
+  {
+    "name": "data",
+    "path": "data",
+    "sha": "3eaf956ccef834a1909cf37929b188b40af7a92d",
+    "size": 0,
+    "url": "https://api.github.com/repos/NiuTrans/LMT/contents/data?ref=main",
+    "html_url": "https://github.com/NiuTrans/LMT/tree/main/data",
+    "git_url": "https://api.github.com/repos/NiuTrans/LMT/git/trees/3eaf956ccef834a1909cf37929b188b40af7a92d",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/NiuTrans/LMT/contents/data?ref=main",
+      "git": "https://api.github.com/repos/NiuTrans/LMT/git/trees/3eaf956ccef834a1909cf37929b188b40af7a92d",
+      "html": "https://github.com/NiuTrans/LMT/tree/main/data"
+    }
+  },
+  {
+    "name": "src",
+    "path": "src",
+    "sha": "fe3e262fef6595953ccf4f3a41eece5fb0c894e2",
+    "size": 0,
+    "url": "https://api.github.com/repos/NiuTrans/LMT/contents/src?ref=main",
+    "html_url": "https://github.com/NiuTrans/LMT/tree/main/src",
+    "git_url": "https://api.github.com/repos/NiuTrans/LMT/git/trees/fe3e262fef6595953ccf4f3a41eece5fb0c894e2",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/NiuTrans/LMT/contents/src?ref=main",
+      "git": "https://api.github.com/repos/NiuTrans/LMT/git/trees/fe3e262fef6595953ccf4f3a41eece5fb0c894e2",
+      "html": "https://github.com/NiuTrans/LMT/tree/main/src"
+    }
+  }
+]

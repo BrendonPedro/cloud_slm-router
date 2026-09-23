@@ -1,0 +1,162 @@
+[
+  {
+    "name": ".gitignore",
+    "path": ".gitignore",
+    "sha": "e7fc63ab9fee4efe16588c8f7afe51a908339518",
+    "size": 135,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/.gitignore?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/blob/main/.gitignore",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/blobs/e7fc63ab9fee4efe16588c8f7afe51a908339518",
+    "download_url": "https://raw.githubusercontent.com/hao-ai-lab/JacobiForcing/main/.gitignore",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/.gitignore?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/blobs/e7fc63ab9fee4efe16588c8f7afe51a908339518",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/blob/main/.gitignore"
+    }
+  },
+  {
+    "name": "JacobiForcing",
+    "path": "JacobiForcing",
+    "sha": "0c631d68d8f9a88519597737f60b6efd2c323f79",
+    "size": 0,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/JacobiForcing?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/JacobiForcing",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/0c631d68d8f9a88519597737f60b6efd2c323f79",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/JacobiForcing?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/0c631d68d8f9a88519597737f60b6efd2c323f79",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/JacobiForcing"
+    }
+  },
+  {
+    "name": "LICENSE",
+    "path": "LICENSE",
+    "sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+    "size": 11357,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/LICENSE?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/blob/main/LICENSE",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+    "download_url": "https://raw.githubusercontent.com/hao-ai-lab/JacobiForcing/main/LICENSE",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/LICENSE?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/blob/main/LICENSE"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "3892c991b5a4ac0bd504f978c4c93bf55089b143",
+    "size": 14294,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/README.md?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/blobs/3892c991b5a4ac0bd504f978c4c93bf55089b143",
+    "download_url": "https://raw.githubusercontent.com/hao-ai-lab/JacobiForcing/main/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/blobs/3892c991b5a4ac0bd504f978c4c93bf55089b143",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/blob/main/README.md"
+    }
+  },
+  {
+    "name": "applications",
+    "path": "applications",
+    "sha": "4230d7559fd57a2c648b0feaacb76b71fa3a2d8c",
+    "size": 0,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/applications?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/applications",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/4230d7559fd57a2c648b0feaacb76b71fa3a2d8c",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/applications?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/4230d7559fd57a2c648b0feaacb76b71fa3a2d8c",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/applications"
+    }
+  },
+  {
+    "name": "assets",
+    "path": "assets",
+    "sha": "225eb901a20693040d17f378cb6a62be6006007f",
+    "size": 0,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/assets?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/assets",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/225eb901a20693040d17f378cb6a62be6006007f",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/assets?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/225eb901a20693040d17f378cb6a62be6006007f",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/assets"
+    }
+  },
+  {
+    "name": "generate_trajectory",
+    "path": "generate_trajectory",
+    "sha": "77621b25d1447257bedec8787fdfa4b0dc73c3e9",
+    "size": 0,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/generate_trajectory?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/generate_trajectory",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/77621b25d1447257bedec8787fdfa4b0dc73c3e9",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/generate_trajectory?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/77621b25d1447257bedec8787fdfa4b0dc73c3e9",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/generate_trajectory"
+    }
+  },
+  {
+    "name": "inference_engine",
+    "path": "inference_engine",
+    "sha": "331eabd5713dee9071c634b99054a400b9e724ee",
+    "size": 0,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/inference_engine?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/inference_engine",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/331eabd5713dee9071c634b99054a400b9e724ee",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/inference_engine?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/331eabd5713dee9071c634b99054a400b9e724ee",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/inference_engine"
+    }
+  },
+  {
+    "name": "modeling",
+    "path": "modeling",
+    "sha": "4fe4cd82327e22f428f41327cfe1c84690f90407",
+    "size": 0,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/modeling?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/modeling",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/4fe4cd82327e22f428f41327cfe1c84690f90407",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/modeling?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/trees/4fe4cd82327e22f428f41327cfe1c84690f90407",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/tree/main/modeling"
+    }
+  },
+  {
+    "name": "requirements.txt",
+    "path": "requirements.txt",
+    "sha": "2b0a21784105a162dc83feed8e7f3eb2549a9f69",
+    "size": 2003,
+    "url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/requirements.txt?ref=main",
+    "html_url": "https://github.com/hao-ai-lab/JacobiForcing/blob/main/requirements.txt",
+    "git_url": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/blobs/2b0a21784105a162dc83feed8e7f3eb2549a9f69",
+    "download_url": "https://raw.githubusercontent.com/hao-ai-lab/JacobiForcing/main/requirements.txt",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/contents/requirements.txt?ref=main",
+      "git": "https://api.github.com/repos/hao-ai-lab/JacobiForcing/git/blobs/2b0a21784105a162dc83feed8e7f3eb2549a9f69",
+      "html": "https://github.com/hao-ai-lab/JacobiForcing/blob/main/requirements.txt"
+    }
+  }
+]

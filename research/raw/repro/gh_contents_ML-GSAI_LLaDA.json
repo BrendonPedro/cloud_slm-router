@@ -1,0 +1,290 @@
+[
+  {
+    "name": "EVAL.md",
+    "path": "EVAL.md",
+    "sha": "21875cdb8b231cf107820fec1c08500a6975ab8c",
+    "size": 8457,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/EVAL.md?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/EVAL.md",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/21875cdb8b231cf107820fec1c08500a6975ab8c",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/EVAL.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/EVAL.md?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/21875cdb8b231cf107820fec1c08500a6975ab8c",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/EVAL.md"
+    }
+  },
+  {
+    "name": "GUIDELINES.md",
+    "path": "GUIDELINES.md",
+    "sha": "840d42e6746e6ca6391b310f67e399e5f80530d7",
+    "size": 4068,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/GUIDELINES.md?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/GUIDELINES.md",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/840d42e6746e6ca6391b310f67e399e5f80530d7",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/GUIDELINES.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/GUIDELINES.md?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/840d42e6746e6ca6391b310f67e399e5f80530d7",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/GUIDELINES.md"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "825d909e2437751c032b64a5e2990cd3f68e2571",
+    "size": 12163,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/README.md?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/825d909e2437751c032b64a5e2990cd3f68e2571",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/825d909e2437751c032b64a5e2990cd3f68e2571",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/README.md"
+    }
+  },
+  {
+    "name": "app.py",
+    "path": "app.py",
+    "sha": "1e4bc5fe5b07c3a11862b2babdc70fe665ee7dea",
+    "size": 20570,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/app.py?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/app.py",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/1e4bc5fe5b07c3a11862b2babdc70fe665ee7dea",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/app.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/app.py?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/1e4bc5fe5b07c3a11862b2babdc70fe665ee7dea",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/app.py"
+    }
+  },
+  {
+    "name": "chat.py",
+    "path": "chat.py",
+    "sha": "dd4eff49583c5b16b065c7caba651a4d51d79a8a",
+    "size": 1559,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/chat.py?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/chat.py",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/dd4eff49583c5b16b065c7caba651a4d51d79a8a",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/chat.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/chat.py?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/dd4eff49583c5b16b065c7caba651a4d51d79a8a",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/chat.py"
+    }
+  },
+  {
+    "name": "data",
+    "path": "data",
+    "sha": "0dd96984543b00204c8d3abddf3877ed1642c4ac",
+    "size": 0,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/data?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/tree/main/data",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/0dd96984543b00204c8d3abddf3877ed1642c4ac",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/data?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/0dd96984543b00204c8d3abddf3877ed1642c4ac",
+      "html": "https://github.com/ML-GSAI/LLaDA/tree/main/data"
+    }
+  },
+  {
+    "name": "eval_illada.py",
+    "path": "eval_illada.py",
+    "sha": "e2c43f3498693ee3f77dcaaecb4ac012fb2ccc50",
+    "size": 16643,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_illada.py?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_illada.py",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/e2c43f3498693ee3f77dcaaecb4ac012fb2ccc50",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/eval_illada.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_illada.py?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/e2c43f3498693ee3f77dcaaecb4ac012fb2ccc50",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_illada.py"
+    }
+  },
+  {
+    "name": "eval_illada.sh",
+    "path": "eval_illada.sh",
+    "sha": "ed365530013c8bbef75fc35dffbad817062ac2d0",
+    "size": 5969,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_illada.sh?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_illada.sh",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/ed365530013c8bbef75fc35dffbad817062ac2d0",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/eval_illada.sh",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_illada.sh?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/ed365530013c8bbef75fc35dffbad817062ac2d0",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_illada.sh"
+    }
+  },
+  {
+    "name": "eval_instruct",
+    "path": "eval_instruct",
+    "sha": "2e511f6c214d98151c479652e3ce0e4d623a1679",
+    "size": 0,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_instruct?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/tree/main/eval_instruct",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/2e511f6c214d98151c479652e3ce0e4d623a1679",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_instruct?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/2e511f6c214d98151c479652e3ce0e4d623a1679",
+      "html": "https://github.com/ML-GSAI/LLaDA/tree/main/eval_instruct"
+    }
+  },
+  {
+    "name": "eval_llada.py",
+    "path": "eval_llada.py",
+    "sha": "9e2a9a70e81de906121510c8aa6ebb70c3d84872",
+    "size": 10723,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_llada.py?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_llada.py",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/9e2a9a70e81de906121510c8aa6ebb70c3d84872",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/eval_llada.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_llada.py?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/9e2a9a70e81de906121510c8aa6ebb70c3d84872",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_llada.py"
+    }
+  },
+  {
+    "name": "eval_llada_lm_eval.sh",
+    "path": "eval_llada_lm_eval.sh",
+    "sha": "7fb552bc0ab727925a13e2ef3aac97da252bfd8e",
+    "size": 2981,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_llada_lm_eval.sh?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_llada_lm_eval.sh",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/7fb552bc0ab727925a13e2ef3aac97da252bfd8e",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/eval_llada_lm_eval.sh",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_llada_lm_eval.sh?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/7fb552bc0ab727925a13e2ef3aac97da252bfd8e",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_llada_lm_eval.sh"
+    }
+  },
+  {
+    "name": "eval_llada_opencompass.sh",
+    "path": "eval_llada_opencompass.sh",
+    "sha": "a76f79d36cc4216c9eacf0c0d95476e6d84e1543",
+    "size": 3307,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_llada_opencompass.sh?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_llada_opencompass.sh",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/a76f79d36cc4216c9eacf0c0d95476e6d84e1543",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/eval_llada_opencompass.sh",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_llada_opencompass.sh?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/a76f79d36cc4216c9eacf0c0d95476e6d84e1543",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_llada_opencompass.sh"
+    }
+  },
+  {
+    "name": "eval_reverse.py",
+    "path": "eval_reverse.py",
+    "sha": "062cdcd91fefac971360f96ebe8fb85227bbe05f",
+    "size": 2533,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_reverse.py?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_reverse.py",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/062cdcd91fefac971360f96ebe8fb85227bbe05f",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/eval_reverse.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/eval_reverse.py?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/062cdcd91fefac971360f96ebe8fb85227bbe05f",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/eval_reverse.py"
+    }
+  },
+  {
+    "name": "generate.py",
+    "path": "generate.py",
+    "sha": "4a0081d605e9102d2e1ae3f8403f06a35f8e4860",
+    "size": 12091,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/generate.py?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/generate.py",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/4a0081d605e9102d2e1ae3f8403f06a35f8e4860",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/generate.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/generate.py?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/4a0081d605e9102d2e1ae3f8403f06a35f8e4860",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/generate.py"
+    }
+  },
+  {
+    "name": "get_log_likelihood.py",
+    "path": "get_log_likelihood.py",
+    "sha": "22f9e1d9e53cea0d57cecfc7014bc04153837ffd",
+    "size": 3670,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/get_log_likelihood.py?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/blob/main/get_log_likelihood.py",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/22f9e1d9e53cea0d57cecfc7014bc04153837ffd",
+    "download_url": "https://raw.githubusercontent.com/ML-GSAI/LLaDA/main/get_log_likelihood.py",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/get_log_likelihood.py?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/blobs/22f9e1d9e53cea0d57cecfc7014bc04153837ffd",
+      "html": "https://github.com/ML-GSAI/LLaDA/blob/main/get_log_likelihood.py"
+    }
+  },
+  {
+    "name": "imgs",
+    "path": "imgs",
+    "sha": "f036069aeea9c597ec18cc455b0dd4c705660a2b",
+    "size": 0,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/imgs?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/tree/main/imgs",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/f036069aeea9c597ec18cc455b0dd4c705660a2b",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/imgs?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/f036069aeea9c597ec18cc455b0dd4c705660a2b",
+      "html": "https://github.com/ML-GSAI/LLaDA/tree/main/imgs"
+    }
+  },
+  {
+    "name": "opencompass",
+    "path": "opencompass",
+    "sha": "e4150e5162fcd1ee79178bd549d572ad72860fc6",
+    "size": 0,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/opencompass?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/tree/main/opencompass",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/e4150e5162fcd1ee79178bd549d572ad72860fc6",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/opencompass?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/e4150e5162fcd1ee79178bd549d572ad72860fc6",
+      "html": "https://github.com/ML-GSAI/LLaDA/tree/main/opencompass"
+    }
+  },
+  {
+    "name": "visualization",
+    "path": "visualization",
+    "sha": "140611ec13083e8686fa76c595914fe806c46ab2",
+    "size": 0,
+    "url": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/visualization?ref=main",
+    "html_url": "https://github.com/ML-GSAI/LLaDA/tree/main/visualization",
+    "git_url": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/140611ec13083e8686fa76c595914fe806c46ab2",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ML-GSAI/LLaDA/contents/visualization?ref=main",
+      "git": "https://api.github.com/repos/ML-GSAI/LLaDA/git/trees/140611ec13083e8686fa76c595914fe806c46ab2",
+      "html": "https://github.com/ML-GSAI/LLaDA/tree/main/visualization"
+    }
+  }
+]

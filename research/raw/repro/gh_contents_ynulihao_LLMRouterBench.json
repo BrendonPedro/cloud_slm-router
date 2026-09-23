@@ -1,0 +1,290 @@
+[
+  {
+    "name": ".env.example",
+    "path": ".env.example",
+    "sha": "8940de5c9ca69b71ca7c238afbf17562208c8aa3",
+    "size": 735,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/.env.example?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/blob/main/.env.example",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/8940de5c9ca69b71ca7c238afbf17562208c8aa3",
+    "download_url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/main/.env.example",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/.env.example?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/8940de5c9ca69b71ca7c238afbf17562208c8aa3",
+      "html": "https://github.com/ynulihao/LLMRouterBench/blob/main/.env.example"
+    }
+  },
+  {
+    "name": ".gitattributes",
+    "path": ".gitattributes",
+    "sha": "20739a9d804d57129a57c4f54c16ef72d7d4b4e8",
+    "size": 44,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/.gitattributes?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/blob/main/.gitattributes",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/20739a9d804d57129a57c4f54c16ef72d7d4b4e8",
+    "download_url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/main/.gitattributes",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/.gitattributes?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/20739a9d804d57129a57c4f54c16ef72d7d4b4e8",
+      "html": "https://github.com/ynulihao/LLMRouterBench/blob/main/.gitattributes"
+    }
+  },
+  {
+    "name": ".gitignore",
+    "path": ".gitignore",
+    "sha": "2ce841c05ba027fc8959ced49c7a7b25df34759e",
+    "size": 5750,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/.gitignore?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/blob/main/.gitignore",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/2ce841c05ba027fc8959ced49c7a7b25df34759e",
+    "download_url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/main/.gitignore",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/.gitignore?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/2ce841c05ba027fc8959ced49c7a7b25df34759e",
+      "html": "https://github.com/ynulihao/LLMRouterBench/blob/main/.gitignore"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "94172790abce4ed3f50519c112b7190be25c821f",
+    "size": 19165,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/README.md?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/94172790abce4ed3f50519c112b7190be25c821f",
+    "download_url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/main/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/94172790abce4ed3f50519c112b7190be25c821f",
+      "html": "https://github.com/ynulihao/LLMRouterBench/blob/main/README.md"
+    }
+  },
+  {
+    "name": "README_zh.md",
+    "path": "README_zh.md",
+    "sha": "8cd861bcf8f93cbb94fc0f619ba401b152aac556",
+    "size": 18624,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/README_zh.md?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/blob/main/README_zh.md",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/8cd861bcf8f93cbb94fc0f619ba401b152aac556",
+    "download_url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/main/README_zh.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/README_zh.md?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/8cd861bcf8f93cbb94fc0f619ba401b152aac556",
+      "html": "https://github.com/ynulihao/LLMRouterBench/blob/main/README_zh.md"
+    }
+  },
+  {
+    "name": "assets",
+    "path": "assets",
+    "sha": "a2ff6734dd7db9985405f8a3efb61446a9263241",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/assets?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/assets",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/a2ff6734dd7db9985405f8a3efb61446a9263241",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/assets?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/a2ff6734dd7db9985405f8a3efb61446a9263241",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/assets"
+    }
+  },
+  {
+    "name": "baselines",
+    "path": "baselines",
+    "sha": "e59fda80c324311c48b11b1ab5ff60ac670a66e5",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/baselines?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/baselines",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/e59fda80c324311c48b11b1ab5ff60ac670a66e5",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/baselines?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/e59fda80c324311c48b11b1ab5ff60ac670a66e5",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/baselines"
+    }
+  },
+  {
+    "name": "common",
+    "path": "common",
+    "sha": "ff4a11ef196be1514dd920a509c34791c9928d5a",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/common?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/common",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/ff4a11ef196be1514dd920a509c34791c9928d5a",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/common?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/ff4a11ef196be1514dd920a509c34791c9928d5a",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/common"
+    }
+  },
+  {
+    "name": "config",
+    "path": "config",
+    "sha": "71d46122621420981ce06eac9fc57344903c1fc8",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/config?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/config",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/71d46122621420981ce06eac9fc57344903c1fc8",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/config?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/71d46122621420981ce06eac9fc57344903c1fc8",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/config"
+    }
+  },
+  {
+    "name": "data",
+    "path": "data",
+    "sha": "81c38a23b083a7d0027ccb14d46d4bac939638ae",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/data?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/data",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/81c38a23b083a7d0027ccb14d46d4bac939638ae",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/data?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/81c38a23b083a7d0027ccb14d46d4bac939638ae",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/data"
+    }
+  },
+  {
+    "name": "data_collector",
+    "path": "data_collector",
+    "sha": "541e74da6060f50af1390bc7b4632b62c74627ea",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/data_collector?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/data_collector",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/541e74da6060f50af1390bc7b4632b62c74627ea",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/data_collector?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/541e74da6060f50af1390bc7b4632b62c74627ea",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/data_collector"
+    }
+  },
+  {
+    "name": "evaluation",
+    "path": "evaluation",
+    "sha": "079cd38be7b3ad662a37236fbdf36f7f874b745e",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/evaluation?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/evaluation",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/079cd38be7b3ad662a37236fbdf36f7f874b745e",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/evaluation?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/079cd38be7b3ad662a37236fbdf36f7f874b745e",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/evaluation"
+    }
+  },
+  {
+    "name": "external_bench",
+    "path": "external_bench",
+    "sha": "45d859446d0fd9e093b9e8879c4aac08e0d0ba6e",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/external_bench?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/external_bench",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/45d859446d0fd9e093b9e8879c4aac08e0d0ba6e",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/external_bench?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/45d859446d0fd9e093b9e8879c4aac08e0d0ba6e",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/external_bench"
+    }
+  },
+  {
+    "name": "generators",
+    "path": "generators",
+    "sha": "19a116cc9641812dbac2768feabc4abbe05b1b24",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/generators?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/generators",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/19a116cc9641812dbac2768feabc4abbe05b1b24",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/generators?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/19a116cc9641812dbac2768feabc4abbe05b1b24",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/generators"
+    }
+  },
+  {
+    "name": "requirements.txt",
+    "path": "requirements.txt",
+    "sha": "6545e2a6cc051ca6c6c5ccdddcd85ec93d5950ac",
+    "size": 533,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/requirements.txt?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/blob/main/requirements.txt",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/6545e2a6cc051ca6c6c5ccdddcd85ec93d5950ac",
+    "download_url": "https://raw.githubusercontent.com/ynulihao/LLMRouterBench/main/requirements.txt",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/requirements.txt?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/blobs/6545e2a6cc051ca6c6c5ccdddcd85ec93d5950ac",
+      "html": "https://github.com/ynulihao/LLMRouterBench/blob/main/requirements.txt"
+    }
+  },
+  {
+    "name": "results",
+    "path": "results",
+    "sha": "139ccccc211ce9cb37ad98a5798a20c92f4970aa",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/results?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/results",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/139ccccc211ce9cb37ad98a5798a20c92f4970aa",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/results?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/139ccccc211ce9cb37ad98a5798a20c92f4970aa",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/results"
+    }
+  },
+  {
+    "name": "tools",
+    "path": "tools",
+    "sha": "57cb4b16953d2a5e5df7ddf68e932baa465a461d",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/tools?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/tools",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/57cb4b16953d2a5e5df7ddf68e932baa465a461d",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/tools?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/57cb4b16953d2a5e5df7ddf68e932baa465a461d",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/tools"
+    }
+  },
+  {
+    "name": "vllms",
+    "path": "vllms",
+    "sha": "90e643aae249857c12c42406309d8f652272e4b6",
+    "size": 0,
+    "url": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/vllms?ref=main",
+    "html_url": "https://github.com/ynulihao/LLMRouterBench/tree/main/vllms",
+    "git_url": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/90e643aae249857c12c42406309d8f652272e4b6",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/ynulihao/LLMRouterBench/contents/vllms?ref=main",
+      "git": "https://api.github.com/repos/ynulihao/LLMRouterBench/git/trees/90e643aae249857c12c42406309d8f652272e4b6",
+      "html": "https://github.com/ynulihao/LLMRouterBench/tree/main/vllms"
+    }
+  }
+]

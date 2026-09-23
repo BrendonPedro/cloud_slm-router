@@ -1,0 +1,178 @@
+[
+  {
+    "name": ".github",
+    "path": ".github",
+    "sha": "bd01a7aa2bfaa4d09bea11056e6df17377978724",
+    "size": 0,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/.github?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/tree/main/.github",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/bd01a7aa2bfaa4d09bea11056e6df17377978724",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/.github?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/bd01a7aa2bfaa4d09bea11056e6df17377978724",
+      "html": "https://github.com/lm-sys/RouteLLM/tree/main/.github"
+    }
+  },
+  {
+    "name": ".gitignore",
+    "path": ".gitignore",
+    "sha": "a5053fe54bd3b8c6858610584e0bdb3d2d2f847a",
+    "size": 3187,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/.gitignore?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/blob/main/.gitignore",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/a5053fe54bd3b8c6858610584e0bdb3d2d2f847a",
+    "download_url": "https://raw.githubusercontent.com/lm-sys/RouteLLM/main/.gitignore",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/.gitignore?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/a5053fe54bd3b8c6858610584e0bdb3d2d2f847a",
+      "html": "https://github.com/lm-sys/RouteLLM/blob/main/.gitignore"
+    }
+  },
+  {
+    "name": ".pre-commit-config.yaml",
+    "path": ".pre-commit-config.yaml",
+    "sha": "a5d77bdbcd019dd1df4f32dd3fdb52c3e8876b2e",
+    "size": 201,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/.pre-commit-config.yaml?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/blob/main/.pre-commit-config.yaml",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/a5d77bdbcd019dd1df4f32dd3fdb52c3e8876b2e",
+    "download_url": "https://raw.githubusercontent.com/lm-sys/RouteLLM/main/.pre-commit-config.yaml",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/.pre-commit-config.yaml?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/a5d77bdbcd019dd1df4f32dd3fdb52c3e8876b2e",
+      "html": "https://github.com/lm-sys/RouteLLM/blob/main/.pre-commit-config.yaml"
+    }
+  },
+  {
+    "name": "LICENSE",
+    "path": "LICENSE",
+    "sha": "f49a4e16e68b128803cc2dcea614603632b04eac",
+    "size": 11356,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/LICENSE?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/blob/main/LICENSE",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/f49a4e16e68b128803cc2dcea614603632b04eac",
+    "download_url": "https://raw.githubusercontent.com/lm-sys/RouteLLM/main/LICENSE",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/LICENSE?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/f49a4e16e68b128803cc2dcea614603632b04eac",
+      "html": "https://github.com/lm-sys/RouteLLM/blob/main/LICENSE"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "45cbe52c3d430869c3b0e7b07dadba7628bc17e6",
+    "size": 14103,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/README.md?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/45cbe52c3d430869c3b0e7b07dadba7628bc17e6",
+    "download_url": "https://raw.githubusercontent.com/lm-sys/RouteLLM/main/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/45cbe52c3d430869c3b0e7b07dadba7628bc17e6",
+      "html": "https://github.com/lm-sys/RouteLLM/blob/main/README.md"
+    }
+  },
+  {
+    "name": "assets",
+    "path": "assets",
+    "sha": "f78de73988b152c4cd09d8b4fd65ad643d5dcd63",
+    "size": 0,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/assets?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/tree/main/assets",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/f78de73988b152c4cd09d8b4fd65ad643d5dcd63",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/assets?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/f78de73988b152c4cd09d8b4fd65ad643d5dcd63",
+      "html": "https://github.com/lm-sys/RouteLLM/tree/main/assets"
+    }
+  },
+  {
+    "name": "benchmarks",
+    "path": "benchmarks",
+    "sha": "0e878208519646be32ec14767ca128a494779274",
+    "size": 0,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/benchmarks?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/tree/main/benchmarks",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/0e878208519646be32ec14767ca128a494779274",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/benchmarks?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/0e878208519646be32ec14767ca128a494779274",
+      "html": "https://github.com/lm-sys/RouteLLM/tree/main/benchmarks"
+    }
+  },
+  {
+    "name": "config.example.yaml",
+    "path": "config.example.yaml",
+    "sha": "98c69a7b6ae035748ff3bedd326bed205f1da340",
+    "size": 417,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/config.example.yaml?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/blob/main/config.example.yaml",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/98c69a7b6ae035748ff3bedd326bed205f1da340",
+    "download_url": "https://raw.githubusercontent.com/lm-sys/RouteLLM/main/config.example.yaml",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/config.example.yaml?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/98c69a7b6ae035748ff3bedd326bed205f1da340",
+      "html": "https://github.com/lm-sys/RouteLLM/blob/main/config.example.yaml"
+    }
+  },
+  {
+    "name": "examples",
+    "path": "examples",
+    "sha": "78be3e139cfbbfbc5bb10d72dfa847cc3461a329",
+    "size": 0,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/examples?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/tree/main/examples",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/78be3e139cfbbfbc5bb10d72dfa847cc3461a329",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/examples?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/78be3e139cfbbfbc5bb10d72dfa847cc3461a329",
+      "html": "https://github.com/lm-sys/RouteLLM/tree/main/examples"
+    }
+  },
+  {
+    "name": "pyproject.toml",
+    "path": "pyproject.toml",
+    "sha": "829339748a37da3d2ed52cacfc2f08c1e7ebaac7",
+    "size": 942,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/pyproject.toml?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/blob/main/pyproject.toml",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/829339748a37da3d2ed52cacfc2f08c1e7ebaac7",
+    "download_url": "https://raw.githubusercontent.com/lm-sys/RouteLLM/main/pyproject.toml",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/pyproject.toml?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/blobs/829339748a37da3d2ed52cacfc2f08c1e7ebaac7",
+      "html": "https://github.com/lm-sys/RouteLLM/blob/main/pyproject.toml"
+    }
+  },
+  {
+    "name": "routellm",
+    "path": "routellm",
+    "sha": "f1161d033a6f78b9fcdf739f1a2008861eb17fe9",
+    "size": 0,
+    "url": "https://api.github.com/repos/lm-sys/RouteLLM/contents/routellm?ref=main",
+    "html_url": "https://github.com/lm-sys/RouteLLM/tree/main/routellm",
+    "git_url": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/f1161d033a6f78b9fcdf739f1a2008861eb17fe9",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/lm-sys/RouteLLM/contents/routellm?ref=main",
+      "git": "https://api.github.com/repos/lm-sys/RouteLLM/git/trees/f1161d033a6f78b9fcdf739f1a2008861eb17fe9",
+      "html": "https://github.com/lm-sys/RouteLLM/tree/main/routellm"
+    }
+  }
+]
