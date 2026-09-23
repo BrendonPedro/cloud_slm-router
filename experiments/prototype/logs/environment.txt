@@ -1,0 +1,10 @@
+# environment captured 2026-09-23T03:34:54Z
+Python 3.12.3
+Linux 6.6.87.2-microsoft-standard-WSL2 x86_64
+model name	: AMD Ryzen 5 8500G w/ Radeon 740M Graphics
+4
+Mem:               9           1           1           0           6           7
+bundle tarball sha256: b79f8cde1a6f029c2efa663a3a3b6f7748defb22341fe59f328cebef6648c8f1
+stage0.py sha256: 1903aa8a419d58bec1848b9c15f5b2f7666d7f19b675e024c993ccbeb1eb2d6c
+config sha256: db39e3e8339ecf763ae8f2921db01223274c483b77370e1d3c27fef5a16192a0
+stage0_raw.json sha256: 3f83fff0260f7896069c363e5c966fd5864cca01fc25902f99c1de465dc24793

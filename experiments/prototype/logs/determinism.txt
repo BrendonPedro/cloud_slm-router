@@ -1,0 +1,3 @@
+# determinism check, iteration 12: re-run of stage0.py in /tmp/proto_rerun
+preds/ and splits/: byte-identical (diff -r exit 0)
+stage0_raw.json identical after removing wall-clock field tfidf_fit.*.fit_seconds: True

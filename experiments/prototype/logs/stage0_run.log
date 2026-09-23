@@ -1,0 +1,29 @@
+[   11.1s] P-L mmlupro/test_1000 Llama-3.1-8B-Instruct: 3 duplicated query strings, 0 with disagreeing scores (last kept)
+[   11.1s] P-L mmlupro/test_1000 qwen3-235b-a22b-2507: 3 duplicated query strings, 0 with disagreeing scores (last kept)
+[   31.8s] P-L: 2432 queries; weak acc 0.2973, strong acc 0.7188, P(y=1) 0.5592
+[   37.8s] P-Q mmlupro/test_1000 Qwen3-8B: 3 duplicated query strings, 1 with disagreeing scores (last kept)
+[   37.8s] P-Q mmlupro/test_1000 qwen3-235b-a22b-2507: 3 duplicated query strings, 0 with disagreeing scores (last kept)
+[   51.0s] P-Q: 2432 queries; weak acc 0.6809, strong acc 0.7188, P(y=1) 0.8857
+[   64.9s] P-L seed 0: train/dev/test 1459/486/487 tfidf {'vocab': 17784, 'l2': 0.001, 'dev_logloss': 0.6539047670337762, 'fit_seconds': 7.5}
+[   76.7s] P-L seed 1: train/dev/test 1459/486/487 tfidf {'vocab': 17955, 'l2': 0.001, 'dev_logloss': 0.6653966797420487, 'fit_seconds': 5.8}
+[   88.1s] P-L seed 2: train/dev/test 1459/486/487 tfidf {'vocab': 17869, 'l2': 0.001, 'dev_logloss': 0.6646740242145144, 'fit_seconds': 5.2}
+[   99.4s] P-L seed 3: train/dev/test 1459/486/487 tfidf {'vocab': 18290, 'l2': 0.001, 'dev_logloss': 0.6669127932569865, 'fit_seconds': 5.2}
+[  111.9s] P-L seed 4: train/dev/test 1459/486/487 tfidf {'vocab': 17934, 'l2': 0.001, 'dev_logloss': 0.6718887804252326, 'fit_seconds': 6.2}
+[  131.7s] P-L LODO MMLU-Pro: train/dev/test 1148/286/998 tfidf {'vocab': 17692, 'l2': 0.001, 'dev_logloss': 0.680695891200895, 'fit_seconds': 5.9}
+[  140.9s] P-L LODO GPQA: train/dev/test 1786/448/198 tfidf {'vocab': 20729, 'l2': 0.001, 'dev_logloss': 0.6530437555035208, 'fit_seconds': 6.9}
+[  157.4s] P-L LODO LiveCodeBench: train/dev/test 1102/275/1055 tfidf {'vocab': 8562, 'l2': 0.001, 'dev_logloss': 0.658717828944494, 'fit_seconds': 1.6}
+[  167.3s] P-L LODO math: train/dev/test 1799/452/181 tfidf {'vocab': 21921, 'l2': 0.001, 'dev_logloss': 0.6635745103087265, 'fit_seconds': 7.9}
+[  179.1s] P-Q seed 0: train/dev/test 1458/489/485 tfidf {'vocab': 17463, 'l2': 0.001, 'dev_logloss': 0.3565381526706713, 'fit_seconds': 5.6}
+[  190.5s] P-Q seed 1: train/dev/test 1458/489/485 tfidf {'vocab': 18186, 'l2': 0.001, 'dev_logloss': 0.355088496385297, 'fit_seconds': 5.4}
+[  201.9s] P-Q seed 2: train/dev/test 1458/489/485 tfidf {'vocab': 17831, 'l2': 0.01, 'dev_logloss': 0.35884560869567744, 'fit_seconds': 5.4}
+[  214.8s] P-Q seed 3: train/dev/test 1458/489/485 tfidf {'vocab': 18374, 'l2': 0.001, 'dev_logloss': 0.3546636382412384, 'fit_seconds': 6.5}
+[  227.5s] P-Q seed 4: train/dev/test 1458/489/485 tfidf {'vocab': 17716, 'l2': 0.001, 'dev_logloss': 0.3527915954724555, 'fit_seconds': 6.6}
+[  247.7s] P-Q LODO MMLU-Pro: train/dev/test 1148/286/998 tfidf {'vocab': 17954, 'l2': 0.001, 'dev_logloss': 0.2813532218892069, 'fit_seconds': 6.4}
+[  257.6s] P-Q LODO GPQA: train/dev/test 1788/446/198 tfidf {'vocab': 21416, 'l2': 0.001, 'dev_logloss': 0.339772879059277, 'fit_seconds': 7.6}
+[  274.2s] P-Q LODO LiveCodeBench: train/dev/test 1103/274/1055 tfidf {'vocab': 8832, 'l2': 0.001, 'dev_logloss': 0.4079932067469311, 'fit_seconds': 1.9}
+[  283.9s] P-Q LODO math: train/dev/test 1802/449/181 tfidf {'vocab': 22033, 'l2': 0.001, 'dev_logloss': 0.3527082888642545, 'fit_seconds': 7.6}
+[  283.9s] done
+
+real	4m44.161s
+user	4m3.773s
+sys	0m39.980s

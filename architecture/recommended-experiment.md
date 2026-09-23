@@ -262,6 +262,12 @@ seeds; command logs; raw per-query predictions for each router × seed × fold;
 the statistics script; and `results/` containing **only** numbers produced by these
 scripts. Anything not produced this way stays labelled **[E]**.
 
+> **Status update (iteration 12):** the stdlib-only part of Stage 0 (label building,
+> frozen splits, always-edge/cloud, random, dataset-prior, TF-IDF+LR, oracle, deferral
+> AUC/CCR@−1/ECE/Brier and a per-seed bootstrap) has been run. Its measured outputs are
+> in `experiments/prototype/` (README §3). The neural routers and McNemar/Holm have
+> not been run.
+
 ## 11. Open questions and uncertainty
 
 1. Whether `arenahard*` (judge-scored, {0, 0.5, 1}) should enter as a secondary

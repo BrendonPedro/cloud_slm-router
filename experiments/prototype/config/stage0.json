@@ -1,0 +1,29 @@
+{
+  "_comment": "Stage-0 prototype config (deliverable 12). Implements the zero-inference part of architecture/recommended-experiment.md sections 4-5 with stdlib-only baselines. No neural router is trained by this config.",
+  "bundle_root": "/tmp/llmrb/bench-release",
+  "bundle_sha256": "b79f8cde1a6f029c2efa663a3a3b6f7748defb22341fe59f328cebef6648c8f1",
+  "splits": [
+    ["mmlupro", "test_1000", "MMLU-Pro"],
+    ["gpqa", "test", "GPQA"],
+    ["livecodebench", "test", "LiveCodeBench"],
+    ["livemathbench", "test", "math"],
+    ["aime", "hybrid", "math"]
+  ],
+  "pairs": {
+    "P-L": {"weak": "Llama-3.1-8B-Instruct", "strong": "qwen3-235b-a22b-2507"},
+    "P-Q": {"weak": "Qwen3-8B", "strong": "qwen3-235b-a22b-2507"}
+  },
+  "label": "y = 1 if score_weak >= score_strong (safe to keep on edge), else 0",
+  "router_input": "origin_query field only (no answer options / prompt template)",
+  "seeds": [0, 1, 2, 3, 4],
+  "split_fractions": {"train": 0.6, "dev": 0.2, "test": 0.2},
+  "stratify_by": ["group", "weak_score", "strong_score"],
+  "lodo_groups": ["MMLU-Pro", "GPQA", "LiveCodeBench", "math"],
+  "lodo_dev_fraction": 0.2,
+  "lodo_seed": 0,
+  "quality_margin": 0.01,
+  "ece_bins": 15,
+  "bootstrap": {"resamples": 10000, "seed": 12345},
+  "tfidf": {"ngram_range": [1, 2], "min_df": 2, "sublinear_tf": true, "lowercase": true, "token_pattern": "[a-z0-9]+"},
+  "logreg": {"l2_grid": [1e-4, 1e-3, 1e-2], "epochs": 60, "lr": 0.5, "optimizer": "full-batch gradient descent with AdaGrad scaling", "select_by": "dev log-loss"}
+}
