@@ -12,3 +12,12 @@ Wed Sep 23 03:18:01 UTC 2026
 2026-09-23T03:18:56Z https://huggingface.co/api/models/Qwen/Qwen3-1.7B -> hf_model_Qwen_Qwen3-1.7B.json
 2026-09-23T03:18:57Z https://huggingface.co/api/models/Qwen/Qwen3-8B -> hf_model_Qwen_Qwen3-8B.json
 2026-09-23T03:18:57Z https://huggingface.co/api/models/routellm/bert_gpt4_augmented -> hf_model_routellm_bert_gpt4_augmented.json
+# iteration 11
+2026-09-23T03:20:05Z curl -sSL -C - -o /tmp/llmrb.tar.gz https://huggingface.co/datasets/NPULH/LLMRouterBench/resolve/main/bench-release.tar.gz  (resumed a partial 867,528,704-byte file from iteration 10; finished 03:20:47Z; final size 1,283,503,080)
+2026-09-23T03:21Z sha256sum /tmp/llmrb.tar.gz -> b79f8cde1a6f029c2efa663a3a3b6f7748defb22341fe59f328cebef6648c8f1 (== HF LFS oid)
+2026-09-23T03:21Z https://huggingface.co/api/datasets/NPULH/LLMRouterBench/tree/main -> hf_dataset_tree.json
+2026-09-23T03:21Z tar xzf /tmp/llmrb.tar.gz -C /tmp/llmrb  -> /tmp/llmrb/bench-release (700 JSON files; bundle NOT committed, 1.28 GB)
+2026-09-23T03:22:39Z python3 inventory_llmrouterbench.py /tmp/llmrb/bench-release -> inventory_output.txt (Python 3, stdlib only; 0 unreadable files)
+# score-type check (manual, same session): arenahard* scores are in {0,0.5,1} (judge win/tie/loss vs a reference), not binary accuracy;
+# mmlupro/test_1000 has 1001 records but 3 duplicated origin_query strings -> 998 unique; other checked splits have 0 duplicates.
+# host: AMD Ryzen 5 8500G, 4 vCPU visible, ~9.7 GiB RAM, no GPU (WSL2 6.6.87.2); numpy/sklearn/torch NOT installed.
