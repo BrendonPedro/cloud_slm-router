@@ -1,0 +1,32 @@
+=== 1705.08500 | ['Selective Classification for Deep Neural Networks'] | date ['2017/05/23'] | authors Geifman, Yonatan; El-Yaniv, Ran
+COMMENTS:  | JREF: 
+=== 1706.04599 | ['On Calibration of Modern Neural Networks'] | date ['2017/06/14'] | authors Guo, Chuan; Pleiss, Geoff; Sun, Yu; Weinberger, Kilian Q.
+COMMENTS: ICML 2017 | JREF: 
+=== 1812.00564 | ['Split learning for health: Distributed deep learning without sharing raw patient data'] | date ['2018/12/03'] | authors Vepakomma, Praneeth; Gupta, Otkrist; Swedish, Tristan; Raskar, Ramesh
+COMMENTS:  | JREF: 
+=== 2211.17192 | ['Fast Inference from Transformers via Speculative Decoding'] | date ['2022/11/30'] | authors Leviathan, Yaniv; Kalman, Matan; Matias, Yossi
+COMMENTS: ICML 2023 Oral | JREF: 
+=== 2302.01318 | ['Accelerating Large Language Model Decoding with Speculative Sampling'] | date ['2023/02/02'] | authors Chen, Charlie; Borgeaud, Sebastian; Irving, Geoffrey; Lespiau, Jean-Baptiste; Sifre, Laurent; Jumper, John
+COMMENTS:  | JREF: 
+=== 2305.10427 | ['Accelerating Transformer Inference for Translation via Parallel Decoding'] | date ['2023/05/17'] | authors Santilli, Andrea; Severino, Silvio; Postolache, Emilian; Maiorca, Valentino; Mancusi, Michele; Marin, Riccardo …
+COMMENTS: Accepted at ACL 2023 main conference | JREF: 
+=== 2401.10774 | ['Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads'] | date ['2024/01/19'] | authors Cai, Tianle; Li, Yuhong; Geng, Zhengyang; Peng, Hongwu; Lee, Jason D.; Chen, Deming …
+COMMENTS: The code for this implementation is available at this https URL | JREF: 
+=== 2401.15077 | ['EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty'] | date ['2024/01/26'] | authors Li, Yuhui; Wei, Fangyun; Zhang, Chao; Zhang, Hongyang
+COMMENTS:  | JREF: 
+=== 2402.02057 | ['Break the Sequential Dependency of LLM Inference Using Lookahead Decoding'] | date ['2024/02/03'] | authors Fu, Yichao; Bailis, Peter; Stoica, Ion; Zhang, Hao
+COMMENTS:  | JREF: 
+=== 2403.00835 | ['CLLMs: Consistency Large Language Models'] | date ['2024/02/28'] | authors Kou, Siqi; Hu, Lanxiang; He, Zhezhi; Deng, Zhijie; Zhang, Hao
+COMMENTS: In the proceedings of the 41st International Conference on Machine Learning (ICML) 2024 | JREF: 
+=== 2404.19737 | ['Better & Faster Large Language Models via Multi-token Prediction'] | date ['2024/04/30'] | authors Gloeckle, Fabian; Idrissi, Badr Youbi; Rozière, Baptiste; Lopez-Paz, David; Synnaeve, Gabriel
+COMMENTS:  | JREF: 
+=== 2502.09992 | ['Large Language Diffusion Models'] | date ['2025/02/14'] | authors Nie, Shen; Zhu, Fengqi; You, Zebin; Zhang, Xiaolu; Ou, Jingyang; Hu, Jun …
+COMMENTS:  | JREF: 
+=== 2505.22618 | ['Fast-dLLM: Training-free Acceleration of Diffusion LLM by Enabling KV Cache and Parallel Decoding'] | date ['2025/05/28'] | authors Wu, Chengyue; Zhang, Hao; Xue, Shuchen; Liu, Zhijian; Diao, Shizhe; Zhu, Ligeng …
+COMMENTS:  | JREF: 
+=== 2512.14681 | ['Fast and Accurate Causal Parallel Decoding using Jacobi Forcing'] | date ['2025/12/16'] | authors Hu, Lanxiang; Kou, Siqi; Fu, Yichao; Rajbhandari, Samyam; Rosing, Tajana; He, Yuxiong …
+COMMENTS:  | JREF: 
+=== 2603.12646 | ['98$\\times$ Faster LLM Routing Without a Dedicated GPU: Flash Attention, Prompt Compression, and Near-Streaming for the vLLM Semantic Router'] | date ['2026/03/13'] | authors Liu, Xunzhuo; He, Bowei; Liu, Xue; Luo, Andy; Zhang, Haichen; Chen, Huamin
+COMMENTS:  | JREF: 
+=== 2604.19642 | ['Micro Language Models Enable Instant Responses'] | date ['2026/04/21'] | authors Cheng, Wen; Chen, Tuochao; Helwani, Karim; Srinivasan, Sriram; Zettlemoyer, Luke; Gollakota, Shyamnath
+COMMENTS:  | JREF: 

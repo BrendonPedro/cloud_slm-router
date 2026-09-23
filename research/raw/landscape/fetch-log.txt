@@ -1,0 +1,55 @@
+2026-09-23T03:09:29Z https://export.arxiv.org/abs/2211.17192 41908
+2026-09-23T03:09:30Z https://export.arxiv.org/abs/2302.01318 40250
+2026-09-23T03:09:32Z https://export.arxiv.org/abs/2401.10774 45392
+2026-09-23T03:09:34Z https://export.arxiv.org/abs/2401.15077 42120
+2026-09-23T03:09:36Z https://export.arxiv.org/abs/2404.19737 41707
+2026-09-23T03:09:39Z https://export.arxiv.org/abs/2502.09992 42244
+2026-09-23T03:09:42Z https://export.arxiv.org/abs/2505.22618 42693
+2026-09-23T03:09:44Z https://export.arxiv.org/abs/1706.04599 42115
+2026-09-23T03:09:46Z https://export.arxiv.org/abs/1705.08500 41254
+2026-09-23T03:09:48Z https://export.arxiv.org/abs/1812.00564 42264
+2026-09-23T03:09:50Z https://export.arxiv.org/abs/2604.19642 41616
+2026-09-23T03:09:53Z https://export.arxiv.org/abs/2603.12646 43966
+2026-09-23T03:09:54Z https://export.arxiv.org/abs/2305.10427 43906
+2026-09-23T03:09:56Z https://export.arxiv.org/abs/2402.02057 41457
+2026-09-23T03:09:58Z https://export.arxiv.org/abs/2403.00835 41018
+2026-09-23T03:10:00Z https://export.arxiv.org/abs/2512.14681 42826
+2026-09-23T03:10:09.467439Z https://dblp.org/search/publ/api?format=json&h=8&q=Selective%20Classification%20for%20Deep%20Neural%20Networks
+2026-09-23T03:10:12.399782Z https://dblp.org/search/publ/api?format=json&h=8&q=Medusa%20Simple%20LLM%20Inference%20Acceleration%20Framework%20Multiple%20Decoding%20Heads
+2026-09-23T03:10:15.332557Z https://dblp.org/search/publ/api?format=json&h=8&q=EAGLE%20Speculative%20Sampling%20Requires%20Rethinking%20Feature%20Uncertainty
+2026-09-23T03:10:18.234522Z https://dblp.org/search/publ/api?format=json&h=8&q=Better%20Faster%20Large%20Language%20Models%20via%20Multi-token%20Prediction
+2026-09-23T03:10:21.564981Z https://dblp.org/search/publ/api?format=json&h=8&q=Large%20Language%20Diffusion%20Models%20Nie
+2026-09-23T03:10:24.903073Z https://dblp.org/search/publ/api?format=json&h=8&q=Fast-dLLM%20Training-free%20Acceleration%20of%20Diffusion%20LLM
+2026-09-23T03:10:28.369988Z https://dblp.org/search/publ/api?format=json&h=8&q=Accelerating%20Large%20Language%20Model%20Decoding%20with%20Speculative%20Sampling
+2026-09-23T03:10:31.621082Z https://dblp.org/search/publ/api?format=json&h=8&q=Neurosurgeon%20Collaborative%20Intelligence%20Between%20the%20Cloud%20and%20Mobile%20Edge
+2026-09-23T03:10:34.876261Z https://dblp.org/search/publ/api?format=json&h=8&q=Split%20learning%20for%20health
+2026-09-23T03:10:38.147670Z https://dblp.org/search/publ/api?format=json&h=8&q=Micro%20Language%20Models%20Enable%20Instant%20Responses
+2026-09-23T03:10:41.430270Z https://dblp.org/search/publ/api?format=json&h=8&q=FrugalGPT
+2026-09-23T03:10:50Z s2 arXiv:1705.08500 174
+2026-09-23T03:10:54Z s2 arXiv:2401.10774 174
+2026-09-23T03:10:58Z s2 arXiv:2401.15077 174
+2026-09-23T03:11:03Z s2 arXiv:2404.19737 174
+2026-09-23T03:11:07Z s2 arXiv:2502.09992 174
+2026-09-23T03:11:11Z s2 arXiv:2505.22618 174
+2026-09-23T03:11:16Z s2 arXiv:2302.01318 174
+2026-09-23T03:11:20Z s2 arXiv:2604.19642 174
+2026-09-23T03:11:25Z s2 arXiv:2305.05176 174
+2026-09-23T03:11:29Z s2 arXiv:2603.12646 174
+2026-09-23T03:11:35Z crossref neurosurgeon
+2026-09-23T03:11:44.770244+00:00 https://api.openalex.org/works?per-page=5&mailto=&filter=title.search:Selective%20Classification%20for%20Deep%20Neural%20Networks
+2026-09-23T03:11:47.696111+00:00 https://api.openalex.org/works?per-page=5&mailto=&filter=title.search:Medusa%20%20Simple%20LLM%20Inference%20Acceleration%20Framework%20with%20Multiple%20Decoding%20Heads
+2026-09-23T03:11:49.791718+00:00 https://api.openalex.org/works?per-page=5&mailto=&filter=title.search:EAGLE%20%20Speculative%20Sampling%20Requires%20Rethinking%20Feature%20Uncertainty
+2026-09-23T03:11:51.793353+00:00 https://api.openalex.org/works?per-page=5&mailto=&filter=title.search:Better%20%26%20Faster%20Large%20Language%20Models%20via%20Multi-token%20Prediction
+2026-09-23T03:11:53.826551+00:00 https://api.openalex.org/works?per-page=5&mailto=&filter=title.search:Large%20Language%20Diffusion%20Models
+2026-09-23T03:11:55.859792+00:00 https://api.openalex.org/works?per-page=5&mailto=&filter=title.search:Fast-dLLM%20%20Training-free%20Acceleration%20of%20Diffusion%20LLM%20by%20Enabling%20KV%20Cache%20and%20Parallel%20Decoding
+2026-09-23T03:11:57.401132+00:00 https://api.openalex.org/works?per-page=5&mailto=&filter=title.search:Neurosurgeon%20%20Collaborative%20Intelligence%20Between%20the%20Cloud%20and%20Mobile%20Edge
+2026-09-23T03:12:49Z https://proceedings.mlr.press/v235/ 2552497
+2026-09-23T03:12:50Z crossref 10.52202/085713-1689
+2026-09-23T03:13:02Z https://security.apple.com/blog/private-cloud-compute/ 100836
+2026-09-23T03:13:02Z https://export.arxiv.org/abs/2407.21075 71133
+2026-09-23T03:13:03Z https://openrouter.ai/docs/guides/routing/routers/auto-router 784030
+2026-09-23T03:13:05Z https://docs.notdiamond.ai/docs/what-is-not-diamond 133946
+2026-09-23T03:13:05Z https://api.github.com/repos/vllm-project/semantic-router 6911
+2026-09-23T03:13:05Z https://api.github.com/repos/lm-sys/RouteLLM 6072
+2026-09-23T03:13:06Z https://api.github.com/repos/hao-ai-lab/JacobiForcing 6627
+2026-09-23T03:13:11Z https://docs.notdiamond.ai/docs/what-is-not-diamond.md 1564
