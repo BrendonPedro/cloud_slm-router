@@ -1,0 +1,92 @@
+================================================================================
+2026-09-23T03:05:05.891616+00:00 DOI 10.1109/tpds.2026.3729256
+TITLE: Mix-or-Split: Latency-Aware Scheduling for Edge–Cloud LLM Inference
+VENUE: IEEE Transactions on Parallel and Distributed Systems [[2026, 11]]
+AUTHORS: Xinghan Wang, Xiaoxiong Zhong, Weihong Yang, Fangming Liu, Weizhe Zhang
+ABSTRACT: NOT AVAILABLE
+================================================================================
+2026-09-23T03:05:07.794340+00:00 DOI 10.1109/tmc.2025.3608303
+TITLE: Joint Inference Offloading and Model Caching for Small and Large Language Model Collaboration
+VENUE: IEEE Transactions on Mobile Computing [[2026, 2]]
+AUTHORS: Xinyi Xu, Gang Feng, Yijing Liu, Shuang Qin, Jian Wang, Yunxiang Wang
+(abstract via OpenAlex)
+ABSTRACT: Large Language Models (LLMs), with advanced content creation and inference capabilities, can provide immersive intelligent services to users in mobile edge networks. However, the increasing demand for real-time artificial intelligence (AI) applications aggravates the limitations of cloud-based LLMs due to the long response time. Meanwhile, Small Language Models (SLMs), which are cost-effective and locally deployable for terminal devices, can serve as an efficient supplement to LLMs for performing latency-sensitive tasks with lower generalization capability. Due to the resource constraints of edge networks and the diverse requirements of user tasks, it is critical to design an inference framework that effectively coordinates the deployment and collaboration of LLMs and SLMs. In this paper, we propose an LLM-SLM collaborative inference (LSCI) scheme under a mobile edge computing (MEC) architecture, which jointly decides where to cache models and how to offload inference tasks to balance latency, accuracy, and resource costs. To optimize inference performance subject to resource constraints, we jointly solve the inference task offloading and model caching problem in LSCI scheme. Specifically, we employ deep reinforcement learning (DRL) to select highly popular SLMs to be cached on the edge server, and distributed belief propagation technique to solve the associated inference task offloading issue. Numerical results show that the proposed LSCI scheme can achieve significant performance gain in terms of inference performance when compared with a number of baseline solutions.
+================================================================================
+2026-09-23T03:05:09.661793+00:00 DOI 10.1109/infocom59046.2026.11571307
+TITLE: Preference-Aware Task Routing for Edge-Cloud Hierarchical Large Language Model Inference
+VENUE: IEEE INFOCOM 2026 - IEEE Conference on Computer Communications [[2026, 5, 18]]
+AUTHORS: Xuehao Ma, Huan Zhou, Tong Wu, Xinggang Fan
+ABSTRACT: NOT AVAILABLE
+================================================================================
+2026-09-23T03:05:11.271572+00:00 DOI 10.1109/access.2026.3724635
+TITLE: DABO: Difficulty-Aware Binary Offloading for Collaborative Large-Small Model Inference
+VENUE: IEEE Access [[2026]]
+AUTHORS: Chen Zhu, Yiming Su, Chenwenjie Mao, Yuhao Wu, Yu Gao, Chengbao Yan, Ran Tao
+(abstract via OpenAlex)
+ABSTRACT: Large-small model collaboration, as an emerging paradigm for efficient language model inference, plays a significant role in balancing inference quality and service efficiency in cloud-edge intelligence systems. By combining the strong generalization capability of cloud-side large language models (LLMs) with the low-latency inference capability of edge-side small language models (SLMs), this paradigm provides a practical way to serve heterogeneous language requests. However, existing collaborative inference methods still face a critical challenge: forwarding all requests to the cloud leads to high latency and unnecessary service cost, while relying only on edge-side SLMs may degrade prediction quality for difficult inputs. Therefore, we propose DABO, a calibration-aware binary offloading method for collaborative large–small model inference. Specifically, the edge-side SLM first performs lightweight probe inference and produces a prediction confidence distribution. DABO then calibrates the confidence through temperature scaling and converts it into a label-space-normalized difficulty score. Based on a model–task-specific operating threshold selected under an explicit accuracy constraint, reliable requests are answered locally by the edge-side SLM, whereas uncertain requests are selectively escalated to the cloud-side LLM. Extensive experiments demonstrate that DABO maintains competitive end-to-end accuracy while processing an average of 83.72% of requests at the edge, reducing expected calibration error by 31.08%, and decreasing mean latency by 84.24% compared with Cloud-only inference in a controlled workstation-based edge simulation.
+================================================================================
+2026-09-23T03:05:13.134330+00:00 DOI 10.1109/jiot.2026.3710272
+TITLE: EC-LLM: Low-Cost, Low-Latency, High-Quality Large Language Model Inference Based on Edge--Cloud Collaboration
+VENUE: IEEE Internet of Things Journal [[2026, 9]]
+AUTHORS: Qing Han, Siyan Guo, Cong Zhao, Shusen Yang, Xuebin Ren, Luhui Wang
+ABSTRACT: NOT AVAILABLE
+================================================================================
+2026-09-23T03:05:14.747492+00:00 DOI 10.1109/access.2025.3632276
+TITLE: LLMSwitchBench: A New Edge-Cloud Routing Benchmark for Smart Home LLM Inference
+VENUE: IEEE Access [[2025]]
+AUTHORS: Zihao Liu, Ping Guo, Peng Wang
+(abstract via OpenAlex)
+ABSTRACT: In smart home automation, large language models (LLMs) offer transformative potential for enabling intelligent, context-aware interactions. However, deploying LLMs on edge devices is constrained to small-scale LLMs (typically 1B–8B parameters) with limited performance, while cloud-based models, though powerful, raise privacy, latency, and cost concerns. To effectively balance these trade-offs, an intelligent routing strategy is needed to determine when to use local inference and when to offload queries to the cloud. Despite growing attention to this problem, there remains a lack of standardized and comprehensive benchmarks that reflect realistic smart home use cases and support the evaluation of such routing strategies. To address this gap, we propose LLMSwitch-bench, a novelQAbenchmark dataset comprising 6,000 queries across five smart home domains, including dietary, sleep, home security, pet care, and plant care. The dataset includes a wide range of question types with varying levels of difficulty, while been human-validated to ensure accuracy and relevance. Building on this benchmark, we introduce LLMSwitch-router, a privacy-preserving routing method that dynamically balances local and cloud-based inference. LLMSwitch-router prioritizes on-device inference to reduce cost and protect user privacy, while selectively leveraging cloud LLMs for handling complex queries that exceed local LLM capabilities. Experimental results show that LLMSwitch-router achieves a 48% reduction in LLM API cost while maintaining cloud-level accuracy, effectively optimizing the trade-off among performance, cost, and privacy.
+================================================================================
+2026-09-23T03:05:16.585621+00:00 DOI 10.1109/southeastcon63549.2026.11476596
+TITLE: Adaptive Token Routing for Heterogeneous LLM Inference in Edge-Cloud Continuum
+VENUE: SoutheastCon 2026 [[2026, 2, 20]]
+AUTHORS: Tejas Pravinbhai Patel
+(abstract via OpenAlex)
+ABSTRACT: Large Language Model (LLM) inference in distributed edge-cloud environments faces critical challenges in latency optimization and resource utilization due to static model placement strategies that ignore dynamic network conditions and heterogeneous GPU capabilities. We present AdaptRoute, a novel token-level routing framework that dynamically assigns inference tokens to edge or cloud GPU nodes based on real-time computational complexity prediction, network latency measurements, and GPU queue depth analysis. Unlike existing layer-parallelism or request-level scheduling approaches, AdaptRoute introduces fine-grained token routing decisions that adapt to infrastructure heterogeneity and workload dynamics. Our system incorporates a lightweight neural router with$\mathbf{O}(\log \mathbf{n})$decision complexity, theoretical latency bounds under network uncertainty, and a productiongrade implementation supporting multiple LLM architectures. Experimental evaluation on Llama-2 7B and 13B models deployed across Paperspace A4000 (edge) and A6000 (cloud) GPUs demonstrates$2.3 \times$latency reduction, 45 % cost savings, and$3.8 \times$throughput improvement compared to state-of-the-art distributed inference systems including vLLM and DeepSpeed-Inference under realistic network conditions (5100 ms RTT) and bursty workloads.
+================================================================================
+2026-09-23T03:05:18.201097+00:00 DOI 10.1109/smartiot70864.2026.00023
+TITLE: A Task-Aware Model Size and Precision Selection Framework for LLM Inference in Edge Computing
+VENUE: 2026 IEEE International Conference on Smart Internet of Things (SmartIoT) [[2026, 8]]
+AUTHORS: Yuan Yuan, Bingxian Lu, Songwei Zhang, Siyu Liu
+ABSTRACT: NOT AVAILABLE
+================================================================================
+2026-09-23T03:05:19.798178+00:00 DOI 10.1109/icnp65844.2025.11192440
+TITLE: Poster: Optimizing Transmission for Privacy-Preserving Edge-Cloud Split LLM Inference
+VENUE: 2025 IEEE 33rd International Conference on Network Protocols (ICNP) [[2025, 9, 22]]
+AUTHORS: Yunxiang Zhou, Junzhe Wu, Daolin Zou, Yanan Huang, Long Luo, Hongfang Yu
+(abstract via OpenAlex)
+ABSTRACT: Today’s cloud-centric Large Language Model (LLM) inference can raise privacy concerns, as raw user data is sent over public networks. Split LLM inference offers a promising alternative by handling sensitive stages, such as prefill and input/output decoding, locally at the edge while offloading heavy intermediate decoding layers to the cloud. This approach could enhance privacy, yet it introduces a key challenge: how to transfer large intermediate vectors with ultra-low latency and high reliability over dynamic networks. We explore a potential transmission framework combining (i) dynamic congestion control to adapt flow and reduce queueing/loss, and (ii) adaptive FEC and quantization to balance redundancy with compression. Preliminary results indicate that this approach can achieve lower per-token latency and higher throughput than TCP/QUIC, enabling privacy-preserving LLM services that remain highly responsive and aligned with real-time user experience demands.
+================================================================================
+2026-09-23T03:05:21.626896+00:00 DOI 10.18653/v1/2026.findings-acl.947
+TITLE: BiCSRouter: Bi-Level Cross-System Routing for Utility-Aware LLM Inference
+VENUE: Findings of the Association for Computational Linguistics: ACL 2026 [[2026]]
+AUTHORS: Mao Keyu, Eiki Murata, Ukyo Honda
+(abstract via OpenAlex)
+ABSTRACT: Selecting an appropriate LLM configuration for a given query is critical, yet existing routing frameworks operate within a single computational paradigm.To address this gap, we formalize the Cross-System Routing Problem, a hierarchical decision-making task that decomposes routing into intra-regime configuration selection and inter-regime system selection.Building on this, we propose BiCSRouter, a bilevel cross-system routing framework that integrates two orthogonal regimes: intensive reasoning via single-agent systems and extensive collaboration via multi-agent systems.BiC-SRouter performs policy learning within each system and employs a lightweight inter-regime router that selects the optimal regime based on predicted performance and cost.Experiments on the MBPP and MATH benchmarks demonstrate that BiCSRouter outperforms 15 representative baselines across three types.On MBPP, compared to the performance ceiling of GPT-5, BiCSRouter achieves a 46% reduction in cost with only a 2% drop in accuracy.Finally, we show that BiCSRouter can extend to additional regimes, highlighting its generality as a cross-system routing framework. * This work
+================================================================================
+2026-09-23T03:05:23.260961+00:00 DOI 10.1109/icc52391.2025.11160773
+TITLE: Distributed Inference Optimization for Large Language Model in Edge-Cloud Collaborative Networks
+VENUE: ICC 2025 - IEEE International Conference on Communications [[2025, 6, 8]]
+AUTHORS: Zideng Feng, Lu Lu, Qin Li, Yuhao Chai, Zhenyu Zhang, Yong Zhang, Yinglei Teng, Da Guo
+(abstract via OpenAlex)
+ABSTRACT: With the progressive evolution of large language models (LLMs) and the increasing need of computing for$\mathbf{6 G}$, it becomes crucial for multiple network nodes with limited computing resources to share the need for large model inference. Model partition methods have been proposed to enable computation-intensive artificial intelligence (AI) services by splitting an AI model across multi-edge and cloud nodes. In this paper, a distributed inference optimization framework for transformer decoder-only based LLMs (DIO-LLMs) is proposed in edge-cloud collaborative networks. The partitioning and offloading strategy is determined based on the computing workload and network status. DIO-LLMs specifically accounts for the parallel execution capabilities of the transformer architecture. It employs a two-phase model partitioning strategy, comprising inter-layer and intra-layer partitions, to effectively distribute LLMs across edge and cloud nodes. Additionally, to mitigate inference latency under resource limitations, a Greedy Proximal Policy Optimization (GPPO) based algorithm has been developed to devise optimal strategies. Simulation results indicate that under memory constraints, the proposed algorithm can reduce inference latency more effectively than other baseline algorithms.
+================================================================================
+2026-09-23T03:05:24.644573+00:00 DOI 10.1007/s11227-025-08034-8
+TITLE: A data-augmented model routing framework for efficient LLM deployment in edge–cloud environments
+VENUE: The Journal of Supercomputing [[2025, 11, 17]]
+AUTHORS: Muhammad Syafiq Mohd Pozi, Yukinori Sato
+ABSTRACT: Abstract Large language model (LLM)-based program generation tasks are hindered by high computational demands. These challenges, along with high deployment costs, often pose a barrier to practical applications. To address these, we propose a novel data-augmented multi-LLM model routing approach that classifies prompts based on whether they should be processed on a weak LLM engine or a strong LLM. Experimental results show up to 16 times better efficiency compared to the existing cascaded approaches, while preserving the inference accuracy. Thus, the proposed method optimally allocates prompts across multiple LLMs, reducing computational costs while maintaining inference accuracy.
+================================================================================
+2026-09-23T03:05:25.284151+00:00 DOI 10.1109/access.2026.3720562
+TITLE: In-Browser Split Inference for Autoregressive Large Language Models With Activation Quantization
+VENUE: IEEE Access [[2026]]
+AUTHORS: Yuseong Lee, Yeohn-Shik Choee, Seunghyun Lee, Soonchul Kwon
+(abstract via OpenAlex)
+ABSTRACT: On-device inference of large language models (LLMs) preserves user privacy and eliminates per-query server costs. However, weak client devices cannot run full models locally, and complete offloading negates the benefits of on-device inference. This study introduces SplitLLM, a novel zero-installation system that partitions autoregressive LLM inference between a WebGPU browser client and remote server, maintaining a key–value cache on both sides of the partition. The influence of the client device, model, split point, and network on the throughput is systematically evaluated. The results show that the optimal split point depends on the client device, whereas the per-token round trip time is invariant to the split point. This explains why adapting the split point to the network conditions yields no communication benefit, providing support for a lightweight placement rule that requires no trial offloading. The transmitted hidden state is compressed to 8 bits using static, offline-calibrated per-channel scales shared between the client and server, reducing the payload by half while keeping perplexity within 0–7% of full precision. In contrast, per-tensor quantization inflates perplexity by several orders of magnitude at intermediate split points. Under bandwidth-constrained conditions, the proposed compression speeds up decode and prefill by 1.7– $2.6\times $ and 2.4– $2.9\times $ , respectively. Overall, this work offers a promising platform for enhancing the accessibility of LLMs, especially for resource-constrained client devices.
+================================================================================
+2026-09-23T03:05:27.108677+00:00 DOI 10.1109/jiot.2026.3719132
+TITLE: A Cloud-Edge Collaborative Large Language Model Inference Framework Based on Historical Context Matching
+VENUE: IEEE Internet of Things Journal [[2026]]
+AUTHORS: Xianzhong Tian, Yu Wang, Guanpeng Zhu
+ABSTRACT: NOT AVAILABLE

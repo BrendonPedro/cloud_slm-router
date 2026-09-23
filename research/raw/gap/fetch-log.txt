@@ -1,0 +1,10 @@
+2026-09-23T03:03:43Z https://export.arxiv.org/abs/2507.16731 42681
+2026-09-23T03:03:45Z https://export.arxiv.org/abs/2507.00672 43781
+2026-09-23T03:03:56Z https://ieeexplore.ieee.org/document/11160773/ 0
+2026-09-23T03:04:30Z https://api.crossref.org/works/10.1145/3838593 94064
+2026-09-23T03:04:31Z https://api.crossref.org/works/10.1145/3809166 84688
+2026-09-23T03:04:33Z crossref query DIO-LLMs 8182
+2026-09-23T03:04:53Z crossref bibliographic sweep, 8 queries x 20 rows -> crossref_sweep.txt
+2026-09-23T03:05:28Z crossref+openalex abstracts for 14 DOIs -> ieee_acm_abstracts.txt
+2026-09-23T03:05:54Z doi.org/IEEE REST/S2 attempts for Mix-or-Split and INFOCOM paper -> s2_ieee_try.txt
+2026-09-23T03:06:03Z S2 DOI:10.1109/infocom59046.2026.11571307 1627
