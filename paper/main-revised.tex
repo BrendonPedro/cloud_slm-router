@@ -1,0 +1,653 @@
+% =====================================================================
+% paper/main-revised.tex  --  REVISED DRAFT FOR ADVISOR DISCUSSION
+% Status: 2026-09-23. Structurally complete; experimentally INCOMPLETE.
+%
+% Rules this draft follows (see research/claim-audit.md section 5):
+%  * source/main-original.tex is not modified (sha256 06f5f9d7...07cf6).
+%  * No result for the proposed router is reported: none exists.
+%  * The only measured numbers are the Stage-0 simple-baseline results in
+%    Section VI. They are \input from paper/tables/*.tex, which
+%    paper/make_tables.py generates from
+%    experiments/prototype/results/stage0_raw.json (raw evidence:
+%    experiments/prototype/{preds,splits,logs}).
+%  * Every \cite key resolves to references/library.bib
+%    (checked by paper/check_paper.py).
+%  * Planned work is written in the future tense and marked \todo{...}.
+%  * The title is a WORKING title. Whether to keep "Tiny-LM" and
+%    "Jacobi-Forced Micro-Encoder" is an advisor decision
+%    (research/micro-encoder-investigation.md, research/gap-assessment.md).
+% Compile: cd paper && pdflatex main-revised && bibtex main-revised &&
+%          pdflatex main-revised && pdflatex main-revised
+% (not compile-tested: no TeX installation on the drafting host).
+% =====================================================================
+\documentclass[lettersize,journal]{IEEEtran}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{array}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\newcommand{\pmark}{$\triangle$}
+\newcommand{\todo}[1]{\textbf{[TODO: #1]}}
+\newcommand{\A}{\mathcal{A}}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+\title{Query Routing between Edge SLMs, Split-LLMs, and Cloud LLMs:\\
+Problem Formulation, Prior-Art Positioning, and a Pre-Registered Evaluation Protocol\\
+{\normalsize (working title; revised draft, no results for the proposed router yet)}}
+
+\author{Brendon Pedro, Sirapop Nuannimnoi, Panuwat Saetee, Hojjat Baghban,
+Karin Honda, and Ching-Yao Huang%
+\thanks{Revised draft prepared 2026-09-23 with AI assistance for advisor
+discussion; see advisor/research-sprint-report.md. Not for submission.}}
+
+\markboth{Revised draft for advisor discussion, 2026-09-23}{Pedro \MakeLowercase{\textit{et al.}}: Split-aware query routing (draft)}
+
+\maketitle
+
+\begin{abstract}
+Collaborative inference between small language models (SLMs) on edge devices and
+large language models (LLMs) in the cloud is an active research area, and
+query-level routing between the two tiers has been studied extensively in both
+datacenter and edge--cloud settings~\cite{li2026collaborative,moslem2026dynamic}.
+This draft revisits a proposal for a lightweight edge-side router that chooses,
+for each query, among an edge SLM, a split (partitioned) LLM, and a full cloud
+LLM. After a review of prior work, we find that lightweight learned routers,
+cost- and latency-aware edge--cloud routing, adaptation to new models without
+retraining, and privacy-aware three-way edge/collaborative/cloud routing have
+all been reported previously. In the literature we could read, we did not find
+a query-level router whose action set includes a layer-split LLM path, with the
+path's cost including activation transmission and split-depth-dependent
+leakage. One likely-relevant 2026 journal paper could not be read and may close
+this gap. We therefore (i) formulate split-aware routing with an explicit action
+set, a measured system-state-dependent cost, and a leakage constraint; (ii)
+position the formulation against the closest prior work; (iii) pre-register a
+staged evaluation protocol with falsification criteria; and (iv) report a
+zero-inference preliminary measurement that uses released per-query scores from
+LLMRouterBench~\cite{li2026llmrouterbench} to set the bar a learned router must
+clear. In that measurement, a TF-IDF plus logistic-regression router did not
+outperform random routing on deferral AUC in any of eight leave-one-dataset-out
+folds. No result for the proposed router is reported in this version.
+\end{abstract}
+
+\begin{IEEEkeywords}
+LLM routing, edge--cloud collaborative inference, small language models,
+split inference, selective prediction, calibration
+\end{IEEEkeywords}
+
+% ---------------------------------------------------------------------
+\section{Introduction}
+\label{sec:intro}
+% Rewritten: the original first abstract sentence reproduced the first sentence
+% of the abstract of li2026collaborative verbatim (research/gap-assessment.md s5).
+
+\IEEEPARstart{L}{anguage-model} services are increasingly deployed across a
+device--edge--cloud continuum rather than in a single location. Recent surveys
+organise this space into collaboration between on-device SLMs and cloud LLMs,
+including routing, cascading, speculative decoding, and partitioned
+execution~\cite{li2026collaborative,chen2026network,moslem2026dynamic}. Two
+motivations recur. First, per-token cost and latency of large models make them
+wasteful for queries that a small model answers correctly~\cite{ding2024hybrid,ong2025routellm}.
+Second, some inputs are sensitive, and sending them to a third-party cloud raises
+privacy concerns~\cite{he2025emerged,zhang2025understanding}; even de-identified
+clinical free text carries a residual re-identification risk~\cite{ford2025patient}.
+\todo{If a regulatory claim (e.g.\ HIPAA) is kept, cite the primary regulatory
+text; the original draft cited a company blog.}
+
+Split (partitioned) inference is one response to the second concern. The first
+layers of a model run on a trusted device and only intermediate activations
+leave it~\cite{kang2017neurosurgeon,mudvari2024splitllm,lee2026browser}. It must
+be distinguished from split \emph{learning}, where the partition is used during
+training~\cite{vepakomma2018split,pham2025split,hukkeri2025comprehensive,alhindi2025balancing}.
+Split inference does not by itself make inference private: transmitted
+activations can be inverted. One preprint reports that an inversion attack
+recovered about 59\% of tokens at a 2-layer split and about 35\% at an 8-layer
+split~\cite{cunningham2026privacy}. Noise-based defences such as
+Split-and-Denoise~\cite{mai2024split} trade utility for protection.
+
+Routing between an edge SLM and a cloud LLM is well studied. Pre-generation
+routers predict from the query whether the small model will suffice~\cite{ding2024hybrid,ong2025routellm,qiao2026consroute};
+confidence-based cascades let the small model answer first and escalate when
+uncertain~\cite{aggarwal2023automix,wu2025recursive,zhu2026dabo,gui2026pro}. PRISM routes
+among cloud-only, edge-only, and a cloud--edge collaboration mode based on
+privacy sensitivity~\cite{zhan2025prism}. Lightweight encoder or linear routers
+are common~\cite{ong2025routellm,chen2024routerdc,garg2026hydra,dey2026compliancegate},
+and several methods integrate new models without retraining the
+router~\cite{wang2026icl,tran2025arch,shirkavand2025cost,garg2026hydra}. A large
+benchmark further reports that many recent routers do not reliably outperform a
+simple baseline~\cite{li2026llmrouterbench}.
+
+In the sources we could read, we did not find a router whose action set contains
+a \emph{split} LLM path alongside an edge SLM and a full cloud LLM. The question
+this draft studies is therefore narrow: \emph{when an edge device can answer
+locally, run part of a large model locally and send activations, or send the
+query to the cloud, can a lightweight router learn from query content which path
+to take, beyond what a fixed systems rule achieves?} Whether this question is
+still open depends on a 2026 journal paper we could not access, Mix-or-Split~\cite{wang2026mix},
+whose title suggests a per-request choice between collaborative and split
+execution (Section~\ref{sec:related:open}).
+
+\subsection*{What this draft contributes, and what it does not}
+\begin{itemize}
+\item \textbf{A formulation} of split-aware query routing
+(Section~\ref{sec:problem}): an explicit action set
+$\{\textsc{Edge},\textsc{Split}(d),\textsc{Cloud}\}$, a learned utility estimate
+separated from a measured, system-state-dependent cost so that the trade-off
+$\lambda$ can be changed at decision time (a property shared with prior
+routers), and a split-depth-dependent leakage constraint.
+\item \textbf{A positioning} against the closest prior work
+(Section~\ref{sec:related}, Table~\ref{tab:comparison}), stating which parts of
+the original proposal are already reported.
+\item \textbf{A pre-registered, staged evaluation protocol}
+(Section~\ref{sec:protocol}) with hypotheses H1--H3 and success and failure
+criteria fixed before any router is trained.
+\item \textbf{A preliminary, zero-inference measurement} of the simple-baseline
+bar on released LLMRouterBench scores (Section~\ref{sec:stage0}). It covers
+baselines only.
+\end{itemize}
+This draft does \emph{not} report a trained router, on-device latency, split-link
+measurements, cost savings, or leakage measurements. These remain future work
+(Section~\ref{sec:results}).
+
+\subsection*{On the phrase ``Jacobi-Forced Micro-Encoder''}
+The original title named a ``Jacobi-Forced Micro-Encoder''. As of 2026-09-23 we
+found no established method with this name. Jacobi Forcing~\cite{hu2025fast} is
+a training procedure that makes an autoregressive model produce correct tokens
+under Jacobi-style parallel decoding. It builds on Jacobi decoding~\cite{song2021accelerating,santilli2023accelerating},
+lookahead decoding~\cite{fu2024break}, and consistency LLMs~\cite{kou2024cllms}.
+Its benefit is fewer sequential steps when generating long outputs with a
+\emph{causal} model. The routing decision in Eq.~\eqref{eq:rule} is a single
+forward pass followed by an $\arg\max$, so parallel decoding has nothing to
+accelerate there, and an encoder-only model lacks the causal structure the
+method assumes. Section~\ref{sec:design:jacobi} records the one role in which a
+Jacobi-family method is technically relevant here: accelerating the edge or
+split \emph{generator}. That role is orthogonal to routing. \todo{Advisor:
+decide whether the title keeps ``Tiny-LM'' and ``Jacobi''. H2
+(Section~\ref{sec:protocol}) tests the first.}
+
+% ---------------------------------------------------------------------
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Query-level LLM routing}
+Hybrid LLM trains a router that predicts the quality gap between a small and a
+large model and routes under a tunable quality--cost
+threshold~\cite{ding2024hybrid}. RouteLLM learns weak/strong routers from
+preference data. Its best routers report cost-saving ratios of about
+1.4--3.7$\times$ depending on the benchmark, at 87--95\% of the strong model's
+performance~\cite{ong2025routellm}.\footnote{The original draft stated
+2--3.6$\times$; the range above follows Table~6 of~\cite{ong2025routellm}
+(3.66$\times$ on MT-Bench, 1.41$\times$ on MMLU, 1.49$\times$ on GSM8K).
+RouteLLM's threshold is swept to meet call-rate targets rather than calibrated to
+measured costs.} RouterDC~\cite{chen2024routerdc} and CSCR~\cite{shirkavand2025cost}
+use contrastive query encoders. IRT-Router models query difficulty and model
+ability with item response theory~\cite{song2025irt}. ICL-Router represents
+models as in-context vectors so that new models can be added without retraining
+the router~\cite{wang2026icl}. BEST-Route jointly selects a model and a number of
+samples~\cite{ding2025best}. Arch-Router is a 1.5B-parameter \emph{generative}
+router that maps queries to natural-language routing policies. Its reported
+93.17\% accuracy and 28$\times$ latency advantage were measured on the authors'
+own benchmark against proprietary LLMs prompted as routers, not against trained
+routers~\cite{tran2025arch}. RouteLMT predicts marginal gain from the small
+model's own prompt representations for translation~\cite{luo2026routelmt}, and
+a related preprint routes from prefill activations of an open LLM~\cite{varshney2026llm}.
+In production, HyDRA reports a CPU-served ModernBERT-based router~\cite{garg2026hydra}.
+LLMRouterBench evaluates many routers on a common pool and reports that several
+recent methods do not reliably outperform a simple baseline~\cite{li2026llmrouterbench}.
+FrugalGPT is an early LLM cascade~\cite{chen2023frugalgpt}, and a recent survey organises routing and cascading methods~\cite{moslem2026dynamic}.
+
+\subsection{Edge--cloud SLM/LLM collaboration}
+Edge--cloud routers include ConsRoute (device--edge--cloud, prefill-state
+probes)~\cite{qiao2026consroute}, a wireless quality--latency-aware
+router~\cite{bao2025dynamic}, TMO (device--cloud reinforcement-learning offloading
+in multi-turn conversations)~\cite{yuan2025device}, Lyra (online preference-aware
+edge--cloud routing, IEEE INFOCOM 2026)~\cite{ma2026preference}, joint offloading
+and SLM caching~\cite{xu2026joint}, and Pro-Router (a pre-scorer plus a
+token-confidence verifier)~\cite{gui2026pro}. DABO calibrates an edge SLM's
+confidence and offloads under an accuracy constraint~\cite{zhu2026dabo}.
+LLMSwitchBench is a public local-versus-cloud routing benchmark for smart-home
+queries~\cite{liu2025llmswitchbench}. Other work collaborates at the token level:
+CITER routes tokens between models~\cite{zheng2025citer}, and distributed
+speculative decoding drafts on the device and verifies in the
+cloud~\cite{zheng2026fast,xu2026dip,zhang2026pipelined}.\footnote{The original
+draft said TSLT~\cite{zheng2026fast} ``improves throughput and reduces latency''.
+Its abstract claims reduced uplink communication while \emph{maintaining}
+latency and quality. It is a speculative-decoding method, not sequence-level
+routing.} Privacy-aware routing is represented by PRISM~\cite{zhan2025prism},
+ComplianceGate~\cite{dey2026compliancegate}, and local privacy
+gatekeepers~\cite{uzor2025guarding,langiu2026privacy}.
+
+\subsection{Split inference for LLMs}
+Split-point selection has been studied for DNNs~\cite{kang2017neurosurgeon} and
+for LLMs under latency, memory, or network constraints~\cite{chen2024adaptive,sung2025memory,mudvari2024splitllm,younesi2025splitwise,kafetzis2025large,djuhera2025joint,feng2025distributed}.
+Browser-based split inference reports that per-token round-trip time does not
+depend on the split point~\cite{lee2026browser}. Work on the privacy of split
+inference includes noise injection~\cite{mai2024split}, transport
+optimisation~\cite{zhou2025poster}, encrypted activation transfer with an authenticated KV cache~\cite{li2026efficient},
+and inversion measurements combined with lookahead decoding over a WAN~\cite{cunningham2026privacy}.
+These systems choose \emph{where to split one model}. None that we read chooses
+per query \emph{whether} to split, as opposed to answering locally or sending the
+query to the cloud.
+
+\subsection{Decision models, calibration, and selective prediction}
+A router is a selective predictor: it abstains from the cheap model when
+uncertain~\cite{geifman2017selective}, and its probability should be
+calibrated~\cite{guo2017calibration}. A commercial ``System One'' decision-model
+API (Jev) advertises typed decisions with confidence
+estimates~\cite{almeida2026jev,typesafe2026systemone,typesafe2026confidencerouting}.
+These are vendor claims that we have not verified. The service is cloud-hosted,
+so it cannot act as a pre-offload router on the device.
+
+\subsection{Positioning}
+\label{sec:related:open}
+Table~\ref{tab:comparison} summarises the closest work. It is condensed from
+our full comparison matrix (\texttt{research/novelty-matrix.md}), in which a
+difference counts only if it changes what must be built or measured. The
+\emph{Proposed} row describes targets, not results.
+
+\begin{table*}[t]
+\centering
+\caption{Closest prior work. \cmark: present; \pmark: partial; \xmark: absent
+in the material we read; ?: not determined; --: not applicable. ``Abs.'' marks
+rows read at abstract depth only. Venue status follows
+\texttt{references/library.bib}; ``pp'' means preprint (a venue named only in
+arXiv comments is not treated as confirmed).}
+\label{tab:comparison}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llcccccccc}
+\hline
+Work & Status & Edge SLM & Query-level & Lightweight & Latency- & Comm.- & Privacy- & Split-LLM & Calibrated \\
+ & & tier & routing & router & aware & aware & aware & action & confidence \\
+\hline
+PRISM~\cite{zhan2025prism} & pp & \cmark & \cmark & \cmark & \cmark & \pmark & \cmark & \xmark$^a$ & \pmark \\
+ConsRoute~\cite{qiao2026consroute} & pp & \cmark & \cmark & \cmark & \cmark & \pmark & \xmark & \xmark & \pmark \\
+Bao et al.~\cite{bao2025dynamic} & pp (wksp.) & \cmark & \cmark & \cmark & \cmark & \cmark & \xmark & \xmark & \xmark \\
+TMO~\cite{yuan2025device} (abs.) & pp & \cmark & \cmark & ? & \cmark & \pmark & \xmark & \xmark & \xmark \\
+Lyra~\cite{ma2026preference} (abs.) & INFOCOM'26 & \cmark & \cmark & ? & \cmark & ? & ? & \xmark$^b$ & ? \\
+DABO~\cite{zhu2026dabo} (abs.) & IEEE Access & \cmark & \cmark$^c$ & ? & \cmark & ? & ? & \xmark$^b$ & \cmark \\
+Pro-Router~\cite{gui2026pro} & pp & \pmark & \cmark & \cmark & \cmark & \pmark & \xmark & \xmark & \cmark \\
+Hybrid LLM~\cite{ding2024hybrid} (abs.) & pp & \pmark & \cmark & ? & \xmark & \xmark & \xmark & \xmark & \pmark \\
+RouteLMT~\cite{luo2026routelmt} (abs.) & ACL'26 Ind. & \pmark & \cmark & \cmark & \xmark & \xmark & \xmark & \xmark & \pmark \\
+RouteLLM~\cite{ong2025routellm} & ICLR'25 & \xmark & \cmark & \cmark & \xmark & \xmark & \xmark & \xmark & \pmark \\
+HyDRA~\cite{garg2026hydra} & pp & \xmark & \cmark & \cmark & \cmark & \xmark & \xmark & \xmark & \pmark \\
+ICL-Router~\cite{wang2026icl} (abs.) & AAAI'26 & \xmark & \cmark & \xmark & \xmark & \xmark & \xmark & \xmark & \pmark \\
+IRT-Router~\cite{song2025irt} (abs.) & ACL'25 & \xmark & \cmark & ? & \xmark & \xmark & \xmark & \xmark & \xmark \\
+Arch-Router~\cite{tran2025arch} & pp & \xmark & \cmark & \pmark & \pmark & \xmark & \xmark & \xmark & \xmark \\
+Cunningham~\cite{cunningham2026privacy} (abs.) & pp & \pmark & \xmark & -- & \cmark & \cmark & \cmark & \cmark$^d$ & \xmark \\
+Jev~\cite{almeida2026jev} (vendor) & product & \xmark & \cmark & \xmark & \cmark & \xmark & \xmark & \xmark & \cmark$^e$ \\
+Mix-or-Split~\cite{wang2026mix} & TPDS'26 & ? & ? & ? & ? & ? & ? & ?$^f$ & ? \\
+\hline
+\textit{Proposed (this draft)} & not built & target & target & target & target & target & target & target & target \\
+\hline
+\end{tabular}
+
+\vspace{2pt}
+\footnotesize{$^a$ The collaboration mode perturbs the prompt with local
+differential privacy and refines a cloud-returned sketch; no model is
+partitioned. $^b$ No split path is mentioned in the abstract. $^c$ The SLM runs a
+probe inference first (post-probe, not pre-generation). $^d$ A split system with
+no router and no SLM path. $^e$ Vendor claim, not independently verified.
+$^f$ Closed access; unread. Its title suggests it may occupy the Split-LLM column.}
+\end{table*}
+
+On this evidence, a lightweight or generative router, joint accuracy--cost--latency
+routing between an edge SLM and a cloud LLM, adaptation without retraining, and
+privacy-aware three-way routing are \emph{not} open problems. What we did not
+find is the Split-LLM column combined with query-level routing. That combination
+is a genuine research question only if the split path differs from the cloud path
+in something that query content predicts, for example which inputs are too
+sensitive to leave the device in any form other than activations. If it does
+not, the split-versus-cloud choice may be a fixed systems rule rather than a
+learned decision (Section~\ref{sec:problem:caveat}). \todo{Read Mix-or-Split
+\cite{wang2026mix} in full (needs IEEE Xplore access) before relying on this
+paragraph.}
+
+% ---------------------------------------------------------------------
+\section{Problem Formulation}
+\label{sec:problem}
+
+\begin{table}[t]
+\centering
+\caption{Notation}
+\label{tab:notation}
+\begin{tabular}{cp{6.2cm}}
+\hline
+Symbol & Meaning \\
+\hline
+$q$ & a user query \\
+$s$ & observed system state (link bandwidth $B$, round-trip time $\rho$, cloud load) \\
+$\A$ & action set $\{\textsc{Edge}_j\}_{j} \cup \{\textsc{Split}(d)\}_{d\in D} \cup \{\textsc{Cloud}\}$ \\
+$D$ & admissible split depths (number of layers kept on the device) \\
+$U(a,q)$ & quality of the answer produced by action $a$ (task metric, e.g.\ accuracy) \\
+$C(a\mid q,s)$ & cost of action $a$ in one declared unit (Section~\ref{sec:problem:cost}) \\
+$L(a)$ & leakage of action $a$ (fraction of input tokens recoverable by a stated attack) \\
+$\varepsilon(q)$ & leakage budget for query $q$ \\
+$\lambda$ & price of one cost unit in quality units \\
+$\hat U_\theta(a\mid q)$ & router's estimate of $U(a,q)$, parameters $\theta$ \\
+$\hat p_\theta(q)$ & router's probability that the edge answer is good enough \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Actions}
+For each query the edge device chooses one action $a\in\A$: answer with an edge
+SLM (\textsc{Edge}$_j$); run the first $d$ layers of a large model locally and
+send activations to the cloud for the rest (\textsc{Split}$(d)$); or send the
+query text to the cloud model (\textsc{Cloud}). The original draft named
+Split-LLMs only as an option at the cloud tier and did not model the partition.
+Here $d$ is an explicit decision variable.
+
+\subsection{Objective}
+The original objective, $\max_R \mathbb{E}_q[U(R(q),q)-\lambda C(R(q),q)]$,
+follows the quality--cost trade-off used in prior routing
+work~\cite{ding2024hybrid,ong2025routellm,song2025irt,ding2025best}. We keep it
+and add system state and a leakage constraint:
+\begin{equation}
+\max_{\pi}\ \mathbb{E}_{q,s}\big[\,U(\pi(q,s),q) - \lambda\, C(\pi(q,s)\mid q,s)\,\big]
+\ \ \text{s.t.}\ \ L(\pi(q,s)) \le \varepsilon(q).
+\label{eq:objective}
+\end{equation}
+The router learns only the quantity that depends on query content. The cost is
+measured, not learned:
+\begin{equation}
+\pi(q,s) = \arg\max_{a\in\A:\,L(a)\le\varepsilon(q)} \ \hat U_\theta(a\mid q) - \lambda\, C(a\mid q,s).
+\label{eq:rule}
+\end{equation}
+Because $\lambda$, $s$, and the cost table enter only at decision time,
+changing prices, links, or budgets does not require retraining. This is a
+property of the decision rule, and prior routers share
+it~\cite{ong2025routellm,ding2024hybrid}. It is not a contribution. Adding a new
+\emph{model} does require new labels for $\hat U_\theta$ unless a method such
+as~\cite{wang2026icl} is used.
+
+In the two-action case (\textsc{Edge} vs.\ \textsc{Cloud}), Eq.~\eqref{eq:rule}
+reduces to thresholding $\hat p_\theta(q)=\Pr[U(\textsc{Edge},q)\ge U(\textsc{Cloud},q)-\delta\mid q]$
+at a threshold $\tau(\lambda,s)$. How $\tau$ is set on a new query distribution
+must be specified: Section~\ref{sec:stage0} shows that thresholds tuned on
+development data can fail under dataset shift.
+
+\subsection{Cost model}
+\label{sec:problem:cost}
+$C$ is expressed in one declared unit. We propose end-to-end latency in seconds,
+with monetary cost reported separately using the cost models of
+Section~\ref{sec:protocol:metrics}. For generating $N$ tokens:
+\begin{align}
+T(\textsc{Edge}_j) &= T^{\text{pre}}_{j}(q) + (N-1)\,T^{\text{tok}}_{j},\\
+T(\textsc{Cloud}) &= \rho + |q|/B + T^{\text{pre}}_{c}(q) + (N-1)\,T^{\text{tok}}_{c},\\
+T(\textsc{Split}(d)) &= T^{\text{pre}}_{e,d}(q) + \tfrac{|q|\,h\,b}{B} + \rho + T^{\text{pre}}_{c,S-d}(q) \nonumber\\
+&\quad + (N-1)\big(T^{\text{tok}}_{e,d} + \rho + \tfrac{h\,b}{B} + T^{\text{tok}}_{c,S-d}\big),
+\end{align}
+where $h$ is the hidden size, $b$ the bytes per transmitted element, $S$ the
+number of layers, and subscripts $e,c$ denote the device and cloud parts. The
+per-token round trip in the last line is the reason Jacobi-family parallel
+decoding has been applied to split inference~\cite{cunningham2026privacy}. This
+is an analytic model. Every term is to be \emph{measured} on the testbed
+(Stage~2), not assumed. \todo{Measure; the original testbed description is
+incomplete (cloud server unspecified).}
+
+\subsection{Leakage}
+$L(\textsc{Cloud})$ is the whole query and $L(\textsc{Edge}_j)=0$. For
+$\textsc{Split}(d)$, $L$ is defined operationally as the token-recovery rate of
+a stated inversion attack at depth $d$. Published numbers are
+depth-dependent~\cite{cunningham2026privacy}. $\varepsilon(q)$ requires a
+sensitivity label per query, as in PRISM~\cite{zhan2025prism}. \todo{Choose the
+attack and the sensitivity labelling procedure.}
+
+\subsection{When is the split action a learning problem?}
+\label{sec:problem:caveat}
+If $\textsc{Split}(d)$ runs the same weights as $\textsc{Cloud}$ and the
+partition is lossless, then $U(\textsc{Split}(d),q)=U(\textsc{Cloud},q)$ for
+every $q$. Quality labels alone then cannot distinguish the two actions; only
+$C$ and $L$ can. In that case the split-versus-cloud choice is determined by
+$s$ and $\varepsilon(q)$, and the router only needs to predict $\varepsilon(q)$
+(sensitivity) and $\hat U(\textsc{Edge}_j\mid q)$. The split action requires
+learning beyond this only if (a) the split path uses a different model, depth,
+or lossy compression, so that quality differs, or (b) sensitivity must itself be
+inferred from content. Hypothesis H3 (Section~\ref{sec:protocol}) tests whether
+a learned policy beats the fixed rule ``sensitive $\rightarrow$ best admissible
+\textsc{Split}$(d)$, otherwise cost-optimal''.
+
+% ---------------------------------------------------------------------
+\section{Candidate Router Designs}
+\label{sec:design}
+The original draft specified a ``Tiny Language Model'' router but left the method
+section empty. We compare four candidate designs. None has been implemented or
+evaluated yet. Details are in \texttt{architecture/options.md}.
+
+\begin{enumerate}
+\item[A.] \textbf{Tiny generative router.} A small instruction-tuned LM
+(e.g.\ 0.5B parameters) fine-tuned to emit a route label; $\hat p$ is read from
+the label-token probabilities. This is the closest reading of the original
+title. Arch-Router~\cite{tran2025arch} is a larger instance.
+\item[B.] \textbf{Discriminative encoder router.} A small encoder (e.g.\ a
+DeBERTa-v3-small or ModernBERT-base backbone) with a classification head. This is the
+design of RouteLLM's BERT router~\cite{ong2025routellm}, RouterDC~\cite{chen2024routerdc},
+and HyDRA~\cite{garg2026hydra}.
+\item[C.] \textbf{Self-routing edge SLM.} A probe on the edge SLM's own prefill
+state, as in RouteLMT~\cite{luo2026routelmt}, ConsRoute~\cite{qiao2026consroute},
+and~\cite{varshney2026llm}. It reuses computation the edge must do anyway
+if it answers locally.
+\item[D.] \textbf{Structured decision head.} Designs A--C with a typed output
+(action, split depth, confidence, abstain), in the spirit of typed decision
+APIs~\cite{typesafe2026systemone}. It runs on the device.
+\end{enumerate}
+Eq.~\eqref{eq:rule} needs one forward pass and an $\arg\max$. No design
+requires sequential decoding. Design A must therefore be justified empirically
+against B (H2).
+
+\subsection{Where a Jacobi-family method could apply}
+\label{sec:design:jacobi}
+Jacobi Forcing trains a causal LM so that Jacobi (fixed-point) parallel decoding
+converges in fewer iterations. Its authors report speedups for 7B code and math
+models on datacenter GPUs, and the released checkpoints are two 7B
+models~\cite{hu2025fast,jacobiforcing2025repo}. In this system it could
+plausibly reduce the number of sequential edge--cloud round trips when the
+\emph{split generator} decodes, the $(N-1)$ term in $T(\textsc{Split}(d))$,
+analogously to the use of lookahead decoding in~\cite{cunningham2026privacy}.
+Whether it transfers to sub-2B edge models or to a split link has not been
+reported, to our knowledge. That would be a decoding contribution separate
+from routing. \todo{Advisor: in scope or not?}
+
+% ---------------------------------------------------------------------
+\section{Evaluation Protocol (Proposed)}
+\label{sec:protocol}
+This section describes experiments that \emph{have not been run}, except
+Stage~0's simple baselines (Section~\ref{sec:stage0}). The full pre-registration
+is in \texttt{architecture/recommended-experiment.md}.
+
+\subsection{Hypotheses}
+\begin{itemize}
+\item \textbf{H1 (a learned router beats simple baselines).} On held-out queries,
+a learned pre-generation router reaches a lower cloud-call rate at quality
+$\ge$ strong $-1$ point than both TF-IDF+LR and random routing at a matched
+rate.
+\item \textbf{H2 (a tiny generative router is justified).} Design A is not
+significantly worse than design B and offers something B does not (e.g.\ better
+out-of-distribution calibration). Otherwise the ``Tiny-LM'' framing is not
+supported.
+\item \textbf{H3 (the split action matters).} A learned policy over
+$\{\textsc{Edge},\textsc{Split}(d),\textsc{Cloud}\}$ beats the fixed rule of
+Section~\ref{sec:problem:caveat} on the objective in Eq.~\eqref{eq:objective}.
+\end{itemize}
+
+\subsection{Stages}
+\textbf{Stage 0 (no model inference).} Labels come from the per-query scores
+released with LLMRouterBench~\cite{li2026llmrouterbench,llmrouterbench2025repo}.
+The pool is the binary-scored splits for which both models in a pair have
+records (MMLU-Pro, GPQA, LiveCodeBench, LiveMathBench, AIME; 2,432 unique
+queries). There are two pairs: P-L (Llama-3.1-8B-Instruct $\rightarrow$
+Qwen3-235B-A22B-2507) and P-Q (Qwen3-8B $\rightarrow$ Qwen3-235B-A22B-2507).
+Splits are 60/20/20 stratified with five seeds, plus four leave-one-dataset-out
+(LODO) folds. \emph{Status: simple baselines run; designs A--C not run.}
+
+\textbf{Stage 1 (own labels).} We will run the edge models of the original
+draft on the Stage-0 datasets and on SimpleQA~\cite{wei2024measuring} to obtain
+labels. The original draft assumed that LLMRouterBench contains SimpleQA scores
+for its model pool. The released data contain SimpleQA scores only for
+flagship API models, and of the original pool only Llama-3.1-8B-Instruct appears
+in the release. Flagship models score low on SimpleQA in the release, so it offers
+little headroom for SLM-versus-LLM routing, and a second dataset such as
+LLMSwitchBench~\cite{liu2025llmswitchbench} should be considered. \emph{Status:
+not run.}
+
+\textbf{Stage 2 (split testbed).} We will measure the cost terms of
+Section~\ref{sec:problem:cost} and the leakage per depth on the edge server and
+cloud server, and test H3. \emph{Status: not run; cloud hardware unspecified.}
+
+\subsection{Models}
+The original model list needs corrections (verified against Hugging Face model
+records on 2026-09-23; see \texttt{experiments/reproducibility-plan.md}).
+No official ``Qwen3-72B-Instruct'' checkpoint exists. The official Gemma-4
+identifiers are \texttt{gemma-4-E2B-it}, \texttt{gemma-4-E4B-it}, and
+\texttt{gemma-4-12B-it}, not ``E2B-A4B'' etc. The E2B checkpoint stores about
+5.1B parameters. The official Nemotron name includes ``A3B''. Candidate edge models
+are Gemma-4 E2B/E4B/12B, Phi-4-mini~\cite{microsoft2025phi},
+Llama-3.1-8B-Instruct, and the diffusion LMs LLaDA~\cite{nie2025large}, Dream,
+and Fast-dLLM v2~\cite{wu2025fast}. Candidate strong models are
+Llama-3.3-70B-Instruct and a replacement for the non-existent Qwen3-72B.
+\todo{Advisor: choose the strong-model replacement (e.g.\ Qwen2.5-72B-Instruct,
+Qwen3-32B, or Qwen3-235B-A22B-2507, which matches Stage 0).}
+
+\subsection{Baselines}
+Always-edge, always-cloud, random at a matched call rate, a dataset-prior router
+(which routes on dataset identity and serves as a leakage control), TF-IDF+LR,
+RouteLLM's released BERT router applied without retraining~\cite{ong2025routellm,routellm2024repo},
+Arch-Router applied zero-shot~\cite{tran2025arch}, a prefill probe (design C),
+and an oracle. RouteLMT's router code is not public~\cite{luo2026routelmt}, so it
+will be re-implemented from the paper and described as such. ICL-Router and
+IRT-Router~\cite{wang2026icl,song2025irt} belong to the full study. For H3: the
+fixed split rule of Section~\ref{sec:problem:caveat}, and PRISM's
+gate~\cite{zhan2025prism}.
+
+\subsection{Metrics}
+\label{sec:protocol:metrics}
+\emph{Routing:} cloud-call rate at quality $\ge$ strong $-1$ point (primary),
+deferral AUC (area under quality vs.\ call rate), ECE, Brier score, and AURC.
+ECE is always reported next to a ranking metric, because a router can be
+well calibrated and still uninformative (Section~\ref{sec:stage0}).
+\emph{System:} router latency (p50/p95) on the device; TTFT, TPOT, and
+$T_{\text{total}}=\text{TTFT}+(N-1)\,\text{TPOT}$; activation bytes per token;
+requests and tokens per second; cold-start latency for serverless deployment.
+\emph{Cost:} as in the original draft, dedicated-GPU cost per request
+$C_{\text{cloud}}=P_{\text{gpu}}T_{\text{alloc}}/N_{\text{req}}$, serverless cost
+$C_{\text{serverless}}=P_{\text{flex}}T_{\text{exec}}+C_{\text{overhead}}$, and edge
+cost $C_{\text{edge}}=E_{\text{query}}R_{\text{elec}}+C_{\text{device}}/L$. Every
+reported quantity will be labelled as measured or estimated (e.g.\ prices taken
+from a price list). \todo{Record price sources and access dates.}
+
+\subsection{Statistics and decision criteria}
+The protocol specifies a paired bootstrap (10,000 resamples, stratified by
+dataset), McNemar's exact test at the selected operating point,
+Holm--Bonferroni correction across routers, pairs, and folds, and five seeds.
+H1 is supported only if the best learned router lowers the primary metric by at
+least 5 points relative to TF-IDF+LR (95\% CI excluding 0) and beats random and
+dataset-prior on deferral AUC in at least 3 of 4 LODO folds. The thresholds are
+our proposals and await the advisor's confirmation.
+
+% ---------------------------------------------------------------------
+\section{Preliminary Measurement: the Simple-Baseline Bar (Stage 0)}
+\label{sec:stage0}
+This section reports the only measurements in this draft. They were computed
+from released per-query scores. No language model was run, and \emph{no proposed
+router was trained}. Code, frozen splits, per-query predictions, logs, and
+checksums are in \texttt{experiments/prototype/}. Tables~\ref{tab:stage0}
+and~\ref{tab:stage0lodo} are generated from the raw results file by a script.
+
+\begin{table}[t]
+\centering
+\caption{Stage 0, in-domain test (mean$\pm$std over 5 seeds; $n\approx486$ per
+seed). ``Target met'': seeds where test quality reached strong $-1$ point at the
+threshold tuned on the development split. $^\dagger$Routes on dataset identity
+(a leakage control). $^\ddagger$Upper bound. Measured on released
+LLMRouterBench scores; no model inference.}
+\label{tab:stage0}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\input{tables/stage0_indomain.tex}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Stage 0, deferral AUC on the held-out dataset group (LODO, seed 0).}
+\label{tab:stage0lodo}
+\scriptsize
+\input{tables/stage0_lodo.tex}
+\end{table}
+
+\textbf{Headroom depends on the pair.} With Llama-3.1-8B-Instruct as the edge
+model (P-L), always-edge scored 0.298 against 0.719 for always-cloud. The oracle
+met the target while calling the cloud for 44.1\% of queries. With Qwen3-8B
+(P-Q), always-edge scored 0.680 against 0.718, and the oracle called the cloud
+for 11.3\% of queries.
+
+\textbf{The bar a learned router must clear.} In-domain, TF-IDF+LR met the
+target in 3/5 seeds for P-L at a call rate of 0.949$\pm$0.014, and in 5/5 seeds
+for P-Q at 0.299$\pm$0.086. Its deferral AUC was significantly higher than
+random in every P-L seed and in 4 of 5 P-Q seeds. It was significantly higher
+than the dataset-prior control in only 2 of 5 seeds for each pair (paired
+bootstrap, 95\% CI).
+
+\textbf{Lexical routing did not transfer across datasets.} In the LODO folds,
+TF-IDF+LR was never significantly better than random on deferral AUC. It was
+significantly worse in 3 of 8 folds (P-L LiveCodeBench, P-Q MMLU-Pro, P-Q math).
+
+\textbf{Calibration alone is misleading.} The dataset-prior router had in-domain
+ECE of 0.002 but little ranking ability (Table~\ref{tab:stage0}).
+
+\textbf{Development-tuned thresholds can fail under shift.} In the P-Q MMLU-Pro
+LODO fold, always-edge already met the target on the development groups, so the
+tuned threshold sent nothing to the cloud and the target was missed on test,
+even for the oracle's scores.
+
+\textbf{Caveats.} These are two model pairs on five benchmarks, with scores
+produced by the benchmark authors. Qwen3-8B's long outputs suggest a reasoning
+mode, which we inferred but did not confirm. The released cost field covers API
+cost only. The results say nothing about any on-device router, about latency, or
+about the split action.
+
+% ---------------------------------------------------------------------
+\section{Results and Discussion}
+\label{sec:results}
+\todo{No results for the proposed router exist yet. This section will report
+H1 and H2 (Stage 0, designs A--C), Stage-1 routing results on the original
+edge-model pool, and Stage-2 latency, cost, communication, and leakage
+measurements with H3. It must not be filled before the corresponding raw outputs
+exist.}
+
+\subsection{Limitations of this draft}
+\begin{itemize}
+\item The literature review was bounded. IEEE Xplore and the ACM Digital Library
+could not be queried directly. Several rows of Table~\ref{tab:comparison} were
+read at abstract depth only, and Mix-or-Split~\cite{wang2026mix} is unread.
+\item The only measurements are simple baselines on released scores for two
+model pairs, which do not include the original draft's edge models apart from
+Llama-3.1-8B-Instruct.
+\item The Split-LLM question may reduce to a fixed systems rule
+(Section~\ref{sec:problem:caveat}).
+\item The leakage measure and sensitivity labels are not yet defined.
+\end{itemize}
+
+% ---------------------------------------------------------------------
+\section{Conclusion}
+\label{sec:conclusion}
+This revision narrows the original proposal. Lightweight, adaptive, cost- and
+latency-aware SLM/LLM routing is established in prior work and is not claimed
+here. What we did not find in the literature we could read is a query-level router whose
+action set includes a split LLM path with measured activation cost and
+depth-dependent leakage. Whether that question is open, and whether it requires
+a learned router at all, remains to be established. We give a formulation that
+makes it testable, a pre-registered protocol, and a measured simple-baseline
+bar. Any claim of benefit awaits the experiments in Section~\ref{sec:protocol}.
+
+\bibliographystyle{IEEEtran}
+\bibliography{../references/library}
+
+\end{document}
