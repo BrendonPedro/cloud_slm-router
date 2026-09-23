@@ -1,0 +1,92 @@
+[
+  {
+    "key": "almeida2026jev",
+    "author": "Almeida, Diogo (TypeSafe AI)",
+    "title": "Introducing System One Models \\& Jev",
+    "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+    "year": "2026",
+    "note": "Company blog post dated Sep 15, 2026; vendor claims, not independently verified (see research/jev-system-one.md). Accessed 2026-09-23.",
+    "raw": "research/raw/jev/blog.html",
+    "status": "vendor blog"
+  },
+  {
+    "key": "typesafe2026systemone",
+    "author": "TypeSafe AI",
+    "title": "System One (concepts documentation)",
+    "url": "https://docs.typesafe.ai/concepts/system-one",
+    "year": "2026",
+    "note": "Official product documentation; vendor claims. Accessed 2026-09-23.",
+    "raw": "research/raw/jev/concepts.html",
+    "status": "vendor documentation"
+  },
+  {
+    "key": "typesafe2026confidencerouting",
+    "author": "TypeSafe AI",
+    "title": "Confidence routing (patterns documentation)",
+    "url": "https://docs.typesafe.ai/patterns/confidence-routing.md",
+    "year": "2026",
+    "note": "Official product documentation; vendor claims. Accessed 2026-09-23.",
+    "raw": "research/raw/jev/md_patterns_confidence-routing.md",
+    "status": "vendor documentation"
+  },
+  {
+    "key": "ma2025patent",
+    "author": "Ma, Liangping and Zhang, Shuai and Qi, Yingyong (Qualcomm Inc.)",
+    "title": "Model selection for split inference",
+    "url": "https://patents.google.com/patent/US12505362B2/en",
+    "year": "2025",
+    "note": "US Patent 12,505,362 B2; application US18/659,158 filed 2024-05-09; granted/published 2025-12-23 (Google Patents record).",
+    "raw": "research/raw/novelty/gpatent_US12505362B2.html",
+    "status": "patent"
+  },
+  {
+    "key": "jacobiforcing2025repo",
+    "author": "{Hao AI Lab}",
+    "title": "JacobiForcing (official code repository)",
+    "url": "https://github.com/hao-ai-lab/JacobiForcing",
+    "year": "2025",
+    "note": "GitHub repository created 2025-06-25, Apache-2.0 (GitHub API). Accessed 2026-09-23.",
+    "raw": "research/raw/repro/gh_hao-ai-lab_JacobiForcing.json",
+    "status": "code repository"
+  },
+  {
+    "key": "routellm2024repo",
+    "author": "{LMSYS}",
+    "title": "RouteLLM: a framework for serving and evaluating LLM routers",
+    "url": "https://github.com/lm-sys/RouteLLM",
+    "year": "2024",
+    "note": "GitHub repository created 2024-06-03, Apache-2.0 (GitHub API). Accessed 2026-09-23.",
+    "raw": "research/raw/repro/gh_lm-sys_RouteLLM.json",
+    "status": "code repository"
+  },
+  {
+    "key": "llmrouterbench2025repo",
+    "author": "Li, Hao and others",
+    "title": "LLMRouterBench (official code and data release)",
+    "url": "https://github.com/ynulihao/LLMRouterBench",
+    "year": "2025",
+    "note": "GitHub repository created 2025-12-09; README badge says MIT but the GitHub API reports no SPDX licence and there is no LICENSE file. Data bundle: https://huggingface.co/datasets/NPULH/LLMRouterBench. Accessed 2026-09-23.",
+    "raw": "research/raw/repro/gh_ynulihao_LLMRouterBench.json",
+    "status": "code repository"
+  },
+  {
+    "key": "vllmsr2025repo",
+    "author": "{vLLM project}",
+    "title": "vLLM Semantic Router",
+    "url": "https://github.com/vllm-project/semantic-router",
+    "year": "2025",
+    "note": "GitHub repository created 2025-08-26, Apache-2.0 (GitHub API). Accessed 2026-09-23.",
+    "raw": "research/raw/landscape/gh_vllm_sr.json",
+    "status": "code repository"
+  },
+  {
+    "key": "ostrovskiy2025hipaa",
+    "author": "Ostrovskiy, S. (Edenlab)",
+    "title": "Best practices for HIPAA compliance of large language models (LLMs)",
+    "url": "https://edenlab.io/blog/hipaa-compliant-ai-best-practices",
+    "year": "2025",
+    "note": "Company marketing blog (posted 2025-12-10, updated 2026-04-28); cited by the original manuscript. Not a suitable source for regulatory claims (research/claim-audit.md).",
+    "raw": "research/raw/claim-audit/edenlab.io_blog_hipaa-compliant-ai-best-practices.html",
+    "status": "company blog"
+  }
+]

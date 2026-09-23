@@ -1,0 +1,21 @@
+manuscript_key	library_key	metadata change vs original bibitem (see research/claim-audit.md §1)
+Zhang2025	zhang2025understanding	DOI 10.1145/3733816.3760750 added
+He2025	he2025emerged	DOI and pages 1--36 added
+Ostrovskiy2025	ostrovskiy2025hipaa	kept as @misc and flagged as company blog; replace with primary regulatory source before citing
+Ford2025	ford2025patient	DOI added; never cited in the original
+Pham2025	pham2025split	none (split LEARNING, not inference)
+Hukkeri2025	hukkeri2025comprehensive	none (split-fed LEARNING survey)
+Alhindi2025	alhindi2025balancing	none (split LEARNING)
+slm1	patra2026survey	none
+slm2	wang2025survey	DOI added
+Mai2023	mai2024split	venue corrected: ICML 2024, PMLR 235:34281--34302 (was arXiv 2023)
+WZheng2025	zheng2025citer	arXiv preprint (arXiv page has no comments field); "COLM'25" appears only in the repo description, not confirmed at a proceedings source
+CZheng2026	zheng2026fast	missing author Chen Sun restored, "and Others" removed; vol 4(1), pp. 67--85, DOI added
+Xu2026	xu2026dip	arXiv preprint; arXiv comments quoted in note (VTC2026-Spring per authors)
+Luo2026	luo2026routelmt	venue added: ACL 2026 Industry Track, pp. 1886--1897
+Wang2026	wang2026icl	issue 39 and DOI 10.1609/aaai.v40i39.40628 added
+Song2025	song2025irt	DOI added from ACL Anthology
+Ong2025	ong2025routellm	none (ICLR 2025 proceedings .bib)
+Tran2025	tran2025arch	none (arXiv preprint)
+sqa	wei2024measuring	none (arXiv preprint)
+dataset	li2026llmrouterbench	DOI added from ACL Anthology

@@ -1,0 +1,102 @@
+key	arxiv	doi	status	title
+aggarwal2023automix	2310.12963		preprint (arXiv abs page)	AutoMix: Automatically Mixing Language Models
+akgul2025cosense	2510.19670		preprint (arXiv abs page)	CoSense-LLM: Semantics at the Edge with Cost- and Uncertainty-Aware Cloud-Edge Cooperation
+alhindi2025balancing		10.1109/access.2025.3528575	peer-reviewed (Crossref record)	Balancing Privacy and Utility in Split Learning: An Adversarial Channel Pruning-Based Approach
+askin2026federate	2601.22318		preprint (arXiv abs page)	Federate the Router: Learning Language Model Routers with Sparse and Decentralized Evaluations
+bansal2026lightweight	2604.03455		preprint (arXiv abs page)	Lightweight Query Routing for Adaptive RAG: A Baseline Study on RAGRouter-Bench
+bao2025dynamic	2508.11291		preprint (arXiv abs page)	Dynamic Quality-Latency Aware Routing for LLM Inference in Wireless Edge-Device Networks
+cai2024medusa	2401.10774		peer-reviewed (PMLR index)	Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads
+chen2023accelerating	2302.01318		preprint (arXiv abs page)	Accelerating Large Language Model Decoding with Speculative Sampling
+chen2023frugalgpt	2305.05176		preprint (arXiv abs page)	FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance
+chen2024adaptive	2406.02616		preprint (arXiv abs page)	Adaptive Layer Splitting for Wireless LLM Inference in Edge Computing: A Model-Based Reinforcement Learning Approach
+chen2024routerdc	2409.19886		preprint (arXiv abs page)	RouterDC: Query-Based Router by Dual Contrastive Learning for Assembling Large Language Models
+chen2026network	2604.22906	10.1145/3809166	peer-reviewed (Crossref record)	Network Edge Inference for Large Language Models: Principles, Techniques, and Opportunities
+cheng2026micro	2604.19642		preprint (arXiv abs page)	Micro Language Models Enable Instant Responses
+cunningham2026privacy	2602.16760		preprint (arXiv abs page)	Privacy-Aware Split Inference with Speculative Decoding for Large Language Models over Wide-Area Networks
+dahshan2026swarm	2606.14711		preprint (arXiv abs page)	SWARM-LLM: Collaborative Inference for Edge-based Small Language Models
+dey2026compliancegate	2606.31163		preprint (arXiv abs page)	ComplianceGate: Classifier-Gated Multi-Tier LLM Routing for Inference in Regulated Industries
+ding2024hybrid	2404.14618		preprint (arXiv abs page)	Hybrid LLM: Cost-Efficient and Quality-Aware Query Routing
+ding2025best	2506.22716		peer-reviewed (PMLR index)	BEST-Route: Adaptive LLM Routing with Test-Time Optimal Compute
+djuhera2025joint	2512.01039	10.1109/ICNC68183.2026.11416947	preprint (arXiv abs page)	Joint Partitioning and Placement of Foundation Models for Real-Time Edge AI
+feng2025distributed		10.1109/icc52391.2025.11160773	peer-reviewed (Crossref record)	Distributed Inference Optimization for Large Language Model in Edge-Cloud Collaborative Networks
+ford2025patient		10.1007/s43681-025-00681-0	peer-reviewed (Crossref record)	What is the patient re-identification risk from using de-identified clinical free text data for health research?
+fu2024break	2402.02057		peer-reviewed (PMLR index)	Break the Sequential Dependency of LLM Inference Using Lookahead Decoding
+garg2026hydra	2605.17106		preprint (arXiv abs page)	HyDRA: Hybrid Dynamic Routing Architecture for Heterogeneous LLM Pools
+geifman2017selective	1705.08500		preprint (arXiv abs page)	Selective Classification for Deep Neural Networks
+gloeckle2024better	2404.19737		peer-reviewed (PMLR index)	Better & Faster Large Language Models via Multi-token Prediction
+gui2026pro	2608.28726		preprint (arXiv abs page)	Pro-Router: Token-Aware Progressive Model Routing with Adaptive Edge-Cloud Collaboration for Efficient Multimodal LLM Inference
+gunter2024apple	2407.21075		preprint (arXiv abs page)	Apple Intelligence Foundation Language Models
+guo2017calibration	1706.04599		peer-reviewed (PMLR index)	On Calibration of Modern Neural Networks
+han2026ec		10.1109/jiot.2026.3710272	peer-reviewed (Crossref record)	EC-LLM: Low-Cost, Low-Latency, High-Quality Large Language Model Inference Based on Edge--Cloud Collaboration
+hao2024hybrid		10.1145/3662006.3662067	peer-reviewed (Crossref record)	Hybrid SLM and LLM for Edge-Cloud Collaborative Inference
+he2025emerged		10.1145/3773080	peer-reviewed (Crossref record)	The Emerged Security and Privacy of LLM Agent: A Survey with Case Studies
+hu2025fast	2512.14681		preprint (arXiv abs page)	Fast and Accurate Causal Parallel Decoding using Jacobi Forcing
+hukkeri2025comprehensive		10.1109/access.2025.3547641	peer-reviewed (Crossref record)	A Comprehensive Survey on Split-Fed Learning: Methods, Innovations, and Future Directions
+kafetzis2025large	2505.02533		preprint (arXiv abs page)	Large Language Model Partitioning for Low-Latency Inference at the Edge
+kang2017neurosurgeon		10.1145/3093336.3037698	peer-reviewed (Crossref record)	Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge
+keyu2026bicsrouter		10.18653/v1/2026.findings-acl.947	peer-reviewed (proceedings .bib export)	BiCSRouter: Bi-Level Cross-System Routing for Utility-Aware LLM Inference
+kou2024cllms	2403.00835		peer-reviewed (PMLR index)	CLLMs: Consistency Large Language Models
+lai2026routejudge	2606.18774		preprint (arXiv abs page)	RouteJudge: An Open Platform for Reproducible and Preference-Aware LLM Routing
+langiu2026privacy	2603.28972		preprint (arXiv abs page)	Privacy Guard & Token Parsimony by Prompt and Context Handling and LLM Routing
+lee2026browser		10.1109/access.2026.3720562	peer-reviewed (Crossref record)	In-Browser Split Inference for Autoregressive Large Language Models With Activation Quantization
+leviathan2023fast	2211.17192		peer-reviewed (PMLR index)	Fast Inference from Transformers via Speculative Decoding
+li2024eagle	2401.15077		peer-reviewed (PMLR index)	EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty
+li2026llmrouterbench	2601.07206	10.18653/v1/2026.findings-acl.1881	peer-reviewed (proceedings .bib export)	LLMRouterBench: A Massive Benchmark and Unified Framework for LLM Routing
+li2026collaborative	2507.16731	10.1145/3838593	peer-reviewed (Crossref record)	Collaborative Inference and Learning between Edge SLMs and Cloud LLMs: A Survey of Algorithms, Execution, and Open Challenges
+li2026efficient	2607.13093		preprint (arXiv abs page)	Efficient and Privacy Aware Edge Cloud Collaborative Inference for Large Language Models
+liu2025llmswitchbench		10.1109/access.2025.3632276	peer-reviewed (Crossref record)	LLMSwitchBench: A New Edge-Cloud Routing Benchmark for Smart Home LLM Inference
+liu2026faster	2603.12646		preprint (arXiv abs page)	98× Faster LLM Routing Without a Dedicated GPU: Flash Attention, Prompt Compression, and Near-Streaming for the vLLM Semantic Router
+luo2025edge	2507.00672		preprint (arXiv abs page)	Toward Edge General Intelligence with Multiple-Large Language Model (Multi-LLM): Architecture, Trust, and Orchestration
+luo2026routelmt	2604.22520	10.18653/v1/2026.acl-industry.129	peer-reviewed (proceedings .bib export)	RouteLMT: Learned Sample Routing for Hybrid LLM Translation Deployment
+ma2026preference		10.1109/infocom59046.2026.11571307	peer-reviewed (Crossref record)	Preference-Aware Task Routing for Edge-Cloud Hierarchical Large Language Model Inference
+mai2024split	2310.09130		peer-reviewed (PMLR index)	Split-and-Denoise: Protect large language model inference with local differential privacy
+microsoft2025phi	2503.01743		preprint (arXiv abs page)	Phi-4-Mini Technical Report: Compact yet Powerful Multimodal Language Models via Mixture-of-LoRAs
+moslem2026dynamic	2603.04445		preprint (arXiv abs page)	Dynamic Model Routing and Cascading for Efficient LLM Inference: A Survey
+mudvari2024splitllm	2410.10759		preprint (arXiv abs page)	SplitLLM: Collaborative Inference of LLMs for Model Placement and Throughput Optimization
+nie2025large	2502.09992	10.52202/085713-1689	peer-reviewed (Crossref record)	Large Language Diffusion Models
+ong2025routellm	2406.18665		peer-reviewed (proceedings .bib export)	RouteLLM: Learning to Route LLMs from Preference Data
+ouyang2022training	2203.02155		preprint (arXiv abs page)	Training language models to follow instructions with human feedback
+patel2026adaptive		10.1109/southeastcon63549.2026.11476596	peer-reviewed (Crossref record)	Adaptive Token Routing for Heterogeneous LLM Inference in Edge-Cloud Continuum
+patidar2025orchestration	2507.09003		preprint (arXiv abs page)	Orchestration for Domain-specific Edge-Cloud Language Models
+patra2026survey		10.1109/iementech202669403.2026.11434122	peer-reviewed (Crossref record)	A Survey on On-Device Small Language Models: Architectures, Compression, Applications, and Open Challenges
+pham2025split		10.1109/tdsc.2025.3565229	peer-reviewed (Crossref record)	Split Learning Without Local Weight Sharing to Enhance Client-Side Data Privacy
+qiao2026consroute	2603.21237		preprint (arXiv abs page)	ConsRoute:Consistency-Aware Adaptive Query Routing for Cloud-Edge-Device Large Language Models
+santilli2023accelerating	2305.10427	10.18653/v1/2023.acl-long.689	preprint (arXiv abs page)	Accelerating Transformer Inference for Translation via Parallel Decoding
+shirkavand2025cost	2508.12491		preprint (arXiv abs page)	Cost-Aware Contrastive Routing for LLMs
+song2021accelerating	2002.03629		peer-reviewed (PMLR index)	Accelerating Feedforward Computation via Parallel Nonlinear Equation Solving
+song2025irt	2506.01048	10.18653/v1/2025.acl-long.761	peer-reviewed (proceedings .bib export)	IRT-Router: Effective and Interpretable Multi-LLM Routing via Item Response Theory
+sung2025memory	2511.04002		preprint (arXiv abs page)	Memory- and Latency-Constrained Inference of Large Language Models via Adaptive Split Computing
+tian2024edge	2401.01666		preprint (arXiv abs page)	An Edge-Cloud Collaboration Framework for Generative AI Service Provision with Synergetic Big Cloud Model and Small Edge Models
+tran2025arch	2506.16655		preprint (arXiv abs page)	Arch-Router: Aligning LLM Routing with Human Preferences
+uzor2025guarding	2508.16765	10.1109/ICSC64641.2025.00040	preprint (arXiv abs page)	Guarding Your Conversations: Privacy Gatekeepers for Secure Interactions with Cloud-Based AI Models
+varshney2026llm	2603.20895		preprint (arXiv abs page)	LLM Router: Rethinking Routing with Prefill Activations
+vepakomma2018split	1812.00564		preprint (arXiv abs page)	Split learning for health: Distributed deep learning without sharing raw patient data
+wang2025survey		10.1145/3711896.3736563	peer-reviewed (Crossref record)	A Survey on Small Language Models in the Era of Large Language Models: Architecture, Capabilities, and Trustworthiness
+wang2026mix		10.1109/tpds.2026.3729256	peer-reviewed (Crossref record)	Mix-or-Split: Latency-Aware Scheduling for Edge–Cloud LLM Inference
+wang2026icl	2510.09719	10.1609/aaai.v40i39.40628	peer-reviewed (Crossref record)	ICL-Router: In-Context Learned Model Representations for LLM Routing
+wei2024measuring	2411.04368		preprint (arXiv abs page)	Measuring short-form factuality in large language models
+wu2025recursive	2505.16502		preprint (arXiv abs page)	Recursive Offloading for LLM Serving in Multi-tier Networks
+wu2025fast	2505.22618		preprint (arXiv abs page)	Fast-dLLM: Training-free Acceleration of Diffusion LLM by Enabling KV Cache and Parallel Decoding
+xu2025trinity	2512.04695		preprint (arXiv abs page)	TRINITY: An Evolved LLM Coordinator
+xu2026joint		10.1109/tmc.2025.3608303	peer-reviewed (Crossref record)	Joint Inference Offloading and Model Caching for Small and Large Language Model Collaboration
+xu2026dip	2604.20919		preprint (arXiv abs page)	DiP-SD: Distributed Pipelined Speculative Decoding for Efficient LLM Inference at the Edge
+yan2020micronet	2005.07877		preprint (arXiv abs page)	MicroNet for Efficient Language Modeling
+younesi2025splitwise	2512.23310	10.1145/3773274.3774267	preprint (arXiv abs page)	Splitwise: Collaborative Edge-Cloud Inference for LLMs via Lyapunov-Assisted DRL
+yuan2025device	2502.11007		preprint (arXiv abs page)	Device-Cloud Collaborative LLM Inference with Multi-Modal, Multi-Task, Multi-Turn Conversations
+yuan2026task		10.1109/smartiot70864.2026.00023	peer-reviewed (Crossref record)	A Task-Aware Model Size and Precision Selection Framework for LLM Inference in Edge Computing
+zhan2025prism	2511.22788		preprint (arXiv abs page)	PRISM: Privacy-Aware Routing for Adaptive Cloud-Edge LLM Inference via Semantic Sketch Collaboration
+zhang2025understanding		10.1145/3733816.3760750	peer-reviewed (Crossref record)	Understanding Users' Privacy Perceptions Towards LLM's RAG-based Memory
+zhang2026pipelined	2603.19133		preprint (arXiv abs page)	A Pipelined Collaborative Speculative Decoding Framework for Efficient Edge-Cloud LLM Inference
+zheng2025citer	2502.01976		preprint (arXiv abs page)	CITER: Collaborative Inference for Efficient Large Language Model Decoding with Token-Level Routing
+zheng2026fast		10.1016/j.jiixd.2025.12.008	peer-reviewed (Crossref record)	Fast collaborative inference via distributed speculative decoding
+zhou2025poster		10.1109/icnp65844.2025.11192440	peer-reviewed (Crossref record)	Poster: Optimizing Transmission for Privacy-Preserving Edge-Cloud Split LLM Inference
+zhu2026dabo		10.1109/access.2026.3724635	peer-reviewed (Crossref record)	DABO: Difficulty-Aware Binary Offloading for Collaborative Large-Small Model Inference
+almeida2026jev			vendor blog	Introducing System One Models \& Jev
+typesafe2026systemone			vendor documentation	System One (concepts documentation)
+typesafe2026confidencerouting			vendor documentation	Confidence routing (patterns documentation)
+ma2025patent			patent	Model selection for split inference
+jacobiforcing2025repo			code repository	JacobiForcing (official code repository)
+routellm2024repo			code repository	RouteLLM: a framework for serving and evaluating LLM routers
+llmrouterbench2025repo			code repository	LLMRouterBench (official code and data release)
+vllmsr2025repo			code repository	vLLM Semantic Router
+ostrovskiy2025hipaa			company blog	Best practices for HIPAA compliance of large language models (LLMs)
