@@ -1,0 +1,14 @@
+Wed Sep 23 03:18:01 UTC 2026
+2026-09-23T03:18:02Z https://raw.githubusercontent.com/ynulihao/LLMRouterBench/main/README.md -> raw.githubusercontent.com_ynulihao_LLMRouterBench_main_README.md 19165
+2026-09-23T03:18:02Z https://api.github.com/repos/ynulihao/LLMRouterBench -> api.github.com_repos_ynulihao_LLMRouterBench 5793
+2026-09-23T03:18:03Z https://api.github.com/repos/ynulihao/LLMRouterBench/contents -> api.github.com_repos_ynulihao_LLMRouterBench_contents 14762
+2026-09-23T03:18:14Z https://huggingface.co/api/datasets/NPULH/LLMRouterBench -> hf_dataset_api.json 437
+2026-09-23T03:18:14Z https://raw.githubusercontent.com/ynulihao/LLMRouterBench/main/results/download.md -> results_download.md 536
+2026-09-23T03:18:55Z https://huggingface.co/api/models/meta-llama/Llama-3.1-8B-Instruct -> hf_model_meta-llama_Llama-3.1-8B-Instruct.json
+2026-09-23T03:18:55Z https://huggingface.co/api/models/katanemo/Arch-Router-1.5B -> hf_model_katanemo_Arch-Router-1.5B.json
+2026-09-23T03:18:55Z https://huggingface.co/api/models/microsoft/deberta-v3-small -> hf_model_microsoft_deberta-v3-small.json
+2026-09-23T03:18:56Z https://huggingface.co/api/models/answerdotai/ModernBERT-base -> hf_model_answerdotai_ModernBERT-base.json
+2026-09-23T03:18:56Z https://huggingface.co/api/models/Qwen/Qwen2.5-0.5B-Instruct -> hf_model_Qwen_Qwen2.5-0.5B-Instruct.json
+2026-09-23T03:18:56Z https://huggingface.co/api/models/Qwen/Qwen3-1.7B -> hf_model_Qwen_Qwen3-1.7B.json
+2026-09-23T03:18:57Z https://huggingface.co/api/models/Qwen/Qwen3-8B -> hf_model_Qwen_Qwen3-8B.json
+2026-09-23T03:18:57Z https://huggingface.co/api/models/routellm/bert_gpt4_augmented -> hf_model_routellm_bert_gpt4_augmented.json
