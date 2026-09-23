@@ -1,0 +1,46 @@
+Client SDKs - TypeSafe AI
+Documentation Index
+Fetch the complete documentation index at: /llms.txt
+Use this file to discover all available pages before exploring further.
+Skip to main content
+TypeSafe AI home page
+Search...⌘K
+TypeSafe console
+Documentation
+Cookbooks
+Reference
+TypeSafe AI home page
+Search...
+Navigation
+Client SDKs
+Client SDKs
+Reference
+Models
+API reference
+Agent skill
+Legal
+Model jaggedness
+Client SDKs
+Client SDKs
+Python SDK
+JavaScript SDK
+Client SDKs
+Client SDKs
+Copy pageCopy page
+Install a TypeSafe client SDK and use typed questions and answers in your application.
+Copy pageCopy page
+Our client SDKs provide typed questions and answers for the TypeSafe API and handle retries automatically with their default retry policy.
+Choose a client SDK for installation instructions, examples, and API details.
+Python
+Install the Python client SDK and make your first request.
+JavaScript / TypeScript
+Install the JavaScript client SDK and make your first typed request.
+You can also call the HTTP API directly from any language.
+Was this page helpful?
+YesNo
+Jev 1.13 jaggedness
+Previous
+TypeSafe Python SDK
+Next
+githubdiscordx
+Powered byThis documentation is built and hosted on Mintlify, a developer documentation platform
