@@ -1,0 +1,332 @@
+% method-references.bib
+% BibTeX companion to methods-v2/17-verified-references.md
+% gnhf microencoder-kd sprint, prepared 2026-10-02.
+%
+% DISCIPLINE (brief §22/§26):
+%   - Entries are included only where the bibliographic IDENTITY (title + ID +
+%     venue) is established in the sprint. No BibTeX is fabricated.
+%   - Author lists are included ONLY for well-established works whose authorship
+%     is standard knowledge. For recent 2026 preprints whose authors were seen
+%     only at [api]/[abs] level, the author field is OMITTED with a comment
+%     rather than invented. Fill these from the arXiv landing page before use.
+%   - Fields that could not be verified this sprint are omitted and flagged.
+%   - Inspection level (see 17-verified-references.md) is a ceiling on how
+%     strongly each entry may be cited; it is noted per entry.
+%
+% ===================================================================
+% 1. ROUTING / MICRO-ENCODER PRIOR ART (brief §4)
+% ===================================================================
+
+@inproceedings{ong2025routellm,
+  title     = {{RouteLLM}: Learning to Route {LLM}s from Preference Data},
+  author    = {Ong, Isaac and Almahairi, Amjad and Wu, Vincent and Chiang, Wei-Lin and Wu, Tianhao and Gonzalez, Joseph E. and Kadous, M. Waleed and Stoica, Ion},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2025},
+  eprint    = {2406.18665},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url       = {https://arxiv.org/abs/2406.18665},
+  note      = {Code: https://github.com/lm-sys/RouteLLM. Inspected [body]+ICLR PDF}
+}
+
+@inproceedings{chen2024routerdc,
+  title     = {{RouterDC}: Query-Based Router by Dual Contrastive Learning for Assembling Large Language Models},
+  % author   = OMITTED: not re-verified at author level this sprint; fill from arXiv.
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2024},
+  eprint    = {2409.19886},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url       = {https://arxiv.org/abs/2409.19886},
+  note      = {Code: https://github.com/shuhao02/RouterDC. Dual CONTRASTIVE, not KD. Inspected [body]}
+}
+
+@misc{bestroute2025,
+  title  = {{BEST-Route}: Adaptive {LLM} Routing with Test-Time Scaling},
+  % author = OMITTED: not verified this sprint.
+  year   = {2025},
+  eprint = {2506.22716},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2506.22716},
+  note   = {Reported ICML 2025 (arXiv comment). Body not read -> [OPEN] for numbers.}
+}
+
+@misc{hydra2026,
+  title  = {{HyDRA}: Hybrid Dynamic Routing Architecture for Heterogeneous {LLM} Pools},
+  % author = OMITTED: not verified this sprint.
+  year   = {2026},
+  eprint = {2605.17106},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2605.17106},
+  note   = {Preprint (deployed). 55--86 ms CPU latency is an authors' claim -> [OPEN], not verified.}
+}
+
+@inproceedings{llmrouterbench2026,
+  title     = {{LLMRouterBench}: A Unified Benchmark for {LLM} Routing},
+  % author   = OMITTED: not verified this sprint.
+  booktitle = {Findings of the Association for Computational Linguistics (ACL)},
+  year      = {2026},
+  eprint    = {2601.07206},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/2601.07206},
+  pages     = {37733--37754},
+  note      = {Title paraphrased from positioning; verify exact title. "Backbone choice has limited impact" is the authors' claim -> [OPEN] for magnitude.}
+}
+
+@inproceedings{routelmt2026,
+  title     = {{RouteLMT}: Learned Sample Routing for Hybrid {LLM} Translation Deployment},
+  % author   = OMITTED: not verified this sprint.
+  booktitle = {Proceedings of the Association for Computational Linguistics (ACL), Industry Track},
+  year      = {2026},
+  eprint    = {2604.22520},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/2604.22520},
+  pages     = {1886--1897},
+  note      = {ACL Anthology 2026.acl-industry.129. Body not read -> [OPEN].}
+}
+
+@misc{consroute2026,
+  title  = {{ConsRoute}: Consistency-Aware Adaptive Query Routing for Cloud-Edge-Device {LLM}s},
+  % author = OMITTED: not verified this sprint.
+  year   = {2026},
+  eprint = {2603.21237},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2603.21237},
+  note   = {Preprint. Network-condition-aware; online threshold adaptation. Body not read -> [OPEN].}
+}
+
+@misc{archrouter2025,
+  title  = {{Arch-Router}: Preference-Aligned Generative Routing for {LLM}s},
+  % author = OMITTED: not verified this sprint; title paraphrased, verify.
+  year   = {2025},
+  eprint = {2506.16655},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2506.16655},
+  note   = {Checkpoint: HF katanemo/Arch-Router-1.5B (licence "other"). GENERATIVE comparison only. Body not read -> [OPEN].}
+}
+
+@misc{prefillroute2026,
+  title  = {Rethinking Routing with Prefill Activations},
+  % author = OMITTED: not verified this sprint; title paraphrased, verify.
+  year   = {2026},
+  eprint = {2603.20895},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2603.20895},
+  note   = {Hidden-state / self-routing probe = demoted Candidate C baseline. Body not read -> [OPEN].}
+}
+
+@inproceedings{irtrouter2025,
+  title     = {{IRT-Router}: Item-Response-Theory Routing for Large Language Models},
+  % author   = OMITTED: not verified this sprint; title paraphrased, verify.
+  booktitle = {Proceedings of the Association for Computational Linguistics (ACL)},
+  year      = {2025},
+  eprint    = {2506.01048},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/2506.01048},
+  note      = {Body not read -> [OPEN].}
+}
+
+@inproceedings{ding2024hybridllm,
+  title     = {Hybrid {LLM}: Cost-Efficient and Quality-Aware Query Routing},
+  author    = {Ding, Dujian and Mallick, Ankur and Wang, Chi and Sim, Robert and Mukherjee, Subhabrata and Ruhle, Victor and Lakshmanan, Laks V. S. and Awadallah, Ahmed Hassan},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  eprint    = {2404.14618},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/2404.14618},
+  note      = {Peer-reviewed edge-small-vs-cloud-large trade-off. Manuscript citation gap (16 OM-5). Inspected [abs].}
+}
+
+% ===================================================================
+% 2. KNOWLEDGE-DISTILLATION PRIOR ART (brief §5)
+% ===================================================================
+
+@article{hinton2015distilling,
+  title   = {Distilling the Knowledge in a Neural Network},
+  author  = {Hinton, Geoffrey and Vinyals, Oriol and Dean, Jeff},
+  journal = {arXiv preprint},
+  year    = {2015},
+  eprint  = {1503.02531},
+  archivePrefix = {arXiv},
+  url     = {https://arxiv.org/abs/1503.02531},
+  note    = {NIPS 2014 Deep Learning workshop. Soft-target/temperature KD loss = KD-1 template. Inspected [body]}
+}
+
+@article{sanh2019distilbert,
+  title   = {{DistilBERT}, a distilled version of {BERT}: smaller, faster, cheaper and lighter},
+  author  = {Sanh, Victor and Debut, Lysandre and Chaumond, Julien and Wolf, Thomas},
+  journal = {arXiv preprint},
+  year    = {2019},
+  eprint  = {1910.01108},
+  archivePrefix = {arXiv},
+  url     = {https://arxiv.org/abs/1910.01108},
+  note    = {NeurIPS 2019 EMC2 workshop. KD-4 / student backbone. Inspected [abs]}
+}
+
+@inproceedings{jiao2020tinybert,
+  title     = {{TinyBERT}: Distilling {BERT} for Natural Language Understanding},
+  author    = {Jiao, Xiaoqi and Yin, Yichun and Shang, Lifeng and Jiang, Xin and Chen, Xiao and Li, Linlin and Wang, Fang and Liu, Qun},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2020},
+  year      = {2020},
+  eprint    = {1909.10351},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/1909.10351},
+  note      = {Hidden-state+attention+embedding KD = KD-4 template. Inspected [abs]}
+}
+
+@inproceedings{wang2020minilm,
+  title     = {{MiniLM}: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers},
+  author    = {Wang, Wenhui and Wei, Furu and Dong, Li and Bao, Hangbo and Yang, Nan and Zhou, Ming},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2020},
+  eprint    = {2002.10957},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/2002.10957},
+  note      = {Small student backbone candidate. Inspected [abs]}
+}
+
+@inproceedings{plad2024,
+  title     = {{PLaD}: Preference-based Large Language Model Distillation with Pseudo-Preference Pairs},
+  % author   = OMITTED: not verified this sprint.
+  booktitle = {Findings of the Association for Computational Linguistics (ACL)},
+  year      = {2024},
+  eprint    = {2406.02886},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/2406.02886},
+  note      = {Ranking/preference KD = KD-2 template (generative, not routing). Inspected [abs]}
+}
+
+@misc{pad2025,
+  title  = {{PAD}: Preference-Aligned Distillation},
+  % author = OMITTED: not verified this sprint; title paraphrased, verify.
+  year   = {2025},
+  eprint = {2502.14272},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2502.14272},
+  note   = {Preference-distribution alignment KD = KD-2 template (generative). Inspected [abs]}
+}
+
+@inproceedings{guo2017calibration,
+  title     = {On Calibration of Modern Neural Networks},
+  author    = {Guo, Chuan and Pleiss, Geoff and Sun, Yu and Weinberger, Kilian Q.},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2017},
+  eprint    = {1706.04599},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/1706.04599},
+  note      = {Temperature scaling + ECE = the N2 calibration baseline KD must beat. Inspected [body]}
+}
+
+@misc{edgecloudsurvey2025,
+  title  = {A Survey of Collaborative Edge-Cloud Inference for Large Language Models},
+  % author = OMITTED: not verified this sprint; title paraphrased, verify.
+  year   = {2025},
+  eprint = {2507.16731},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2507.16731},
+  note   = {SECONDARY (survey). Positioning only; must not anchor a primary claim.}
+}
+
+% ===================================================================
+% 3. STUDENT / TEACHER BACKBONE ENCODERS (brief §8)
+% Identity fields [OPEN] -- confirm arXiv ID + params before manuscript use.
+% ===================================================================
+
+@misc{warner2024modernbert,
+  title  = {Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference},
+  % author = OMITTED pending verification (Warner et al., Answer.AI/LightOn).
+  year   = {2024},
+  eprint = {2412.13663},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/2412.13663},
+  note   = {ModernBERT. Checkpoints HF answerdotai/ModernBERT-base,-large (Apache-2.0). ID/params [OPEN] -- not re-verified this sprint.}
+}
+
+@inproceedings{he2023debertav3,
+  title     = {{DeBERTaV3}: Improving {DeBERTa} using {ELECTRA}-Style Pre-Training with Gradient-Disentangled Embedding Sharing},
+  author    = {He, Pengcheng and Gao, Jianfeng and Chen, Weizhu},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2023},
+  eprint    = {2111.09543},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/2111.09543},
+  note      = {Alternate student. ONNX/INT8 disentangled-attention friction. ID [OPEN] -- not re-verified this sprint.}
+}
+
+% ===================================================================
+% 4. CONTINUAL-LEARNING PRIOR ART (JOURNAL EXTENSION ONLY, brief §18)
+% Do NOT cite these in the conference-core blue text.
+% ===================================================================
+
+@article{kirkpatrick2017ewc,
+  title   = {Overcoming catastrophic forgetting in neural networks},
+  author  = {Kirkpatrick, James and Pascanu, Razvan and Rabinowitz, Neil and Veness, Joel and Desjardins, Guillaume and Rusu, Andrei A. and Milan, Kieran and Quan, John and Ramalho, Tiago and Grabska-Barwinska, Agnieszka and Hassabis, Demis and Clopath, Claudia and Kumaran, Dharshan and Hadsell, Raia},
+  journal = {Proceedings of the National Academy of Sciences (PNAS)},
+  volume  = {114},
+  number  = {13},
+  pages   = {3521--3526},
+  year    = {2017},
+  doi     = {10.1073/pnas.1611835114},
+  url     = {https://www.pnas.org/doi/10.1073/pnas.1611835114}
+}
+
+@article{huszar2018ewc,
+  title   = {Note on the quadratic penalties in elastic weight consolidation},
+  author  = {Husz{\'a}r, Ferenc},
+  journal = {Proceedings of the National Academy of Sciences (PNAS)},
+  year    = {2018},
+  doi     = {10.1073/pnas.1717042115},
+  url     = {https://www.pnas.org/doi/10.1073/pnas.1717042115},
+  note    = {Correction to the EWC penalty form.}
+}
+
+@inproceedings{lopezpaz2017gem,
+  title     = {Gradient Episodic Memory for Continual Learning},
+  author    = {Lopez-Paz, David and Ranzato, Marc'Aurelio},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2017},
+  eprint    = {1706.08840},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/1706.08840}
+}
+
+@inproceedings{chaudhry2019agem,
+  title     = {Efficient Lifelong Learning with {A-GEM}},
+  author    = {Chaudhry, Arslan and Ranzato, Marc'Aurelio and Rohrbach, Marcus and Elhoseiny, Mohamed},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2019},
+  eprint    = {1812.00420},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/1812.00420}
+}
+
+@misc{chaudhry2019er,
+  title  = {On Tiny Episodic Memories in Continual Learning},
+  author = {Chaudhry, Arslan and Rohrbach, Marcus and Elhoseiny, Mohamed and Ajanthan, Thalaiyasingam and Dokania, Puneet K. and Torr, Philip H. S. and Ranzato, Marc'Aurelio},
+  year   = {2019},
+  eprint = {1902.10486},
+  archivePrefix = {arXiv},
+  url    = {https://arxiv.org/abs/1902.10486}
+}
+
+@inproceedings{li2016lwf,
+  title     = {Learning without Forgetting},
+  author    = {Li, Zhizhong and Hoiem, Derek},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  pages     = {614--629},
+  year      = {2016},
+  eprint    = {1606.09282},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/1606.09282},
+  note      = {Extended as IEEE TPAMI 40(12):2935--2947, 2018, doi:10.1109/TPAMI.2017.2773081. = conference KD-5 loss with previous student as teacher.}
+}
+
+@inproceedings{houlsby2019adapters,
+  title     = {Parameter-Efficient Transfer Learning for {NLP}},
+  author    = {Houlsby, Neil and Giurgiu, Andrei and Jastrzebski, Stanislaw and Morrone, Bruna and de Laroussilhe, Quentin and Gesmundo, Andrea and Attariyan, Mona and Gelly, Sylvain},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2019},
+  eprint    = {1902.00751},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/1902.00751}
+}
