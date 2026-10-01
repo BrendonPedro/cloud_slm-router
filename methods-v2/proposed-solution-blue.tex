@@ -1,0 +1,387 @@
+% =====================================================================
+%  methods-v2 / proposed-solution-blue.tex
+%  Manuscript-ready DRAFT of the Proposed Solution section.
+%  Deliverable for MICROENCODER_KD_BRIEF.md Sec. 20.
+%  Prepared 2026-10-02 (gnhf microencoder-kd sprint, iteration 19).
+%
+%  WHAT THIS IS
+%  ------------
+%  Drop-in LaTeX for the empty \section{Proposed Solution} at line 193 of
+%  source/main-original.tex. It specifies the distilled micro-encoder (TLM)
+%  router: f_theta, the KD training, the runtime cost integration, the
+%  inference routing rule, and Split-LLM integration. Content is lifted
+%  verbatim from the locked methods-v2 deliverable 06 (proposed-method),
+%  which in turn rests on 00-05, 07-09.
+%
+%  BLUE CONVENTION (brief Sec. 20)
+%  -------------------------------
+%  All newly proposed manuscript prose is wrapped in \prop{...}, which
+%  renders in blue. Shared/background sentences that merely restate the
+%  already-accepted problem formulation are left in black. Equations and
+%  algorithms that are new are flagged in blue in their lead-in sentence.
+%
+%  HOW TO MERGE INTO THE IEEEtran MANUSCRIPT (do NOT edit the original here)
+%  ----------------------------------------------------------------------
+%    1. Add to the manuscript preamble (it is not currently loaded):
+%           \usepackage{xcolor}
+%           \newcommand{\prop}[1]{\textcolor{blue}{#1}}
+%    2. Replace the stub body of \section{Proposed Solution} (the lone ".")
+%       with the body between the BEGIN/END MERGE markers below.
+%    3. The equations below are written with manuscript notation
+%       (\mathcal{M}, M_k, f_\theta, \lambda, C) so they slot in after the
+%       existing Eqs. (1)-(3) in Sec. "Problem Statement and Formulation".
+%
+%  COMPILATION STATUS
+%  ------------------
+%  This file is a STANDALONE, self-contained document (article class) so it
+%  can be compiled on its own to proof the prose/equations/algorithms. No
+%  LaTeX toolchain exists in the sprint environment, so it has NOT been
+%  compile-verified here (same honest caveat as architecture-figure.tex,
+%  iter 16); it was authored to compile but must be checked at merge time.
+%
+%  EVIDENCE DISCIPLINE (brief Sec. 23)
+%  -----------------------------------
+%  No results are claimed. Per brief Sec. 20/26 this file contains no
+%  "experiments demonstrate / we outperform / our method achieves"
+%  language; every performance statement is phrased as a design intent or
+%  a to-be-evaluated hypothesis. Bracketed [S:NN] comments trace each claim
+%  to its source deliverable; they are LaTeX comments and never render.
+% =====================================================================
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+% ---- blue convention for newly proposed manuscript prose (brief Sec. 20) ----
+\newcommand{\prop}[1]{\textcolor{blue}{#1}}
+
+% ---- notation shorthands (match source/main-original.tex) ----
+\newcommand{\Mcal}{\mathcal{M}}
+\newcommand{\Qcal}{\mathcal{Q}}
+\newcommand{\Acal}{\mathcal{A}}
+\newcommand{\Uhat}{\widehat{U}}
+\newcommand{\argmax}{\operatorname*{arg\,max}}
+
+\title{Proposed Solution (BLUE DRAFT)\\
+\large Distilled Micro-Encoder Router for Edge SLM / Split-LLM Collaborative Inference}
+\author{methods-v2 draft --- not for submission as-is}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Reviewer note (remove at merge):} blue text is newly
+proposed manuscript prose; black text restates the already-accepted problem
+formulation from Sec.~``Problem Statement and Formulation''. No experimental
+results are stated anywhere in this draft.
+
+% =====================================================================
+% ========================  BEGIN MERGE BLOCK  ========================
+% =====================================================================
+
+\section{Proposed Solution}
+\label{sec:proposed}
+
+\prop{%
+We implement the routing function $f_{\theta}$ of
+Eq.~(3) as a \emph{distilled micro-encoder}: a Tiny Language Model (TLM)
+that predicts, for each candidate execution path, a calibrated utility for
+the query, and is trained once with knowledge distillation from a larger
+same-family encoder. At inference the TLM runs a single forward pass on the
+edge device and its learned utilities are combined with \emph{measured} live
+system cost to select an execution path. The design keeps the learned,
+query-dependent quality signal separate from the measured, network-dependent
+cost signal: the former is trained into the TLM weights, the latter is read
+from the running system and never enters the weights.}
+
+% ------------------------------------------------------------------
+\subsection{Execution paths and the routing decision}
+\label{subsec:actions}
+
+\prop{%
+The decision in Eq.~(1) is taken over execution \emph{actions} rather than
+over models alone, because a Split-LLM path is defined by a cut depth and two
+cut depths of the same model are two different cost/quality operating points.
+We therefore route over the action set}
+\begin{equation}
+\label{eq:actionset}
+\Acal \;=\; \bigl\{\, \textsc{Edge},\;
+\textsc{Split}(d_1),\dots,\textsc{Split}(d_m),\;
+\textsc{Strong}\,\bigr\},
+\end{equation}
+\prop{where \textsc{Edge} runs the small model entirely on the edge device;
+$\textsc{Split}(d)$ runs layers $[0,d)$ on the edge, transfers the
+intermediate activation to the server, and runs layers $[d,L)$ there; and
+\textsc{Strong} executes the strong/remote model in full. We write
+$N=\lvert\Acal\rvert$ for the number of actions, fixed by the model pool and
+the enabled split depths.}
+
+\prop{%
+Equation~(\ref{eq:actionset}) is an \emph{extension of notation, not a
+redefinition of the problem}. Each action $a\in\Acal$ induces a
+model-of-record $M(a)$; the manuscript's model set $\Mcal$ is the image
+$\{M(a):a\in\Acal\}$, and when split depths are disabled ($m=0$) the map
+$a\mapsto M(a)$ is a bijection, so $\Acal\equiv\Mcal$. Under that condition,
+and with the cost term switched off ($\lambda=0$), the rule introduced below
+collapses exactly to Eq.~(3). The proposed method thus refines Eq.~(3) by
+(i)~enriching the choice set with split depths and (ii)~factoring the score
+into a learned term and a measured term.}
+
+% ------------------------------------------------------------------
+\subsection{The micro-encoder scoring function $f_{\theta}$}
+\label{subsec:ftheta}
+
+\prop{%
+The TLM is an encoder $g_{\theta}:\Qcal\!\rightarrow\!\mathbb{R}^{N}$ with a
+pooled query representation feeding $N$ parallel scalar heads, one per
+action. For a query $q$,}
+\begin{align}
+\label{eq:pool}
+h(q) &\;=\; \mathrm{Pool}\bigl(\mathrm{Encoder}_{\theta}(q)\bigr)
+      \;\in\; \mathbb{R}^{H},\\[2pt]
+\label{eq:head}
+\Uhat_{\theta}(a\mid q) &\;=\; \sigma\bigl(w_a^{\top} h(q) + b_a\bigr),
+      \qquad a\in\Acal,
+\end{align}
+\prop{%
+where $\sigma$ is the logistic function and each head is \emph{independent}
+(a per-action sigmoid, not a softmax over actions). Independent heads are a
+deliberate choice: they keep the learned utility separable from the cost term
+introduced below, and they make the model pool extensible, since adding an
+action is adding one head rather than re-training a joint normalisation over
+all actions. The proposed scoring function of Eq.~(3) is the per-action
+learned utility}
+\begin{equation}
+\label{eq:ftheta}
+f_{\theta}(q,a) \;:=\; \Uhat_{\theta}(a\mid q),
+\end{equation}
+\prop{%
+i.e.\ the preferred $f_{\theta}(q,M_k)=\Uhat_{\theta}(M_k\mid q)$ form, with
+the model index $M_k$ generalised to the action $a$ of
+Eq.~(\ref{eq:actionset}). The target semantics of $\Uhat_{\theta}(a\mid q)$
+is a \emph{calibrated probability that action $a$ succeeds on query $q$}
+(Sec.~\ref{subsec:labels}).}
+
+\prop{%
+We instantiate $g_{\theta}$ with a compact modern encoder backbone in the
+$\sim$20--150\,M parameter range (the micro-encoder), exported to a quantised
+(e.g.\ INT8/ONNX) runtime for edge execution; the exact backbone and
+precision are an implementation choice to be fixed by ablation rather than a
+contribution of this work.}
+% [S:05] backbone size-range and INT8/ONNX edge path; exact backbone is [OPEN].
+
+% ------------------------------------------------------------------
+\subsection{Runtime routing rule: learned utility minus measured cost}
+\label{subsec:rule}
+
+\prop{%
+At inference, for query $q$ under measured live system state $s$, the router
+selects}
+\begin{equation}
+\label{eq:rule}
+R(q,s) \;=\; \argmax_{a\in\Acal}\;
+\Bigl[\, \underbrace{\Uhat_{\theta}(a\mid q)}_{\text{learned (TLM)}}
+\;-\; \lambda\cdot \underbrace{C(a\mid s)}_{\text{measured, not in }\theta}
+\,\Bigr],
+\end{equation}
+\prop{%
+where $\lambda$ is the quality--cost trade-off coefficient of Eq.~(2).
+$\Uhat_{\theta}(a\mid q)$ is produced by a single forward pass of the TLM and
+is \emph{system-unaware}: it depends on the query, not on the network.
+$C(a\mid s)$ is the scalarised live system cost of action $a$ under the
+measured state $s$, where $s$ aggregates such quantities as available
+bandwidth, round-trip time, server contention, the activation-transfer size
+of a split, edge and server compute latency, time-to-first-token,
+time-per-output-token, and resource pressure.}
+
+\prop{%
+Separating the two terms is intentional. Query-conditioned utility is a
+stable property of the query--model match and is learned once; system cost is
+a volatile property of the live network and hardware and is \emph{measured},
+not learned. Folding $s$ into $\theta$ would require re-training whenever
+network conditions change and would undermine edge deployment; we therefore
+keep $C(a\mid s)$ outside the TLM weights and combine it with the learned
+utility only at decision time. The scalarisation of $C(a\mid s)$ (for
+example, a normalised weighted sum, or a latency penalty with the remaining
+metrics reported separately, or a constrained formulation in which $\lambda$
+plays the role of a budget multiplier) is treated as a measurement-and-policy
+choice and does not alter the learned component $\Uhat_{\theta}$.}
+% [S:08] scalarisation options S1-S4; S3/S4 would change the rule's form -> [OPEN].
+
+% ------------------------------------------------------------------
+\subsection{Training labels and utility prediction}
+\label{subsec:labels}
+
+\prop{%
+The hard supervision signal is the \emph{observed} per-action outcome
+$y(a,q)\in[0,1]$: for each query $q$ and action $a$ we record whether the
+path produced a satisfactory answer, measured by a task-appropriate
+correctness or quality score. These observed outcomes are ground truth, not
+the output of any auxiliary model. Because a $\textsc{Split}(d)$ action runs
+the \emph{same} model as its corresponding full execution, its quality label
+equals that of the full model and only its cost differs; the split actions
+therefore add no additional quality-labelling cost and are distinguished from
+\textsc{Strong} purely by the measured cost term in Eq.~(\ref{eq:rule}). The
+TLM is trained so that each head $\Uhat_{\theta}(a\mid q)$ is a
+\emph{calibrated} estimate of $\Pr\!\bigl(y(a,q)=\text{success}\mid q\bigr)$;
+calibration is enforced on held-out data and is a property we evaluate rather
+than assume.}
+% [S:07] y(a,q) = observed outcome (= oracle ground truth, not a teacher);
+% [S:07/08] y(SPLIT(d),q) = y(full,q); target = calibrated P(success) (target E).
+
+% ------------------------------------------------------------------
+\subsection{Knowledge-distillation training}
+\label{subsec:kd}
+
+\prop{%
+The TLM (the \emph{student}) is trained with a hybrid objective that combines
+the hard observed outcomes with soft targets from a larger \emph{teacher}
+router. The teacher is a larger encoder of the same model family, fit to the
+same observed outcomes and used \emph{only during training}; it is discarded
+before deployment, so it adds nothing to the inference footprint. We stress
+that the observed-outcome signal $y(a,q)$ is not a teacher: it is ground
+truth, and regressing the student onto it alone is ordinary supervised
+learning. Distillation is the addition of the teacher's soft per-action
+utilities $\Uhat_{T}(a\mid q)$, whose value is that they can generalise
+beyond the labelled outcomes.}
+
+\prop{%
+Let $\alpha\in[0,1]$ weight the hard loss against the soft (distillation)
+loss. The training objective is}
+\begin{equation}
+\label{eq:loss}
+\mathcal{L} \;=\;
+\alpha\, \mathcal{L}_{\text{task}}\bigl(\Uhat_{\theta},\,y\bigr)
+\;+\;(1-\alpha)\,\mathcal{L}_{\text{KD}}\bigl(\Uhat_{\theta},\,\Uhat_{T}\bigr)
+\;+\;\gamma\, \mathcal{L}_{\text{repr}}(\theta,T),
+\end{equation}
+\prop{%
+where $\mathcal{L}_{\text{task}}$ is a per-action loss against the hard
+targets (e.g.\ binary cross-entropy or smooth-$L_1$),
+$\mathcal{L}_{\text{KD}}$ is a per-action regression of the student utilities
+onto the teacher utilities, and the optional term
+$\mathcal{L}_{\text{repr}}$ (weight $\gamma$, used only because student and
+teacher share a family) matches an intermediate representation. Because the
+primary distillation target is a per-action utility \emph{regressed}
+directly, no softmax temperature is required; a temperature-scaled softmax
+variant is available only as an ablation.}
+
+\prop{%
+The coefficient $\alpha$ is the central design variable, not a hidden
+hyper-parameter: at $\alpha=1$ the soft term vanishes and the objective
+reduces to the \emph{non-distilled} student trained on observed outcomes
+alone. Knowledge distillation is therefore claimed to add value only if some
+$\alpha<1$ improves held-out routing quality or calibration at a matched
+student size; the non-distilled $\alpha=1$ model is the control against which
+this is to be tested. We do not assert such an improvement here; it is an
+empirical question, and the method remains a coherent, non-distilled
+micro-encoder router if the improvement does not materialise.}
+% [S:03/04] KD-3 utility regression trained as KD-5 hybrid; alpha=1 = control (E1).
+
+\begin{algorithm}[t]
+\caption{\prop{Training the distilled micro-encoder router (training-only)}}
+\label{alg:train}
+\begin{algorithmic}[1]
+\STATE \textbf{Input:} queries $\{q_i\}$; actions $\Acal$; observed outcomes
+       $y(a,q_i)$; hybrid weight $\alpha$; optional repr.\ weight $\gamma$
+\STATE Fit teacher router $T$ (larger same-family encoder) on $y$; freeze $T$
+\STATE Precompute soft targets $\Uhat_{T}(a\mid q_i)$ for all $i,a$
+\FOR{each minibatch $B$}
+  \STATE $h\gets\mathrm{Pool}(\mathrm{Encoder}_{\theta}(q))$;\quad
+         $\Uhat_{\theta}(a\mid q)\gets\sigma(w_a^{\top}h+b_a)\;\;\forall a$
+  \STATE $\mathcal{L}_{\text{task}}\gets$ per-action loss
+         $\bigl(\Uhat_{\theta}(a\mid q),\,y(a,q)\bigr)$ \hfill(hard)
+  \STATE $\mathcal{L}_{\text{KD}}\gets$ per-action regression
+         $\bigl(\Uhat_{\theta}(a\mid q),\,\Uhat_{T}(a\mid q)\bigr)$ \hfill(soft)
+  \STATE $\mathcal{L}\gets \alpha\,\mathcal{L}_{\text{task}}
+         +(1-\alpha)\,\mathcal{L}_{\text{KD}}
+         +\gamma\,\mathcal{L}_{\text{repr}}$
+  \STATE $\theta\gets\theta-\eta\,\nabla_{\theta}\mathcal{L}$
+\ENDFOR
+\STATE Calibrate heads on held-out data (temperature / isotonic)
+\STATE \textbf{Output:} student weights $\theta$ \emph{only}; discard teacher
+\end{algorithmic}
+\end{algorithm}
+
+% ------------------------------------------------------------------
+\subsection{Inference routing and Split-LLM integration}
+\label{subsec:inference}
+
+\prop{%
+At deployment only the student $g_{\theta}$ runs, on the edge device. For a
+query $q$ it computes all $N$ utilities in one forward pass; the runtime
+monitor supplies the live cost $C(a\mid s)$ for each action; and the router
+applies Eq.~(\ref{eq:rule}). If \textsc{Edge} is selected the small model
+answers locally; if \textsc{Strong} is selected the query is served by the
+remote model; if $\textsc{Split}(d)$ is selected the edge runs the first $d$
+layers, transmits the activation tensor to the server, and the server runs
+the remaining layers and returns the result.}
+
+\prop{%
+The router is \emph{decoupled} from the internals of the Split-LLM
+implementation: it does not read or transform activations. It consumes only
+(i)~a measured scalar activation-transfer size for each enabled split depth,
+cached once per model, and (ii)~the live bandwidth and round-trip time, from
+which the communication component of $C(\textsc{Split}(d)\mid s)$ is formed.
+The split execution itself (partitioning, activation serialisation, transfer,
+and server-side continuation) is provided by the existing Split-LLM runtime;
+the router treats it as a measured execution path, not as a remote API call.}
+% [S:09] activation-byte -> c_comm feed; Henry-code interface details are [OPEN].
+
+\begin{algorithm}[t]
+\caption{\prop{Edge inference with the distilled micro-encoder router}}
+\label{alg:infer}
+\begin{algorithmic}[1]
+\STATE \textbf{Input:} query $q$; live system state $s$; trade-off $\lambda$
+\STATE $h\gets\mathrm{Pool}(\mathrm{Encoder}_{\theta}(q))$
+       \hfill(single forward pass, quantised runtime)
+\STATE $\Uhat_a\gets\sigma(w_a^{\top}h+b_a)$ for each $a\in\Acal$
+       \hfill(learned, calibrated)
+\STATE $C_a\gets C(a\mid s)$ for each $a\in\Acal$
+       \hfill(measured now, not in $\theta$)
+\STATE $a^{\star}\gets\argmax_{a\in\Acal}\;[\,\Uhat_a-\lambda\,C_a\,]$
+\STATE \textbf{dispatch} $a^{\star}$:
+       \textsc{Edge} (local) \textbar{}
+       $\textsc{Split}(d)$ (local $[0,d)$ $\to$ transfer $\to$ server $[d,L)$)
+       \textbar{} \textsc{Strong} (remote)
+\STATE \textbf{return} the generated response
+\end{algorithmic}
+\end{algorithm}
+
+% ------------------------------------------------------------------
+\subsection{Design assumptions and limitations}
+\label{subsec:limits}
+
+\prop{%
+We record the assumptions on which the design rests, to be resolved
+empirically rather than asserted. First, distillation is justified only if a
+larger same-family teacher generalises beyond the observed outcomes; if the
+teacher's soft targets coincide with the hard labels, distillation reduces to
+supervised regression and the non-distilled control should be used. Second,
+the number of actions $N$ and the set of enabled split depths are fixed by
+the model pool and by the available Split-LLM interface, and are left open
+here. Third, per-action calibration is a property we evaluate, not one the
+sigmoid heads provide automatically. Fourth, Eq.~(\ref{eq:rule}) assumes a
+scalar cost $C(a\mid s)$; a constrained or multi-objective treatment of the
+cost would change the form of the decision rule. Fifth, all statements about
+the lightness of a single forward pass are architectural; no latency has been
+measured on the target edge hardware in this draft.}
+
+% =====================================================================
+% =========================  END MERGE BLOCK  =========================
+% =====================================================================
+
+\vfill
+\noindent\rule{\linewidth}{0.4pt}\\
+{\footnotesize\itshape
+Draft provenance: this section is typeset from methods-v2 deliverable
+\texttt{06-proposed-method.md} (locked f\_theta, Eqs.~3$'$/4, training and
+inference algorithms, architecture) and its antecedents \texttt{00--05},
+\texttt{07--09}. No experimental results are claimed. The architecture figure
+referenced by the paper is specified separately in
+\texttt{15-architecture-figure-spec.md} / \texttt{architecture-figure.tex}.}
+
+\end{document}
