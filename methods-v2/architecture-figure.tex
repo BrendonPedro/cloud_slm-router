@@ -1,0 +1,163 @@
+% =====================================================================
+% architecture-figure.tex
+% Distilled micro-encoder router: training + inference architecture.
+% Renders methods-v2/15-architecture-figure-spec.md (the authoritative spec).
+%
+% Standalone-compilable:   pdflatex architecture-figure.tex
+% A methods-v2 asset ONLY. DO NOT \input into source/main-original.tex
+% (MICROENCODER_KD_BRIEF.md §20 forbids modifying the manuscript).
+%
+% No quantity in this figure is a measured result (brief §20/§26);
+% every value shown is a symbol (Û_θ, C, λ, d), never a number.
+% =====================================================================
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usetikzlibrary{positioning,shapes.geometric,shapes.misc,arrows.meta,fit,backgrounds,calc}
+
+% ---- §2 normative colour channels (redundantly encoded by line style too) ----
+\definecolor{trainonly}{HTML}{9AA0A6} % training-only  (DASHED grey)
+\definecolor{learned}{HTML}{1A56DB}   % learned in theta (SOLID blue = manuscript "Proposed" blue)
+\definecolor{measured}{HTML}{E8820C}  % measured live   (SOLID bold/double orange)
+\definecolor{learnedfill}{HTML}{E7EEFC}
+\definecolor{measuredfill}{HTML}{FDEFD9}
+\definecolor{trainfill}{HTML}{ECEDEF}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\scriptsize,
+  >=Stealth,
+  node distance=6mm and 10mm,
+  % ---- node styles (channel enforced by style, not by hand) ----
+  neutral/.style   ={rounded corners, draw=black, thin, fill=white,
+                     align=center, inner sep=3pt, minimum height=7mm},
+  trainnode/.style ={draw=trainonly, dashed, thick, fill=trainfill,
+                     align=center, inner sep=3pt, minimum height=7mm},
+  trainstore/.style={cylinder, shape border rotate=90, aspect=0.12,
+                     draw=trainonly, dashed, thick, fill=trainfill,
+                     align=center, inner sep=2pt, minimum height=9mm},
+  learnednode/.style={draw=learned, very thick, fill=learnedfill,
+                     align=center, inner sep=3pt, minimum height=7mm},
+  learnedval/.style ={signal, signal to=east and west, draw=learned, thick,
+                     fill=learnedfill, align=center, inner sep=3pt},
+  measval/.style    ={signal, signal to=east and west, draw=measured, very thick,
+                     double, fill=measuredfill, align=center, inner sep=3pt},
+  lossop/.style     ={regular polygon, regular polygon sides=6, draw=trainonly,
+                     dashed, thick, fill=trainfill, align=center, inner sep=1pt},
+  decision/.style   ={diamond, draw=black, thick, aspect=2.1,
+                     align=center, inner sep=1pt, top color=learnedfill,
+                     bottom color=measuredfill},
+  % ---- edge styles ----
+  flow/.style     ={->, thick},
+  flowL/.style    ={->, thick, learned},
+  flowM/.style    ={->, very thick, measured},
+  super/.style    ={->, dashed, >=Open Triangle 60, thick, trainonly},
+  opt/.style      ={->, dashed, thin, trainonly, opacity=0.8},
+  grad/.style     ={->, thick, learned, opacity=0.9},
+]
+
+% =====================================================================
+%  PANEL A  — TRAINING (lab GPU; training-only = dashed grey)
+% =====================================================================
+\node[neutral] (A1) {query set $\{q_i\}$};
+
+\node[trainstore, right=18mm of A1, text width=30mm] (A2)
+   {OBSERVED OUTCOMES $y(a,q)$\\[1pt]{\tiny $=$ oracle T4 $=$ GROUND TRUTH\\(judge/strong $=$ label \emph{source})}};
+
+\node[trainnode, below=9mm of A1, text width=30mm] (A3)
+   {TEACHER ROUTER (T1)\\ModernBERT-large ($\sim$395M)\\[1pt]{\tiny training-only}};
+
+\node[learnednode, below=20mm of A2, text width=34mm] (A4)
+   {\textbf{STUDENT} ModernBERT-base\\($\sim$149M) $+\,N$ heads\\[1pt]
+    $\widehat{U}_\theta(a\,|\,q)=\sigma(w_a^{\!\top}h+b_a)$};
+
+\node[lossop, below=9mm of $(A3)!0.5!(A4)$, text width=40mm] (A5)
+   {$L=\alpha L_{\text{task}}(\widehat U_\theta,y)+(1{-}\alpha)L_{\text{KD}}(\widehat U_\theta,\widehat U_T)\,[+\gamma L_{\text{repr}}]$};
+\node[trainnode, draw=learned, text=learned, below=2mm of A5, inner sep=2pt] (A5b)
+   {\textbf{$\alpha=1 \Rightarrow$ non-distilled control (E1)}};
+
+\node[learnednode, right=14mm of A4, text width=24mm] (A6)
+   {calibrate heads\\(temperature / isotonic)};
+
+% edges (training)
+\draw[flow]  (A1) -- (A2);
+\draw[flow]  (A1) -- (A3);
+\draw[flow]  (A1.south) |- (A4.west);
+\draw[super] (A2.south) -- node[right,text=black]{\tiny $\alpha L_{\text{task}}$ (hard)} (A5.north-|A2);
+\draw[super] (A3.south) |- node[below left,text=black]{\tiny $(1{-}\alpha)L_{\text{KD}}$ (soft $\widehat U_T$)} (A5.west);
+\draw[flow]  (A4.south) -- (A5.east|-A4.south) |- (A5.east);
+\draw[grad]  (A5.north) to[bend right=12] node[left,text=black]{\tiny $\theta\!\leftarrow\!\theta-\eta\nabla L$} (A4.south);
+\draw[opt]   (A3) -- node[above,text=black,align=center]{\tiny $\gamma L_{\text{repr}}$ (KD-4,\\\tiny same-family, optional)} (A4);
+\draw[flowL] (A4) -- (A6);
+
+\begin{pgfonlayer}{background}
+  \node[draw=trainonly, dashed, rounded corners, fit=(A1)(A2)(A3)(A4)(A5)(A5b)(A6),
+        inner sep=5mm, label={[anchor=north west,font=\footnotesize\bfseries]north west:PANEL A \textemdash\ TRAINING (lab GPU)}] (panelA) {};
+\end{pgfonlayer}
+
+% ---- divider: "ship theta only; teacher discarded"  (scissors) ----
+\node[below=5mm of panelA.south, font=\footnotesize\bfseries] (div)
+   {\textcolor{learned}{$\blacktriangledown$ ship $\theta$ only} \quad\textemdash\quad teacher discarded \ \Large\Letter};
+\draw[trainonly, dashed, thick] ([yshift=-2mm]panelA.south west) -- ([yshift=-2mm]panelA.south east);
+\node[trainonly] at ([yshift=-2mm,xshift=-6mm]panelA.south east) {\large $\times\!\!<$}; % scissors cue
+
+% =====================================================================
+%  PANEL B  — INFERENCE (edge device; learned=blue, measured=orange)
+% =====================================================================
+\node[neutral, below=14mm of panelA.south west, anchor=north west] (B1) {query $q$};
+
+\node[learnednode, below=7mm of B1, text width=34mm] (B2)
+   {\textbf{STUDENT $g_\theta$} \ 1 fwd pass, INT8/ONNX\\[1pt]$h(q)=\text{Pool}(\text{ModernBERT}_\theta(q))$};
+
+\node[learnedval, below=7mm of B2, text width=26mm] (B3)
+   {$\widehat U_\theta(a\,|\,q)$ for $a\!\in\!\mathcal A$ \ {\tiny[$\theta$]}};
+
+\node[measval, right=42mm of B1, text width=40mm] (B4)
+   {live system state $s$ \ {\tiny[\textbf{meter}]}\\[1pt]{\tiny bw\,$\cdot$\,RTT\,$\cdot$\,contention\,$\cdot$\,act-bytes\\\tiny TTFT/TPOT\,$\cdot$\,compute-lat\,$\cdot$\,mem}};
+
+\node[measval, below=14mm of B4, text width=34mm] (B5)
+   {$C(a\,|\,s)$ for $a\!\in\!\mathcal A$ \ {\tiny[\textbf{meter}]}\\[1pt]{\tiny scalarized (S1\textendash S4), outside $\theta$}};
+
+\node[decision, below=10mm of $(B3)!0.5!(B5)$, text width=34mm] (B6)
+   {$a^\ast=\arg\max_a[\,\widehat U_\theta(a|q)-\lambda\,C(a|s)\,]$\\[1pt]{\tiny Eq.\,(4)}};
+\node[neutral, right=4mm of B6, inner sep=2pt] (B6lab) {\tiny $\lambda$ set at\\\tiny runtime (E5)};
+
+\node[neutral, below=10mm of B6, xshift=-34mm, text width=22mm] (B7a) {EDGE\_SLM\\{\tiny run small model locally}};
+\node[neutral, below=10mm of B6, text width=30mm] (B7b)
+   {SPLIT($d$)\\{\tiny $[0,d)$ local $\to$ send activation $\to$ server $[d,L)$}\\{\tiny bytes$(d)\!\to\!C(\text{SPLIT}(d)|s)$ (09)}};
+\node[neutral, below=10mm of B6, xshift=34mm, text width=22mm] (B7c) {STRONG / CLOUD\\{\tiny full remote exec}};
+
+\node[trainnode, right=10mm of B7c, text width=26mm, opacity=0.9] (B8)
+   {{\tiny log $(q,a^\ast,\widehat U,C,\text{outcome})\to$ journal CL (13)}\\{\tiny logging only; no core effect}};
+
+% edges (inference)
+\draw[flowL] (B1) -- (B2);
+\draw[flowL] (B2) -- (B3);
+\draw[flowM] (B4) -- (B5);
+\draw[flowL] (B3.south) |- node[above right,text=black]{\tiny $\widehat U_\theta(a|q)$ (learned)} (B6.west);
+\draw[flowM] (B5.south) |- node[above left,text=black]{\tiny $-\lambda C(a|s)$ (measured)} (B6.east);
+\draw[flow]  (B6.south) -- (B7a.north);
+\draw[flow]  (B6.south) -- (B7b.north);
+\draw[flow]  (B6.south) -- (B7c.north);
+\draw[opt]   (B6.east) to[bend left=18] (B8.north);
+
+\begin{pgfonlayer}{background}
+  \node[draw=learned, rounded corners, fit=(B1)(B2)(B3)(B4)(B5)(B6)(B6lab)(B7a)(B7b)(B7c)(B8),
+        inner sep=5mm, label={[anchor=north west,font=\footnotesize\bfseries]north west:PANEL B \textemdash\ INFERENCE (edge device)}] (panelB) {};
+\end{pgfonlayer}
+
+% =====================================================================
+%  LEGEND (§2)
+% =====================================================================
+\node[below=4mm of panelB.south west, anchor=north west, draw=black, rounded corners,
+      inner sep=4pt, align=left, font=\tiny] (legend) {
+  \textbf{Legend} \quad
+  \textcolor{trainonly}{\textbf{- -}~dashed grey} = training-only (discarded) \quad
+  \textcolor{learned}{\textbf{---}~blue} = learned in $\theta$\,[$\theta$] \quad
+  \textcolor{measured}{\textbf{===}~orange} = measured live\,[meter] \\
+  \textcolor{trainonly}{$\dashrightarrow$} = KD / supervision (loss) \qquad
+  no quantity shown is a measured result (brief §20).
+};
+
+\end{tikzpicture}
+\end{document}
