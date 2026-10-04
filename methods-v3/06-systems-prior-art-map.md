@@ -117,6 +117,7 @@ deployment.
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | Bao et al., "Dynamic Quality-Latency Aware Routing for LLM Inference in Wireless Edge-Device Networks" | IEEE/CIC ICCC Workshops 2025, 10.1109/icccworkshops67136.2025.11147210; arXiv 2508.11291 | **BODY** (§III, Eq. 6–12) | Y (Qwen2.5-3B device vs QwQ-32B edge) | Y | Y | N | N (token counts only) | partial (fixed B = 2·10⁷ tok/s + δ) | Y (BERT router adopted from RouteLLM) | Y | **Most threatening LLM work:** p̃ = p − α(T_edge − T_local), thresholded — our "utility minus cost" shape, binary actions only, no split |
 | Chen et al., "Optimizing NetGPT via Routing-Based Synergy and Reinforcement Learning" | arXiv 2511.22217 (venue unverified) | **BODY** (§IV, Eq. 2, 5, 8, 28–29) | Y (7B edge / DeepSeek-V3.2 cloud) | Y (reward-model score) | Y | N | N (payload via transmit time) | **Y** (τ = τ₀ − α·RTT + β·BW, Eq. 28; emulated regimes + Gauss–Markov) | Y (+ ~2.9k-param PolicyNet MLP) | Y | **High threat:** learned edge score + network-adaptive threshold; proves the optimal threshold is monotone in BW/RTT. Two models, no split |
+| Xue et al., "CR²: Cost-Aware Risk-Controlled Routing for Wireless Device-Edge LLM Inference" *(added iteration 15)* | arXiv 2605.12001 ("submitted to IEEE Journal"; venue unverified) | **BODY** (§IV Eq. 4–18, §VI Eq. 24–59, §VII; see `12` §2.1) | Y (Qwen3-1.7B UE vs Qwen3-4B/8B/14B edge) | Y (frozen MiniLM embedding) | Y | N | N (uplink/downlink payload via rates) | partial (simulated quasi-static fading ξ; fixed 18 ms RTT; profiled inference) | Y (per-model sigmoid heads, BCE + ranking; on-device gate **distilled** from teacher utility margins) | Y | **Highest-threat routing work found:** u = y − λ·c(x,ξ) over multiple models with wireless latency+energy, plus router-to-router distillation. No split actions, no measured network |
 | Splitwise (Younesi et al.), "Collaborative Edge–Cloud Inference for LLMs via Lyapunov-Assisted DRL" | IEEE/ACM UCC 2025, 10.1145/3773274.3774267; arXiv 2512.23310 | **BODY** (state/action, Δacc) | N | N | N | Y (attention head / FFN sub-layer) | Y (modelled D_k(π)) | Y (B(t), moving average, variance) | partial (DRL policy; accuracy loss = fixed quantization proxy) | Y | Learned LLM partitioning under live bandwidth; single model, not query-aware |
 | Chen et al., adaptive layer splitting for wireless LLM inference (MBRL) | FITEE 2025, 10.1631/fitee.2400468; arXiv 2406.02616 | **BODY** (§II–V) | N | N (state = channel noise/fading + split) | N | Y (±1/0 moves) | **N — tensor size assumed constant across splits (§II-B)** | Y (simulated, §III-A) | partial (reward −(PPL + λ·FLOPs)) | Y | Learned LLM split under channel state; explicitly does not model depth-dependent bytes |
 | R. Zhang et al., "Compact LLM Deployment and World Model Assisted Offloading in MEC" | arXiv 2602.13628 (venue unverified) | **BODY** (system model, state, reward) | Y (local compact vs edge full) | N | partial (offload ratio) | N | N | Y (channel gains) | partial (WM-PPO) | Y | Multi-user per-slot offloading |
@@ -267,3 +268,24 @@ before experiments (`12`).
 5. Venues stated only in arXiv comments (TMO → MobiHoc 2025; HybridFlow →
    ICML 2026) are unverified; Fang et al. ICML 2026 is confirmed via the PMLR
    v306 page found in the search, at META level.
+
+---
+
+## 6. Addendum — iteration 15 supplementary search (see `12` §1.2, §2)
+
+A supplementary invalidation search (five web queries, 2026-10-04) found
+**CR²** (row added to §1.3, body read). It pre-empts (i) multi-model
+utility − λ·(wireless latency/energy) routing for device–edge LLMs and (ii)
+distilling a teacher router into an on-device router. It does **not** include
+split actions or measured network state. The §2 rows "Utility-minus-latency
+LLM routing with network term" and "Micro-encoder router + KD" should be read
+with CR² added to their prior work. The §3 surviving candidate is unchanged in
+scope, but its strength stays weak-to-moderate (`12` §4.2).
+
+ABS-only hits (not load-bearing): Koch et al. arXiv 2504.03668 (runtime
+re-splitting of LFM layers across MEC nodes); Sung et al. arXiv 2511.04002
+(joint split point × quantization × sequence length; lossy); FourierCompress
+arXiv 2510.16418 (layer-aware activation compression, so compressed bytes can
+depend on depth); RAC arXiv 2608.04991 (split-LLM activation codec);
+Cunningham arXiv 2602.16760 (privacy-aware split with lookahead decoding that
+amortises the per-token round trip). None is a query-aware model router.
