@@ -5,15 +5,22 @@
 % Rules applied to every entry (details and per-claim locators are in
 % 17-verified-references-v3.md):
 %   * Identity (title, authors, venue, year, pages, DOI) was re-fetched on
-%     2026-10-04 from the official record listed in the `note` field:
+%     2026-10-04 from the official record listed in the `provenance` field:
 %     Crossref (DOI), ACL Anthology DOI, proceedings.iclr.cc, papers.nips.cc,
 %     proceedings.mlr.press, or the arXiv abs page (citation_* meta tags).
 %   * When the proceedings record and arXiv differ, the proceedings record is
 %     copied (title, author list).
 %   * No entry is included on the strength of methods-v2 alone.
-%   * `note` records the inspection level (BODY / META / ABS) so a reader of
-%     the .bib cannot mistake a META entry for a body-verified one. Remove the
-%     notes (or use a style that ignores `note`) before camera-ready.
+%   * `provenance` records the identity source and inspection level
+%     (BODY / META / ABS) so a reader of the .bib cannot mistake a META entry
+%     for a body-verified one. BibTeX styles ignore unknown fields, so
+%     `provenance` never appears in the printed reference list (iteration 23:
+%     these were `note` fields until a Tectonic/IEEEtran.bst compile showed
+%     them leaking into the bibliography). The only printed `note` is
+%     "arXiv preprint arXiv:<id>", added to every misc-type entry that has
+%     an `eprint` (IEEEtran.bst does not print `eprint` itself).
+%     Never write the at-sign in these comments: BibTeX parses it as an
+%     entry start even after a percent sign.
 %   * Excluded on purpose: continual-learning papers (journal scope, see
 %     15-conference-vs-journal.md), DistilBERT/TinyBERT (not used by v3),
 %     ABS-only systems hits (06), and the ICDCS 2025 hit whose identity is
@@ -31,7 +38,7 @@
   pages     = {34433--34448},
   eprint    = {2406.18665},
   archivePrefix = {arXiv},
-  note      = {Identity: proceedings.iclr.cc (2025). arXiv title says "with Preference Data"; proceedings title used. BODY (arXiv v1, v4; repo).}
+  provenance = {Identity: proceedings.iclr.cc (2025). arXiv title says "with Preference Data"; proceedings title used. BODY (arXiv v1, v4; repo).}
 }
 
 @inproceedings{chen2024routerdc,
@@ -43,7 +50,7 @@
   doi       = {10.52202/079017-2120},
   eprint    = {2409.19886},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. BODY (arXiv v1; repo).}
+  provenance = {Identity: Crossref. BODY (arXiv v1; repo).}
 }
 
 @misc{garg2026hydra,
@@ -53,7 +60,8 @@
   eprint    = {2605.17106},
   archivePrefix = {arXiv},
   primaryClass = {cs.CL},
-  note      = {Preprint (arXiv comment: "preprint v2"). Author list copied from arXiv metadata; the v2 PDF header additionally lists Giuseppe Cianci. BODY (v1, v2).}
+  provenance = {Preprint (arXiv comment: "preprint v2"). Author list copied from arXiv metadata; the v2 PDF header additionally lists Giuseppe Cianci. BODY (v1, v2).},
+  note      = {arXiv preprint arXiv:2605.17106}
 }
 
 @inproceedings{li2026llmrouterbench,
@@ -65,7 +73,7 @@
   doi       = {10.18653/v1/2026.findings-acl.1881},
   eprint    = {2601.07206},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv).}
+  provenance = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv).}
 }
 
 @misc{qiao2026consroute,
@@ -75,7 +83,8 @@
   eprint    = {2603.21237},
   archivePrefix = {arXiv},
   primaryClass = {cs.DC},
-  note      = {Preprint; no venue found. Identity: arXiv abs. BODY (v1 only).}
+  provenance = {Preprint; no venue found. Identity: arXiv abs. BODY (v1 only).},
+  note      = {arXiv preprint arXiv:2603.21237}
 }
 
 @inproceedings{ding2024hybridllm,
@@ -86,7 +95,7 @@
   pages     = {41348--41366},
   eprint    = {2404.14618},
   archivePrefix = {arXiv},
-  note      = {Identity: proceedings.iclr.cc (2024). BODY (arXiv).}
+  provenance = {Identity: proceedings.iclr.cc (2024). BODY (arXiv).}
 }
 
 @inproceedings{ding2025bestroute,
@@ -100,7 +109,7 @@
   year      = {2025},
   eprint    = {2506.22716},
   archivePrefix = {arXiv},
-  note      = {Identity: proceedings.mlr.press/v267/ding25d. BODY (arXiv v1).}
+  provenance = {Identity: proceedings.mlr.press/v267/ding25d. BODY (arXiv v1).}
 }
 
 @misc{varshney2026prefill,
@@ -110,7 +119,8 @@
   eprint    = {2603.20895},
   archivePrefix = {arXiv},
   primaryClass = {cs.CL},
-  note      = {Preprint. v1 title was "LLM Router: Prefill is All You Need"; v3 title used. BODY (v3).}
+  provenance = {Preprint. v1 title was "LLM Router: Prefill is All You Need"; v3 title used. BODY (v3).},
+  note      = {arXiv preprint arXiv:2603.20895}
 }
 
 @misc{tran2025archrouter,
@@ -120,7 +130,8 @@
   eprint    = {2506.16655},
   archivePrefix = {arXiv},
   primaryClass = {cs.CL},
-  note      = {Preprint. BODY (v1).}
+  provenance = {Preprint. BODY (v1).},
+  note      = {arXiv preprint arXiv:2506.16655}
 }
 
 @inproceedings{song2025irtrouter,
@@ -132,7 +143,7 @@
   doi       = {10.18653/v1/2025.acl-long.761},
   eprint    = {2506.01048},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv).}
+  provenance = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv).}
 }
 
 @misc{xue2026cr2,
@@ -141,7 +152,8 @@
   year      = {2026},
   eprint    = {2605.12001},
   archivePrefix = {arXiv},
-  note      = {Preprint (arXiv comment: "submitted to IEEE Journal"). BODY (sections IV, VI, VII).}
+  provenance = {Preprint (arXiv comment: "submitted to IEEE Journal"). BODY (sections IV, VI, VII).},
+  note      = {arXiv preprint arXiv:2605.12001}
 }
 
 @inproceedings{bao2025qualitylatency,
@@ -154,7 +166,7 @@
   doi       = {10.1109/ICCCWorkshops67136.2025.11147210},
   eprint    = {2508.11291},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. BODY (section III, Eq. 6--12).}
+  provenance = {Identity: Crossref. BODY (section III, Eq. 6--12).}
 }
 
 @misc{chen2025netgptrouting,
@@ -163,7 +175,8 @@
   year      = {2025},
   eprint    = {2511.22217},
   archivePrefix = {arXiv},
-  note      = {Preprint; venue unverified. BODY (section IV).}
+  provenance = {Preprint; venue unverified. BODY (section IV).},
+  note      = {arXiv preprint arXiv:2511.22217}
 }
 
 @inproceedings{luo2026routelmt,
@@ -175,7 +188,7 @@
   doi       = {10.18653/v1/2026.acl-industry.129},
   eprint    = {2604.22520},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv v1, sections 3, 4, 5.1--5.3, Limitations).}
+  provenance = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv v1, sections 3, 4, 5.1--5.3, Limitations).}
 }
 
 @misc{wang2025iclrouter,
@@ -184,7 +197,8 @@
   year      = {2025},
   eprint    = {2510.09719},
   archivePrefix = {arXiv},
-  note      = {arXiv comment says "Accepted by AAAI 2026"; proceedings record not checked, so cited as arXiv. BODY (v3, sections 3.1--3.4, 4.2--4.3, App. A.4--A.5).}
+  provenance = {arXiv comment says "Accepted by AAAI 2026"; proceedings record not checked, so cited as arXiv. BODY (v3, sections 3.1--3.4, 4.2--4.3, App. A.4--A.5).},
+  note      = {arXiv preprint arXiv:2510.09719}
 }
 
 @inproceedings{zheng2023judging,
@@ -196,7 +210,7 @@
   doi       = {10.52202/075280-2020},
   eprint    = {2306.05685},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. META (cited only for the term "LLM-as-a-judge"; see 04).}
+  provenance = {Identity: Crossref. META (cited only for the term "LLM-as-a-judge"; see 04).}
 }
 
 % =====================================================================
@@ -210,7 +224,8 @@
   eprint    = {1503.02531},
   archivePrefix = {arXiv},
   primaryClass = {stat.ML},
-  note      = {arXiv comment: NIPS 2014 Deep Learning Workshop (no archival proceedings). BODY (sections 1--2, 6).}
+  provenance = {arXiv comment: NIPS 2014 Deep Learning Workshop (no archival proceedings). BODY (sections 1--2, 6).},
+  note      = {arXiv preprint arXiv:1503.02531}
 }
 
 @inproceedings{guo2017calibration,
@@ -224,7 +239,7 @@
   year      = {2017},
   eprint    = {1706.04599},
   archivePrefix = {arXiv},
-  note      = {Identity: proceedings.mlr.press/v70/guo17a. BODY (sections 2, 3, 4.1, 4.2).}
+  provenance = {Identity: proceedings.mlr.press/v70/guo17a. BODY (sections 2, 3, 4.1, 4.2).}
 }
 
 @inproceedings{muller2019labelsmoothing,
@@ -234,7 +249,7 @@
   year      = {2019},
   eprint    = {1906.02629},
   archivePrefix = {arXiv},
-  note      = {Identity: papers.nips.cc (no page range on record). BODY (sections 3, 4, 6).}
+  provenance = {Identity: papers.nips.cc (no page range on record). BODY (sections 3, 4, 6).}
 }
 
 @inproceedings{menon2021statistical,
@@ -248,7 +263,7 @@
   year      = {2021},
   eprint    = {2005.10419},
   archivePrefix = {arXiv},
-  note      = {Identity: proceedings.mlr.press/v139/menon21a. arXiv title "Why distillation helps: a statistical perspective". BODY (arXiv version, sections 1, 3).}
+  provenance = {Identity: proceedings.mlr.press/v139/menon21a. arXiv title "Why distillation helps: a statistical perspective". BODY (arXiv version, sections 1, 3).}
 }
 
 @inproceedings{lopezpaz2016unifying,
@@ -258,7 +273,7 @@
   year      = {2016},
   eprint    = {1511.03643},
   archivePrefix = {arXiv},
-  note      = {Venue from the arXiv journal-ref (author-supplied); no proceedings page checked. BODY (sections 2, 4, 4.1).}
+  provenance = {Venue from the arXiv journal-ref (author-supplied); no proceedings page checked. BODY (sections 2, 4, 4.1).}
 }
 
 @inproceedings{stanton2021kd,
@@ -269,7 +284,7 @@
   pages     = {6906--6919},
   eprint    = {2106.05945},
   archivePrefix = {arXiv},
-  note      = {Identity: papers.nips.cc. BODY for abstract and section 1 only.}
+  provenance = {Identity: papers.nips.cc. BODY for abstract and section 1 only.}
 }
 
 @inproceedings{furlanello2018bornagain,
@@ -283,7 +298,7 @@
   year      = {2018},
   eprint    = {1805.04770},
   archivePrefix = {arXiv},
-  note      = {Identity: proceedings.mlr.press/v80/furlanello18a. BODY (section 3.2).}
+  provenance = {Identity: proceedings.mlr.press/v80/furlanello18a. BODY (section 3.2).}
 }
 
 @inproceedings{cho2019efficacy,
@@ -295,7 +310,7 @@
   doi       = {10.1109/ICCV.2019.00489},
   eprint    = {1910.01348},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. BODY (sections 5.2, 5.3).}
+  provenance = {Identity: Crossref. BODY (sections 5.2, 5.3).}
 }
 
 @inproceedings{yuan2020revisiting,
@@ -307,7 +322,7 @@
   doi       = {10.1109/CVPR42600.2020.00396},
   eprint    = {1909.11723},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. BODY (abstract, sections 2.1--2.2, 3).}
+  provenance = {Identity: Crossref. BODY (abstract, sections 2.1--2.2, 3).}
 }
 
 @inproceedings{kim2016sequence,
@@ -319,7 +334,7 @@
   doi       = {10.18653/v1/D16-1139},
   eprint    = {1606.07947},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref (ACL Anthology DOI). BODY for sections 3.1--3.2 only (teacher-generated hard targets as a KD variant).}
+  provenance = {Identity: Crossref (ACL Anthology DOI). BODY for sections 3.1--3.2 only (teacher-generated hard targets as a KD variant).}
 }
 
 @misc{romero2014fitnets,
@@ -329,7 +344,8 @@
   eprint    = {1412.6550},
   archivePrefix = {arXiv},
   primaryClass = {cs.LG},
-  note      = {Published at ICLR 2015 per secondary sources; the arXiv record carries no venue and no proceedings page was checked, so cited as arXiv. BODY for section 2.2 only (hint = teacher hidden-layer output).}
+  provenance = {Published at ICLR 2015 per secondary sources; the arXiv record carries no venue and no proceedings page was checked, so cited as arXiv. BODY for section 2.2 only (hint = teacher hidden-layer output).},
+  note      = {arXiv preprint arXiv:1412.6550}
 }
 
 % =====================================================================
@@ -345,7 +361,7 @@
   doi       = {10.18653/v1/2025.acl-long.127},
   eprint    = {2412.13663},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref (ACL Anthology). The arXiv version also lists Nathan Cooper; the Anthology list is used. BODY (sections 2.1.3, 2.2.1, 3.2, 4.2; Tables 1, 2, 4).}
+  provenance = {Identity: Crossref (ACL Anthology). The arXiv version also lists Nathan Cooper; the Anthology list is used. BODY (sections 2.1.3, 2.2.1, 3.2, 4.2; Tables 1, 2, 4).}
 }
 
 @inproceedings{he2023debertav3,
@@ -355,7 +371,7 @@
   year      = {2023},
   eprint    = {2111.09543},
   archivePrefix = {arXiv},
-  note      = {Venue: title present in the iclr.cc/virtual/2023 paper listing (OpenReview unreachable; no page range). BODY for Table 9 only.}
+  provenance = {Venue: title present in the iclr.cc/virtual/2023 paper listing (OpenReview unreachable; no page range). BODY for Table 9 only.}
 }
 
 @inproceedings{wang2020minilm,
@@ -366,7 +382,7 @@
   pages     = {5776--5788},
   eprint    = {2002.10957},
   archivePrefix = {arXiv},
-  note      = {Identity: papers.nips.cc. META only: cite for existence of the model family, not for any load-bearing claim.}
+  provenance = {Identity: papers.nips.cc. META only: cite for existence of the model family, not for any load-bearing claim.}
 }
 
 @inproceedings{weller2026ettin,
@@ -377,7 +393,7 @@
   pages     = {143110--143133},
   eprint    = {2507.11412},
   archivePrefix = {arXiv},
-  note      = {Identity: proceedings.iclr.cc (2026). BODY (recipe differences, model sizes, GLUE table).}
+  provenance = {Identity: proceedings.iclr.cc (2026). BODY (recipe differences, model sizes, GLUE table).}
 }
 
 % =====================================================================
@@ -392,7 +408,7 @@
   pages     = {615--629},
   publisher = {ACM},
   doi       = {10.1145/3037697.3037698},
-  note      = {Identity: Crossref (title + subtitle fields). META: cite only for runtime split-point selection under bandwidth/server load.}
+  provenance = {Identity: Crossref (title + subtitle fields). META: cite only for runtime split-point selection under bandwidth/server load.}
 }
 
 @inproceedings{han2016mcdnn,
@@ -403,7 +419,7 @@
   pages     = {123--136},
   publisher = {ACM},
   doi       = {10.1145/2906388.2906396},
-  note      = {Identity: Crossref (title + subtitle fields). BODY (UW tech-report version, Alg. 1).}
+  provenance = {Identity: Crossref (title + subtitle fields). BODY (UW tech-report version, Alg. 1).}
 }
 
 @article{li2020edgent,
@@ -417,7 +433,7 @@
   doi       = {10.1109/TWC.2019.2946140},
   eprint    = {1910.05316},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. BODY (sections III--IV).}
+  provenance = {Identity: Crossref. BODY (sections III--IV).}
 }
 
 @inproceedings{laskaridis2020spinn,
@@ -430,7 +446,7 @@
   doi       = {10.1145/3372224.3419194},
   eprint    = {2008.06402},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref + arXiv DOI tag. BODY (sections 3.2--3.6).}
+  provenance = {Identity: Crossref + arXiv DOI tag. BODY (sections 3.2--3.6).}
 }
 
 @misc{mounesan2024edgerl,
@@ -439,7 +455,8 @@
   year      = {2024},
   eprint    = {2410.12221},
   archivePrefix = {arXiv},
-  note      = {Venue unverified; cited as arXiv. BODY (sections II-B, II-C, Eq. 8).}
+  provenance = {Venue unverified; cited as arXiv. BODY (sections II-B, II-C, Eq. 8).},
+  note      = {arXiv preprint arXiv:2410.12221}
 }
 
 @inproceedings{younesi2025splitwise,
@@ -452,7 +469,7 @@
   doi       = {10.1145/3773274.3774267},
   eprint    = {2512.23310},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. Not the ISCA 2024 "Splitwise" (Patel et al.) prefill/decode paper. BODY (state/action, accuracy-loss proxy).}
+  provenance = {Identity: Crossref. Not the ISCA 2024 "Splitwise" (Patel et al.) prefill/decode paper. BODY (state/action, accuracy-loss proxy).}
 }
 
 @article{chen2025adaptivesplit,
@@ -466,7 +483,7 @@
   doi       = {10.1631/FITEE.2400468},
   eprint    = {2406.02616},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. BODY (sections II--V).}
+  provenance = {Identity: Crossref. BODY (sections II--V).}
 }
 
 @article{matsubara2022splitsurvey,
@@ -478,7 +495,7 @@
   pages     = {1--30},
   year      = {2022},
   doi       = {10.1145/3527155},
-  note      = {Identity: Crossref. META: cite only as a taxonomy/survey pointer.}
+  provenance = {Identity: Crossref. META: cite only as a taxonomy/survey pointer.}
 }
 
 % =====================================================================
@@ -488,12 +505,12 @@
 @misc{he2025nondeterminism,
   title     = {Defeating Nondeterminism in {LLM} Inference},
   author    = {He, Horace and {Thinking Machines Lab}},
-  howpublished = {Thinking Machines Lab: Connectionism (technical blog, not peer reviewed)},
+  howpublished = {Thinking Machines Lab: Connectionism, technical blog},
   year      = {2025},
   month     = sep,
   doi       = {10.64434/tml.20250910},
   url       = {https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/},
-  note      = {Identity: Crossref (report DOI). BODY. Must be described as a technical report in the manuscript.}
+  provenance = {Identity: Crossref (report DOI). BODY. Must be described as a technical report in the manuscript.}
 }
 
 @inproceedings{yuan2025nondeterminism,
@@ -505,7 +522,7 @@
   doi       = {10.52202/085713-5653},
   eprint    = {2506.09501},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref (resolves the venue question left open in 02). META (abstract): cite only for "batch size / GPU count / GPU type change BF16 greedy outputs".}
+  provenance = {Identity: Crossref (resolves the venue question left open in 02). META (abstract): cite only for "batch size / GPU count / GPU type change BF16 greedy outputs".}
 }
 
 @inproceedings{schuster2022calm,
@@ -517,7 +534,7 @@
   doi       = {10.52202/068431-1269},
   eprint    = {2207.07061},
   archivePrefix = {arXiv},
-  note      = {Identity: Crossref. BODY for section 3.3.1 and section 4 (Defs. 1--2) only.}
+  provenance = {Identity: Crossref. BODY for section 3.3.1 and section 4 (Defs. 1--2) only.}
 }
 
 @inproceedings{mai2024splitdenoise,
@@ -531,7 +548,7 @@
   year      = {2024},
   eprint    = {2310.09130},
   archivePrefix = {arXiv},
-  note      = {Identity: proceedings.mlr.press/v235/mai24a. META (abstract): cite only for "noise added to transmitted embeddings".}
+  provenance = {Identity: proceedings.mlr.press/v235/mai24a. META (abstract): cite only for "noise added to transmitted embeddings".}
 }
 
 % =====================================================================
@@ -544,5 +561,6 @@
   year      = {2024},
   eprint    = {2411.04368},
   archivePrefix = {arXiv},
-  note      = {Preprint (SimpleQA). BODY for section 2.4 and Table 3 only.}
+  provenance = {Preprint (SimpleQA). BODY for section 2.4 and Table 3 only.},
+  note      = {arXiv preprint arXiv:2411.04368}
 }

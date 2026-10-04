@@ -388,9 +388,9 @@ After the edits, the static checks were re-run (§7).
    conditionally ("under a pipeline split in which the server samples
    tokens"). If Henry's implementation batches or speculates, P18 must be
    revised (`14`).
-6. **No compilation.** No LaTeX/BibTeX toolchain exists in the environment, so
-   cite resolution was checked statically against the .bib (§7), not by
-   BibTeX.
+6. **Compilation (superseded in iteration 23, see §8).** When this audit was
+   written, cite resolution had been checked only statically (§7). It has since
+   been confirmed by BibTeX through Tectonic.
 
 ---
 
@@ -443,3 +443,38 @@ No uncited factual claim about prior work remains.
   decoder layers", "first implementation candidate" and similar. `identical`
   appears only in "does not by itself guarantee bit-identical outputs".
 * `source/main-original.tex` and `methods-v2/` show no git diff.
+
+---
+
+## 8. Compile check (iteration 23, 2026-10-04)
+
+A user-space Tectonic 0.15.0 binary was used (XeTeX engine with bundled BibTeX
+0.99d and `IEEEtran.bst` 1.14; see `latex-compile.log` for how it was obtained).
+`pdflatex` itself is **untested**. Two wrappers were compiled outside the repo:
+
+| Wrapper | Errors | Undefined cites/refs | BibTeX warnings | Overfull boxes |
+|---|---|---|---|---|
+| `proposed-solution-blue-v3.tex` as is (article, one column) | 0 | 0 | 0 | 0 |
+| BEGIN–END MERGE body inside `\documentclass[conference]{IEEEtran}` (two columns) | 0 | 0 | 0 | 0 |
+
+The compile surfaced two defects that the static check could not catch.
+
+1. **Equation widths.** In the two-column IEEEtran setting, Eqs. (ftheta),
+   (kdloss), (feasible) and (factor) were 8–72 pt too wide. They are now
+   multi-line `split` environments. No symbol or meaning changed.
+2. **Internal provenance leaked into the reference list.** Every `.bib` entry
+   kept its inspection notes ("Identity: Crossref … BODY (sections …)", "see
+   04", "Must be described as a technical report …") in `note`, and
+   `IEEEtran.bst` prints `note`. Merging the .bib as instructed would therefore
+   have put internal sprint annotations into the paper's references. All 44
+   notes were renamed to the non-printing field `provenance`, so the content is
+   kept and the inspection levels are unchanged. The 11 misc-type entries with
+   an `eprint` now carry a printable `note = {arXiv preprint arXiv:<id>}`,
+   because `IEEEtran.bst` ignores `eprint`. Before this fix, preprints such as
+   HyDRA or CR² printed with no identifier at all. A grep of the generated
+   `.bbl` for `Identity|BODY|META` returns 0.
+
+Remaining cosmetic warnings: underfull boxes in long bibliography URLs, and
+XeTeX `TU/ptm` font-shape substitutions. pdflatex uses T1/ptm, so the latter
+do not apply to it.
+

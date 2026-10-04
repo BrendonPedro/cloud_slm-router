@@ -35,10 +35,15 @@
 %  COMPILATION STATUS
 %  ------------------
 %  Standalone article-class wrapper so the section can be proofed alone.
-%  No LaTeX toolchain (pdflatex/latexmk/bibtex) exists in the sprint
-%  environment, so this file has NOT been compiled. Only a static check
-%  (balanced braces/environments, every \cite key present in the .bib) was
-%  run. It must be compiled at merge time.
+%  Iteration 20 had only a static check (no pdflatex/latexmk on PATH).
+%  Iteration 23 COMPILED it with a user-space Tectonic 0.15.0 binary
+%  (XeTeX engine + bundled BibTeX 0.99d, IEEEtran.bst), with this .bib:
+%  0 errors, 0 undefined citations/references, BibTeX "Done." with no
+%  warnings, 0 overfull boxes. The BEGIN-END MERGE body was also compiled
+%  inside \documentclass[conference]{IEEEtran} (two columns) with the same
+%  result after Eqs. (ftheta), (kdloss), (feasible) and (factor) were split
+%  over several lines. pdflatex itself is untested. Details:
+%  16-citation-audit.md Sec. 8 and proposed-solution-compile.log.
 %
 %  WORDING RULES APPLIED (brief Sec. 10, 21, 30)
 %  ---------------------------------------------
@@ -154,9 +159,11 @@ specifications.
 The router is a compact bidirectional encoder $E_\theta$ followed by one
 sigmoid head per candidate model:
 \begin{equation}
-f_\theta(q, M_k) := \hat U_\theta(M_k \mid q)
-= \sigma\!\big(w_k^{\top} h_\theta(q) + b_k\big),\qquad
-h_\theta(q) = \mathrm{pool}\big(E_\theta(q)\big),
+\begin{split}
+f_\theta(q, M_k) &:= \hat U_\theta(M_k \mid q)
+= \sigma\!\big(w_k^{\top} h_\theta(q) + b_k\big),\\
+h_\theta(q) &= \mathrm{pool}\big(E_\theta(q)\big),
+\end{split}
 \label{eq:ftheta}
 \end{equation}
 for $k = 1,\ldots,K$, with mean pooling over token states. The heads are
@@ -239,9 +246,11 @@ The student minimizes a weighted sum of a hard-label term and a soft-target
 term, adapting to per-model sigmoid outputs the form introduced for
 knowledge distillation by Hinton et al.~\cite{hinton2015distilling}:
 \begin{equation}
-\mathcal{L}_S(\theta) = \sum_{i}\sum_{M\in\mathcal{M}} w_{D(i)}\Big[
-\alpha\,\ell\big(\hat U_\theta(M\mid q_i),\, y_i(M)\big)
-+ (1-\alpha)\,\ell\big(\hat U_\theta(M\mid q_i),\, \tilde t(q_i, M)\big)\Big],
+\begin{split}
+\mathcal{L}_S(\theta) = \sum_{i}\sum_{M\in\mathcal{M}} w_{D(i)}
+\Big[&\alpha\,\ell\big(\hat U_\theta(M\mid q_i),\, y_i(M)\big)\\
+&\hspace{-4em}+ (1-\alpha)\,\ell\big(\hat U_\theta(M\mid q_i),\, \tilde t(q_i, M)\big)\Big],
+\end{split}
 \label{eq:kdloss}
 \end{equation}
 where $\ell(p,t) = -[t\log p + (1-t)\log(1-p)]$ is the binary cross-entropy
@@ -305,9 +314,11 @@ where $\hat\Delta(a,q)$ is a quality correction for split execution that is
 zero unless the equivalence test of Section~\ref{sec:split} fails, and the
 feasible set
 \begin{equation}
-\mathcal{F}(q,s) = \{a\in\mathcal{A}:\ \hat L(a\mid q,s)\le L_{\mathrm{SLA}},\
-\mathrm{mem}_{\mathrm{edge}}(a)\le \mathrm{mem}_{\mathrm{avail}}(s),\
-a \text{ permitted by the data policy}\}
+\begin{split}
+\mathcal{F}(q,s) = \{a\in\mathcal{A}:\ &\hat L(a\mid q,s)\le L_{\mathrm{SLA}},\\
+&\mathrm{mem}_{\mathrm{edge}}(a)\le \mathrm{mem}_{\mathrm{avail}}(s),\\
+&a \text{ permitted by the data policy}\}
+\end{split}
 \label{eq:feasible}
 \end{equation}
 applies a per-query latency limit, the edge memory limit and any rule that
@@ -379,9 +390,11 @@ model's own run-to-run variation. Three branches follow.
 \emph{Exact:} if E0 passes, every depth of $M_S$ shares
 $\hat U_\theta(M_S\mid q)$ and $\hat\Delta \equiv 0$, so
 \begin{equation}
-\max_{a\in\mathcal{A}}\big[\hat U_\theta(M(a)\mid q) - \lambda \hat L(a\mid q,s)\big]
-= \max_{M\in\mathcal{M}}\Big[\hat U_\theta(M\mid q)
+\begin{split}
+&\max_{a\in\mathcal{A}}\big[\hat U_\theta(M(a)\mid q) - \lambda \hat L(a\mid q,s)\big]\\
+&\quad= \max_{M\in\mathcal{M}}\Big[\hat U_\theta(M\mid q)
 - \lambda \min_{a\in\mathcal{A}(M)} \hat L(a\mid q,s)\Big],
+\end{split}
 \label{eq:factor}
 \end{equation}
 that is, the router chooses a model and the cost model alone chooses its
