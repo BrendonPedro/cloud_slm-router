@@ -1,0 +1,479 @@
+% =====================================================================
+%  methods-v3 / proposed-solution-blue-v3.tex
+%  Manuscript-ready DRAFT of the Proposed Solution section (v3).
+%  Deliverable for MICROENCODER_HARDENING_BRIEF.md Sec. 21.
+%  Prepared 2026-10-04 (gnhf microencoder-hardening sprint, iteration 20).
+%
+%  WHAT THIS IS
+%  ------------
+%  Replacement for methods-v2/proposed-solution-blue.tex (left unchanged).
+%  It is built from the v3 decisions in 01 (model-level utility), 02 (split
+%  equivalence, Branches X/L/E), 03 (KD hardening, C* control), 08 (utility
+%  definition), 09 (cost policy C-1) and 12 (Conservative wording), and cites
+%  ONLY keys from method-references-v3.bib, within the "May support" limits
+%  recorded in 17-verified-references-v3.md Sec. 2 and the usage rules of
+%  17 Sec. 5. Paragraph tags "% [Pn]" are the anchors used by
+%  16-citation-audit.md.
+%
+%  BLUE CONVENTION
+%  ---------------
+%  Everything in this section is new manuscript text, so the whole section
+%  body is typeset in blue (\color{blue} at the start of the section and
+%  inside each float, because colour does not propagate into floats).
+%
+%  HOW TO MERGE INTO THE IEEEtran MANUSCRIPT (do NOT edit the original here)
+%  ----------------------------------------------------------------------
+%    1. Add \usepackage{xcolor} to the manuscript preamble.
+%    2. Copy the text between BEGIN MERGE and END MERGE into the empty
+%       \section{Proposed Solution} of the manuscript.
+%    3. Append method-references-v3.bib entries to the manuscript .bib.
+%    4. Equation numbers continue after the manuscript's Eqs. (1)-(3);
+%       f_theta, M_k, lambda and C keep the manuscript's meaning.
+%
+%  COMPILATION STATUS
+%  ------------------
+%  Standalone article-class wrapper so the section can be proofed alone.
+%  No LaTeX toolchain (pdflatex/latexmk/bibtex) exists in the sprint
+%  environment, so this file has NOT been compiled. Only a static check
+%  (balanced braces/environments, every \cite key present in the .bib) was
+%  run. It must be compiled at merge time.
+%
+%  WORDING RULES APPLIED (brief Sec. 10, 21, 30)
+%  ---------------------------------------------
+%  No "first" claim; no "without retraining" claim; no claim that network
+%  changes force retraining; split quality is never asserted equal, only
+%  tested (E0); KD is investigated, not assumed to help; continual learning
+%  is out of scope; no results are reported (none exist yet).
+% =====================================================================
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage{url}
+
+\begin{document}
+
+% ======================== BEGIN MERGE ========================
+\section{Proposed Solution}
+\label{sec:proposed}
+\color{blue}
+
+% [P1] Design overview
+\subsection{Design Overview}
+We propose a router for edge--cloud LLM serving in which a query can be
+answered by a small language model (SLM) on the edge device, by split
+execution of a larger model across the edge device and a server, or by
+remote execution on the server. The router separates two questions that
+have different sources of evidence. \emph{Which model is likely to answer
+this query well} is a semantic question, answered by a compact text encoder
+trained offline on observed model outcomes. \emph{What it costs to run that
+model now, and where} is a systems question, answered by a cost model that is
+filled with profiled compute times and live network and load measurements at
+decision time. A runtime controller combines the two to choose an execution
+action. The design builds on learned query routers that predict model quality
+from the query text~\cite{ong2025routellm,ding2024hybridllm,chen2024routerdc,ding2025bestroute},
+on LLM routing at the network edge that trades predicted quality against
+latency or communication cost~\cite{bao2025qualitylatency,chen2025netgptrouting,xue2026cr2}
+or tunes routing thresholds for latency across device, edge and cloud tiers~\cite{qiao2026consroute},
+and on split computing, which selects a partition point of a neural network
+under bandwidth and server-load conditions~\cite{kang2017neurosurgeon,li2020edgent,laskaridis2020spinn,matsubara2022splitsurvey}.
+The remainder of this section defines the execution actions
+(Section~\ref{sec:actions}), the utility the router predicts
+(Section~\ref{sec:utility}), the encoder (Section~\ref{sec:encoder}), its
+training (Section~\ref{sec:kd}), the runtime cost and decision rule
+(Section~\ref{sec:cost}) and the split execution path
+(Section~\ref{sec:split}).
+
+% [P2] Actions and models
+\subsection{Execution Actions and the Action-to-Model Map}
+\label{sec:actions}
+Let the action set be
+\begin{equation}
+\mathcal{A} = \{\textsc{Edge},\ \textsc{Split}(d_1),\ \ldots,\
+\textsc{Split}(d_m),\ \textsc{Remote}\},
+\label{eq:actions}
+\end{equation}
+where $\textsc{Split}(d)$ runs the first $d$ decoder layers of a model on
+the edge device and the remaining layers on the server. We distinguish an
+\emph{action} from the \emph{model} it executes. A model specification $M$
+fixes the checkpoint and revision, the weight quantization, the compute data
+type, the prompt template and the decoding configuration; the same
+checkpoint at two numerical configurations is two specifications. Each action
+$a$ executes exactly one specification $M(a)$. We write
+$\mathcal{M} = \{M(a) : a \in \mathcal{A}\}$ for the candidate models, with
+$K = |\mathcal{M}|$, and $\mathcal{A}(M) = \{a : M(a) = M\}$ for the
+realizations of model $M$. All split depths of the split-capable model $M_S$
+are realizations of $M_S$; if the remote action runs the same specification,
+it is the realization in which all layers run on the server. The candidate
+models $\mathcal{M}$ play the role of the pool $\mathcal{M}$ in the problem
+formulation, so the scoring function $f_\theta(q, M_k)$ of
+Eq.~(3) remains a function of a query and a \emph{model}.
+
+% [P3] Utility definition
+\subsection{Utility: Expected Task Score of a Model on a Query}
+\label{sec:utility}
+For a dataset or task family $D$ we fix, before training, a score function
+$S_D(y, q) \in [0,1]$ computed by the benchmark's own grader (exact match,
+unit tests, or a pinned judge with a fixed prompt and version) from the output
+$y$ and the reference answer of $q$. The utility of model $M$ on query $q$ is
+the expected score
+\begin{equation}
+U(M \mid q) = \mathbb{E}_{\xi}\big[S_D\big(y_M(q;\xi),\, q\big)\big] \in [0,1],
+\label{eq:utility}
+\end{equation}
+where $\xi$ collects the randomness of a run: sampling during decoding,
+run-to-run numerical variation, and grader stochasticity. For a binary metric
+$U(M\mid q)$ is the probability that $M$ answers $q$ correctly; for a graded
+metric it is the expected score. On SimpleQA, for example, a response scores
+1 only if the benchmark's grader marks it correct, and both incorrect answers
+and abstentions score 0~\cite{wei2024simpleqa}. We do not define a single
+notion of ``success'' across heterogeneous benchmarks: each dataset keeps its
+own $S_D$, and results are reported per dataset and macro-averaged.
+Utility depends on the query and the model only; it does not depend on
+network state, cost, or the trade-off weight $\lambda$.
+
+% [P4] Labels
+Training labels are obtained by running every model specification in
+$\mathcal{M}$ on the training queries and scoring the outputs with $S_D$. A
+single run gives a noisy but unbiased estimate of $U(M\mid q)$; where the
+budget allows, we average $k$ sampled runs, following the use of empirical
+soft labels from repeated sampling in Hybrid LLM~\cite{ding2024hybridllm}.
+Labels for the edge SLM and the split-capable model are produced by new
+inference runs through the benchmark's evaluation pipeline, because
+pre-computed benchmark results do not cover these model
+specifications.
+
+% [P5] Encoder
+\subsection{The Micro-Encoder Scoring Function $f_\theta$}
+\label{sec:encoder}
+The router is a compact bidirectional encoder $E_\theta$ followed by one
+sigmoid head per candidate model:
+\begin{equation}
+f_\theta(q, M_k) := \hat U_\theta(M_k \mid q)
+= \sigma\!\big(w_k^{\top} h_\theta(q) + b_k\big),\qquad
+h_\theta(q) = \mathrm{pool}\big(E_\theta(q)\big),
+\label{eq:ftheta}
+\end{equation}
+for $k = 1,\ldots,K$, with mean pooling over token states. The heads are
+independent sigmoids rather than a softmax over models, because the events
+``model $M_k$ answers $q$ correctly'' are not mutually exclusive: several
+models may all answer a query correctly, or all fail. Per-model sigmoid
+outputs of this kind are also used by the prefill-activation router of
+Varshney et al.~\cite{varshney2026prefill} and by the CR$^2$ router of
+Xue et al.~\cite{xue2026cr2} (both preprints), and BEST-Route trains one
+sigmoid head per (model, number-of-samples) action~\cite{ding2025bestroute}.
+
+% [P6] Backbone
+The encoder is a replaceable component, and its choice is an engineering
+decision rather than a contribution. Our first implementation candidate is
+ModernBERT-base, an encoder with 149M parameters, 22 layers and a native
+context of 8{,}192 tokens~\cite{warner2025modernbert}; ModernBERT-base was
+also used as the encoder of the HyDRA router (preprint)~\cite{garg2026hydra}.
+The compared alternatives are smaller encoders of the Ettin
+suite~\cite{weller2026ettin}, which replicate the ModernBERT recipe at sizes
+down to 17M parameters, DeBERTa-v3-small~\cite{he2023debertav3}, the
+encoder family used by the Hybrid LLM and BEST-Route
+routers~\cite{ding2024hybridllm,ding2025bestroute}, and a MiniLM
+encoder~\cite{wang2020minilm}. Li et al.\ report only a limited effect of the
+embedding model in LLMRouterBench, for three frozen embedding models
+combined with embedding-based routers~\cite{li2026llmrouterbench}; that
+result does not cover fine-tuned encoders, so we treat the backbone as an
+experimental factor. Each candidate is trained with the same non-distilled
+protocol and tuning budget, and the deployed backbone is the
+lowest-latency candidate whose validation routing utility lies within a
+tolerance, fixed in advance, of the best candidate.
+
+% [P7] Pool changes
+Because the heads in Eq.~\eqref{eq:ftheta} are indexed by model, adding a
+new split depth of an existing model adds no head: it requires the
+split-equivalence test of Section~\ref{sec:split} at that depth and a cost
+profile, and, if the test passes, no new utility labels. Adding a new
+\emph{model} requires labelled outcomes for that model, training at least a
+new head on the encoder features, and recalibration. Routing to models never
+seen in training would require model descriptors as router inputs, as in
+IRT-Router~\cite{song2025irtrouter}, the learned model embeddings of
+RouterDC~\cite{chen2024routerdc}, or the capability profiles of HyDRA
+(preprint)~\cite{garg2026hydra}; our design does not provide this.
+
+% [P8] Teacher
+\subsection{Teacher--Student Training}
+\label{sec:kd}
+We investigate whether distilling a larger router improves the compact
+encoder over a well-tuned student trained without distillation. The
+teacher is a larger encoder from the same tokenizer family (ModernBERT-large
+or an Ettin encoder of similar size) with the same per-model heads, trained
+on the same labels. Since such a teacher sees no information beyond the
+student's labels, any benefit must come from statistical effects, such as
+reducing the variance of noisy single-run labels~\cite{menon2021statistical}
+or acting as a learned, query-dependent form of label
+smoothing~\cite{yuan2020revisiting}, and gains are not guaranteed: students
+often do not match their teachers~\cite{stanton2021kd}, and larger teachers
+are not always better teachers~\cite{cho2019efficacy}. Teacher size is
+therefore an experimental factor. A teacher that reads privileged
+training-time inputs, such as the edge SLM's prefill activations, is a
+generalized-distillation variant~\cite{lopezpaz2016unifying} that we treat as
+a secondary condition. Distilling a router into a smaller on-device router has
+been used before: CR$^2$ (preprint) distils an on-device gate from a teacher
+with privileged information~\cite{xue2026cr2}.
+
+% [P9] Cross-fitting and teacher calibration
+Teacher targets on training queries are produced \emph{out of fold}: the
+training set is split into $F$ folds, $F$ teachers are each trained on
+$F-1$ folds, and every query receives its target from the teacher that did
+not see it. Without this step a high-capacity teacher can fit its training
+queries almost exactly, and its targets collapse onto the hard labels. Each
+teacher head is then calibrated with Platt scaling~\cite{guo2017calibration}
+on a teacher-calibration split that is disjoint from the student's
+calibration and test splits, so that the soft targets
+$\tilde t(q, M) \in [0,1]$ estimate the expected score
+of Eq.~\eqref{eq:utility}.
+
+% [P10] Student loss
+The student minimizes a weighted sum of a hard-label term and a soft-target
+term, the form introduced for knowledge distillation by Hinton
+et al.~\cite{hinton2015distilling}:
+\begin{equation}
+\mathcal{L}_S(\theta) = \sum_{i}\sum_{M\in\mathcal{M}} w_{D(i)}\Big[
+\alpha\,\ell\big(\hat U_\theta(M\mid q_i),\, y_i(M)\big)
++ (1-\alpha)\,\ell\big(\hat U_\theta(M\mid q_i),\, \tilde t(q_i, M)\big)\Big],
+\label{eq:kdloss}
+\end{equation}
+where $\ell(p,t) = -[t\log p + (1-t)\log(1-p)]$ is the binary cross-entropy
+with a target $t\in[0,1]$, $y_i(M)$ is the observed score, and $w_D$ is a
+per-dataset weight. Because $\ell$ is linear in $t$, Eq.~\eqref{eq:kdloss}
+equals the cross-entropy against the mixed target
+$\alpha y_i(M) + (1-\alpha)\tilde t(q_i,M)$, and since the expected
+cross-entropy is minimized at $p = \mathbb{E}[t]$, the student is trained
+towards the conditional mean that the mixed target encodes. This makes the
+comparison with non-distilled training exact: label
+smoothing~\cite{muller2019labelsmoothing} mixes in a constant, smoothing
+towards a per-dataset base rate mixes in a per-model prior, and distillation
+mixes in a query-dependent teacher output.
+
+% [P11] Controls and terminology
+The non-distilled control is the same student trained on the same labels,
+with label smoothing and base-rate smoothing in its hyperparameter search,
+weight decay and early stopping, given the same number of tuning trials as
+the distilled student. A self-distillation control, in which the teacher has
+the student's size~\cite{furlanello2018bornagain}, separates the effect of a
+larger teacher from that of any teacher. Every student, distilled or not,
+is calibrated after training with per-model Platt or temperature
+scaling~\cite{guo2017calibration} on the same calibration split, so any
+calibration benefit of distillation must exceed that of post-hoc calibration.
+If distillation does not improve routing utility over this control, the
+non-distilled student is deployed. We use the term distillation only for
+training on a teacher router's soft outputs. RouteLLM's augmentation of human
+preference data with labels from GPT-4 acting as a judge~\cite{ong2025routellm,zheng2023judging}
+is preference supervision with hard labels; training on teacher-generated
+hard targets is a recognized but distinct sequence-level
+variant~\cite{kim2016sequence}.
+
+% [P12] Cost and state
+\subsection{Runtime Cost and Decision Rule}
+\label{sec:cost}
+At decision time the edge node measures a system state $s$: round-trip time
+to the server, available uplink and downlink bandwidth, the server's queue
+length, the server's cold or warm status, and edge utilization and free
+memory. The cost of an action is its predicted end-to-end latency
+$\hat L(a\mid q,s)$, assembled from the time-to-first-token and
+time-per-output-token decomposition
+$T_{\mathrm{total}} = \mathrm{TTFT} + (N-1)\,\mathrm{TPOT}$, where the compute
+terms come from offline profiles of each action on the deployment hardware
+and the communication terms are computed from the measured state. For
+$\textsc{Split}(d)$ the communication terms include the transfer of the
+activation tensor at the cut, $B/\mathrm{BW}_{\mathrm{up}}$, and the
+round trips needed per decoding step. The expected output length $N$ is the
+per-model median on a profiling split. Transferred bytes, energy, monetary
+cost and memory are measured and reported separately rather than summed with
+latency.
+
+% [P13] Decision rule
+The controller chooses
+\begin{equation}
+R(q,s) = \operatorname*{arg\,max}_{a \in \mathcal{F}(q,s)}
+\Big[\hat U_\theta\big(M(a)\mid q\big) - \hat\Delta(a,q)
+- \lambda\, \hat L(a\mid q,s)\Big],
+\label{eq:route}
+\end{equation}
+where $\hat\Delta(a,q)$ is a quality correction for split execution that is
+zero unless the equivalence test of Section~\ref{sec:split} fails, and the
+feasible set
+\begin{equation}
+\mathcal{F}(q,s) = \{a\in\mathcal{A}:\ \hat L(a\mid q,s)\le L_{\mathrm{SLA}},\
+\mathrm{mem}_{\mathrm{edge}}(a)\le \mathrm{mem}_{\mathrm{avail}}(s),\
+a \text{ permitted by the data policy}\}
+\label{eq:feasible}
+\end{equation}
+applies a per-query latency limit, the edge memory limit and any rule that
+forbids raw text from leaving the device. With $\hat\Delta \equiv 0$ and
+$\mathcal{F}=\mathcal{A}$, Eq.~\eqref{eq:route} instantiates the routing
+objective of the problem formulation with
+$f_\theta(q,M_k) = \hat U_\theta(M_k\mid q)$ and $C = \hat L$.
+Additive quality-minus-cost rules of this form appear in prior
+routers~\cite{song2025irtrouter,varshney2026prefill}, including routers
+at the wireless edge that subtract a latency or communication
+penalty~\cite{bao2025qualitylatency,xue2026cr2}. If $\mathcal{F}(q,s)$ is
+empty, the controller runs \textsc{Edge} when it fits in memory and logs a
+latency-limit violation.
+
+% [P14] lambda
+Since the objective is an expectation over queries of a term that depends
+only on each query and its action, choosing the action per query as in
+Eq.~\eqref{eq:route} maximizes the plug-in objective for a fixed $\lambda$.
+Over randomized policies, $\lambda$ can also be read as the Lagrange
+multiplier of an average-latency budget; the per-query limit
+$L_{\mathrm{SLA}}$ is enforced as a feasibility constraint and is not
+dualized. The weight $\lambda$, in units of normalized score per second, is
+swept to trace quality--latency frontiers. For headline results it is chosen
+on the validation split to meet a stated mean-latency or remote-call budget
+and then frozen. We do not claim constrained routing as a contribution.
+
+% [P15] Why s stays out of theta
+Network state enters the decision only through the measured cost term, so the
+router reacts to changes in bandwidth and round-trip time at the next query
+without updating the semantic predictor. A router that takes $s$ as an input
+could learn this dependence from data, but it would need training data
+spanning the network conditions it must handle. Keeping the two parts separate
+lets one semantic predictor be reused across deployments, lets the cost
+model be re-profiled without new utility labels, and makes each routing
+decision attributable to $\hat U_\theta$, $\hat\Delta$ and $\lambda\hat L$.
+
+% [P16] Split execution and equivalence
+\subsection{Split-LLM Execution and Split Equivalence}
+\label{sec:split}
+In $\textsc{Split}(d)$ the edge device runs the embedding layer and the
+first $d$ decoder layers of $M_S$ and sends the hidden states at the cut to
+the server, which runs the remaining layers and returns tokens. For a
+standard dense decoder the tensor crossing the cut has
+$n \times d_{\mathrm{model}}$ elements for $n$ prompt tokens and hidden size
+$d_{\mathrm{model}}$, so the prefill transfer size does not depend on the
+depth $d$; depth mainly moves compute between the edge and the server.
+Prior systems select split points of neural networks under measured
+bandwidth and load~\cite{kang2017neurosurgeon,li2020edgent,laskaridis2020spinn},
+and recent work learns split points for LLMs under changing channel or
+bandwidth conditions for a single model~\cite{chen2025adaptivesplit,younesi2025splitwise}.
+
+% [P17] When depths share utility
+Whether split depths may share the utility of their model is a hypothesis
+that we test, not an assumption. Exact tensor transfer does not by itself
+guarantee bit-identical outputs, because floating-point results depend on
+batch size, hardware and kernel choice, which can change greedy LLM
+outputs even without splitting~\cite{yuan2025nondeterminism}; a technical
+report attributes such run-to-run differences to kernels that are not
+batch-invariant~\cite{he2025nondeterminism}. Quantizing or compressing the
+transmitted activations~\cite{laskaridis2020spinn} or adding noise to them for
+privacy~\cite{mai2024splitdenoise} makes split execution approximate by
+design, and early exit changes inference semantics, with outputs that are
+consistent with the full model only within a
+tolerance~\cite{schuster2022calm}. Before training the router we therefore
+run a split-equivalence test (E0) at every deployed depth and numerical
+configuration: per-query task scores of $\textsc{Split}(d)$ are compared with
+those of unsplit execution of the same specification, against the unsplit
+model's own run-to-run variation. Three branches follow.
+\emph{Exact:} if E0 passes, every depth of $M_S$ shares
+$\hat U_\theta(M_S\mid q)$ and $\hat\Delta \equiv 0$, so
+\begin{equation}
+\max_{a\in\mathcal{A}}\big[\hat U_\theta(M(a)\mid q) - \lambda \hat L(a\mid q,s)\big]
+= \max_{M\in\mathcal{M}}\Big[\hat U_\theta(M\mid q)
+- \lambda \min_{a\in\mathcal{A}(M)} \hat L(a\mid q,s)\Big],
+\label{eq:factor}
+\end{equation}
+that is, the router chooses a model and the cost model alone chooses its
+depth. \emph{Lossy:} if E0 shows a quality loss at some depths, we subtract a
+per-depth correction $\hat\Delta(d)$ estimated on a held-out set, and move to
+a query-dependent correction $\hat\Delta(d,q)$, or to separate heads per
+depth, only if the loss varies across queries. \emph{Semantics-changing:} an
+execution path that alters the computation, such as early exit, is treated as
+a different model specification with its own head and labels.
+
+% [P18] Split cost caveat
+Under a pipeline split in which the server samples tokens, every decoding
+step needs a round trip between the edge and the server. When the pool also
+contains remote execution of the same specification and the server is faster
+than the edge device, a latency-only cost will then rarely select
+$\textsc{Split}(d)$; split execution is chosen when the data policy forbids
+sending raw text or a server-compute budget applies. We report how often
+each action is selected under each condition.
+
+% [P19] Algorithms
+\subsection{Training and Inference Procedures}
+Algorithm~\ref{alg:train} summarizes training and Algorithm~\ref{alg:infer}
+summarizes routing of one query.
+
+\begin{algorithm}[t]
+\color{blue}
+\caption{Router training (offline)}
+\label{alg:train}
+\begin{algorithmic}[1]
+\REQUIRE training, teacher-calibration, calibration and validation splits;
+model specifications $\mathcal{M}$; split depths $D$; folds $F$
+\STATE Run E0 for every $d\in D$; set the branch (exact, lossy or
+semantics-changing) and, if lossy, estimate $\hat\Delta$
+\STATE For each query $q_i$ and each $M\in\mathcal{M}$, run $M$ and record
+$y_i(M) = S_D(y_M(q_i), q_i)$ (or a $k$-run mean)
+\FOR{$f = 1$ \TO $F$}
+\STATE Train teacher $T_f$ on all folds except $f$; Platt-calibrate each head
+on the teacher-calibration split
+\STATE For queries in fold $f$, set $\tilde t(q_i, M) \leftarrow T_f(q_i, M)$
+\ENDFOR
+\STATE Train the student with Eq.~\eqref{eq:kdloss}, tuning $\alpha$ on the
+validation split; train the non-distilled control with the same budget
+\STATE Calibrate every student head with Platt or temperature scaling on the
+calibration split
+\STATE Keep the distilled student only if it beats the control on
+validation routing utility; otherwise keep the control
+\STATE Profile compute times of every $a\in\mathcal{A}$ on the deployment
+hardware
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\color{blue}
+\caption{Routing one query (online)}
+\label{alg:infer}
+\begin{algorithmic}[1]
+\REQUIRE query $q$; calibrated student; cost profiles; $\lambda$;
+$L_{\mathrm{SLA}}$; data policy
+\STATE Compute $\hat U_\theta(M\mid q)$ for all $M\in\mathcal{M}$ with one
+encoder pass
+\STATE Read the current state $s$ (RTT, bandwidth, server queue, cold or warm
+status, edge memory)
+\STATE For each $a\in\mathcal{A}$, compute $\hat L(a\mid q,s)$ and test
+membership in $\mathcal{F}(q,s)$
+\IF{$\mathcal{F}(q,s) = \emptyset$}
+\STATE Run \textsc{Edge} if it fits in memory; log the violation
+\ELSE
+\STATE Select $a^\star$ by Eq.~\eqref{eq:route}; break ties by lower server
+compute, then fewer transferred bytes
+\ENDIF
+\STATE Execute $a^\star$; log $\hat U_\theta$, $\hat L$, $s$, the measured
+TTFT, TPOT, bytes and the output
+\end{algorithmic}
+\end{algorithm}
+
+% [P20] Assumptions and limitations
+\subsection{Assumptions and Limitations}
+The method assumes a fixed pool of model specifications chosen before
+training; changes to the pool after deployment are outside the scope of this
+paper. Sharing one utility estimate across split depths is valid only where
+E0 passes, and the lossy and semantics-changing branches require
+depth-specific labels. Distillation is evaluated against a tuned and
+calibrated non-distilled control and is not required by the rest of the
+design. The latency model is analytic and its accuracy is measured
+separately; decisions are only as good as the calibration of
+$\hat U_\theta$ and the accuracy of $\hat L$. Several of the closest related
+routers (HyDRA, CR$^2$, the prefill-activation router and the NetGPT
+router) are preprints, and comparisons with them are limited to their
+published descriptions. Our search for prior work combining query-aware
+model selection, split execution and live network cost was bounded, and we
+do not claim that the combination is new.
+
+\color{black}
+% ========================= END MERGE =========================
+
+\bibliographystyle{IEEEtran}
+\bibliography{method-references-v3}
+
+\end{document}
