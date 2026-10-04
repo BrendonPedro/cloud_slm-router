@@ -3,6 +3,8 @@
 %  Manuscript-ready DRAFT of the Proposed Solution section (v3).
 %  Deliverable for MICROENCODER_HARDENING_BRIEF.md Sec. 21.
 %  Prepared 2026-10-04 (gnhf microencoder-hardening sprint, iteration 20).
+%  Revised 2026-10-04 (iteration 21): five wording fixes from the citation
+%  audit (P1, P3, P7, P10, P17); see 16-citation-audit.md Sec. 3.
 %
 %  WHAT THIS IS
 %  ------------
@@ -72,8 +74,8 @@ trained offline on observed model outcomes. \emph{What it costs to run that
 model now, and where} is a systems question, answered by a cost model that is
 filled with profiled compute times and live network and load measurements at
 decision time. A runtime controller combines the two to choose an execution
-action. The design builds on learned query routers that predict model quality
-from the query text~\cite{ong2025routellm,ding2024hybridllm,chen2024routerdc,ding2025bestroute},
+action. The design builds on learned query routers that predict, from the query
+text, which model will answer it well~\cite{ong2025routellm,ding2024hybridllm,chen2024routerdc,ding2025bestroute},
 on LLM routing at the network edge that trades predicted quality against
 latency or communication cost~\cite{bao2025qualitylatency,chen2025netgptrouting,xue2026cr2}
 or tunes routing thresholds for latency across device, edge and cloud tiers~\cite{qiao2026consroute},
@@ -126,9 +128,10 @@ U(M \mid q) = \mathbb{E}_{\xi}\big[S_D\big(y_M(q;\xi),\, q\big)\big] \in [0,1],
 where $\xi$ collects the randomness of a run: sampling during decoding,
 run-to-run numerical variation, and grader stochasticity. For a binary metric
 $U(M\mid q)$ is the probability that $M$ answers $q$ correctly; for a graded
-metric it is the expected score. On SimpleQA, for example, a response scores
-1 only if the benchmark's grader marks it correct, and both incorrect answers
-and abstentions score 0~\cite{wei2024simpleqa}. We do not define a single
+metric it is the expected score. For example, the SimpleQA grader labels
+each response correct, incorrect or not attempted~\cite{wei2024simpleqa};
+we set $S_D = 1$ for a correct response and $S_D = 0$ otherwise, so
+abstentions count as failures in the utility and are analysed separately. We do not define a single
 notion of ``success'' across heterogeneous benchmarks: each dataset keeps its
 own $S_D$, and results are reported per dataset and macro-averaged.
 Utility depends on the query and the model only; it does not depend on
@@ -192,10 +195,11 @@ split-equivalence test of Section~\ref{sec:split} at that depth and a cost
 profile, and, if the test passes, no new utility labels. Adding a new
 \emph{model} requires labelled outcomes for that model, training at least a
 new head on the encoder features, and recalibration. Routing to models never
-seen in training would require model descriptors as router inputs, as in
-IRT-Router~\cite{song2025irtrouter}, the learned model embeddings of
-RouterDC~\cite{chen2024routerdc}, or the capability profiles of HyDRA
-(preprint)~\cite{garg2026hydra}; our design does not provide this.
+seen in training would require model descriptors as router inputs, such as
+the model-profile embeddings of IRT-Router~\cite{song2025irtrouter} or the
+capability profiles of HyDRA (preprint)~\cite{garg2026hydra}; learned
+per-model embeddings, as in RouterDC~\cite{chen2024routerdc}, still have to
+be trained for each new model. Our design does not provide such inputs.
 
 % [P8] Teacher
 \subsection{Teacher--Student Training}
@@ -232,8 +236,8 @@ of Eq.~\eqref{eq:utility}.
 
 % [P10] Student loss
 The student minimizes a weighted sum of a hard-label term and a soft-target
-term, the form introduced for knowledge distillation by Hinton
-et al.~\cite{hinton2015distilling}:
+term, adapting to per-model sigmoid outputs the form introduced for
+knowledge distillation by Hinton et al.~\cite{hinton2015distilling}:
 \begin{equation}
 \mathcal{L}_S(\theta) = \sum_{i}\sum_{M\in\mathcal{M}} w_{D(i)}\Big[
 \alpha\,\ell\big(\hat U_\theta(M\mid q_i),\, y_i(M)\big)
@@ -359,7 +363,7 @@ bandwidth conditions for a single model~\cite{chen2025adaptivesplit,younesi2025s
 Whether split depths may share the utility of their model is a hypothesis
 that we test, not an assumption. Exact tensor transfer does not by itself
 guarantee bit-identical outputs, because floating-point results depend on
-batch size, hardware and kernel choice, which can change greedy LLM
+batch size and hardware configuration, which can change greedy LLM
 outputs even without splitting~\cite{yuan2025nondeterminism}; a technical
 report attributes such run-to-run differences to kernels that are not
 batch-invariant~\cite{he2025nondeterminism}. Quantizing or compressing the
