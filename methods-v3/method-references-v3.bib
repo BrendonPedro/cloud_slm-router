@@ -1,0 +1,548 @@
+% method-references-v3.bib
+% Deliverable of MICROENCODER_HARDENING_BRIEF.md section 23 (gnhf run
+% microencoder-hardeni-d272f9, iteration 19, 2026-10-04).
+%
+% Rules applied to every entry (details and per-claim locators are in
+% 17-verified-references-v3.md):
+%   * Identity (title, authors, venue, year, pages, DOI) was re-fetched on
+%     2026-10-04 from the official record listed in the `note` field:
+%     Crossref (DOI), ACL Anthology DOI, proceedings.iclr.cc, papers.nips.cc,
+%     proceedings.mlr.press, or the arXiv abs page (citation_* meta tags).
+%   * When the proceedings record and arXiv differ, the proceedings record is
+%     copied (title, author list).
+%   * No entry is included on the strength of methods-v2 alone.
+%   * `note` records the inspection level (BODY / META / ABS) so a reader of
+%     the .bib cannot mistake a META entry for a body-verified one. Remove the
+%     notes (or use a style that ignores `note`) before camera-ready.
+%   * Excluded on purpose: continual-learning papers (journal scope, see
+%     15-conference-vs-journal.md), DistilBERT/TinyBERT (not used by v3),
+%     ABS-only systems hits (06), and the ICDCS 2025 hit whose identity is
+%     unconfirmed.
+
+% =====================================================================
+% LLM routing
+% =====================================================================
+
+@inproceedings{ong2025routellm,
+  title     = {{RouteLLM}: Learning to Route {LLMs} from Preference Data},
+  author    = {Ong, Isaac and Almahairi, Amjad and Wu, Vincent and Chiang, Wei-Lin and Wu, Tianhao and Gonzalez, Joseph E. and Kadous, M. Waleed and Stoica, Ion},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2025},
+  pages     = {34433--34448},
+  eprint    = {2406.18665},
+  archivePrefix = {arXiv},
+  note      = {Identity: proceedings.iclr.cc (2025). arXiv title says "with Preference Data"; proceedings title used. BODY (arXiv v1, v4; repo).}
+}
+
+@inproceedings{chen2024routerdc,
+  title     = {{RouterDC}: Query-Based Router by Dual Contrastive Learning for Assembling Large Language Models},
+  author    = {Chen, Shuhao and Jiang, Weisen and Lin, Baijiong and Kwok, James T. and Zhang, Yu},
+  booktitle = {Advances in Neural Information Processing Systems 37 (NeurIPS 2024)},
+  year      = {2024},
+  pages     = {66305--66328},
+  doi       = {10.52202/079017-2120},
+  eprint    = {2409.19886},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. BODY (arXiv v1; repo).}
+}
+
+@misc{garg2026hydra,
+  title     = {{HyDRA}: Hybrid Dynamic Routing Architecture for Heterogeneous {LLM} Pools},
+  author    = {Garg, Aashna and Singha Roy, Siddharth and Jang, Jinu and Brancasi, Federico and Fu, Shengyu},
+  year      = {2026},
+  eprint    = {2605.17106},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  note      = {Preprint (arXiv comment: "preprint v2"). Author list copied from arXiv metadata; the v2 PDF header additionally lists Giuseppe Cianci. BODY (v1, v2).}
+}
+
+@inproceedings{li2026llmrouterbench,
+  title     = {{LLMRouterBench}: A Massive Benchmark and Unified Framework for {LLM} Routing},
+  author    = {Li, Hao and Zhang, Yiqun and Guo, Zhaoyan and Wang, Chenxu and Tang, Shengji and Zhang, Qiaosheng and Chen, Yang and Qi, Biqing and Ye, Peng and Bai, Lei and Wang, Zhen and Hu, Shuyue},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2026},
+  year      = {2026},
+  pages     = {37733--37754},
+  doi       = {10.18653/v1/2026.findings-acl.1881},
+  eprint    = {2601.07206},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv).}
+}
+
+@misc{qiao2026consroute,
+  title     = {{ConsRoute}: Consistency-Aware Adaptive Query Routing for Cloud-Edge-Device Large Language Models},
+  author    = {Qiao, Haoyu and Zhang, Hao and Mao, Shanwen and Cheng, Siyao and Liu, Jie},
+  year      = {2026},
+  eprint    = {2603.21237},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.DC},
+  note      = {Preprint; no venue found. Identity: arXiv abs. BODY (v1 only).}
+}
+
+@inproceedings{ding2024hybridllm,
+  title     = {Hybrid {LLM}: Cost-Efficient and Quality-Aware Query Routing},
+  author    = {Ding, Dujian and Mallick, Ankur and Wang, Chi and Sim, Robert and Mukherjee, Subhabrata and R{\"u}hle, Victor and Lakshmanan, Laks V. S. and Awadallah, Ahmed Hassan},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  pages     = {41348--41366},
+  eprint    = {2404.14618},
+  archivePrefix = {arXiv},
+  note      = {Identity: proceedings.iclr.cc (2024). BODY (arXiv).}
+}
+
+@inproceedings{ding2025bestroute,
+  title     = {{BEST-Route}: Adaptive {LLM} Routing with Test-Time Optimal Compute},
+  author    = {Ding, Dujian and Mallick, Ankur and Zhang, Shaokun and Wang, Chi and Madrigal, Daniel and Hipolito Garcia, Mirian Del Carmen and Xia, Menglin and Lakshmanan, Laks V. S. and Wu, Qingyun and R{\"u}hle, Victor},
+  booktitle = {Proceedings of the 42nd International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {267},
+  pages     = {13870--13884},
+  publisher = {PMLR},
+  year      = {2025},
+  eprint    = {2506.22716},
+  archivePrefix = {arXiv},
+  note      = {Identity: proceedings.mlr.press/v267/ding25d. BODY (arXiv v1).}
+}
+
+@misc{varshney2026prefill,
+  title     = {{LLM} Router: Rethinking Routing with Prefill Activations},
+  author    = {Varshney, Tanay and Surla, Annie and Xu, Michelle and Krishnan, Gomathy Venkata and Jeblick, Maximilian and Austin, David and Vaidya, Neal and Onofrio, Davide},
+  year      = {2026},
+  eprint    = {2603.20895},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  note      = {Preprint. v1 title was "LLM Router: Prefill is All You Need"; v3 title used. BODY (v3).}
+}
+
+@misc{tran2025archrouter,
+  title     = {{Arch-Router}: Aligning {LLM} Routing with Human Preferences},
+  author    = {Tran, Co and Paracha, Salman and Hafeez, Adil and Chen, Shuguang},
+  year      = {2025},
+  eprint    = {2506.16655},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  note      = {Preprint. BODY (v1).}
+}
+
+@inproceedings{song2025irtrouter,
+  title     = {{IRT-Router}: Effective and Interpretable Multi-{LLM} Routing via Item Response Theory},
+  author    = {Song, Wei and Huang, Zhenya and Cheng, Cheng and Gao, Weibo and Xu, Bihan and Zhao, GuanHao and Wang, Fei and Wu, Runze},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  year      = {2025},
+  pages     = {15629--15644},
+  doi       = {10.18653/v1/2025.acl-long.761},
+  eprint    = {2506.01048},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv).}
+}
+
+@misc{xue2026cr2,
+  title     = {{CR}$^2$: Cost-Aware Risk-Controlled Routing for Wireless Device-Edge {LLM} Inference},
+  author    = {Xue, Nan and Chen, Shengkang and Chen, Zhiyong and Yao, Jiangchao and Sun, Yaping and Hu, Zixia and Tao, Meixia},
+  year      = {2026},
+  eprint    = {2605.12001},
+  archivePrefix = {arXiv},
+  note      = {Preprint (arXiv comment: "submitted to IEEE Journal"). BODY (sections IV, VI, VII).}
+}
+
+@inproceedings{bao2025qualitylatency,
+  title     = {Dynamic Quality-Latency Aware Routing for {LLM} Inference in Wireless Edge-Device Networks},
+  author    = {Bao, Rui and Xue, Nan and Sun, Yaping and Chen, Zhiyong},
+  booktitle = {2025 IEEE/CIC International Conference on Communications in China (ICCC Workshops)},
+  year      = {2025},
+  pages     = {1--6},
+  publisher = {IEEE},
+  doi       = {10.1109/ICCCWorkshops67136.2025.11147210},
+  eprint    = {2508.11291},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. BODY (section III, Eq. 6--12).}
+}
+
+@misc{chen2025netgptrouting,
+  title     = {Optimizing {NetGPT} via Routing-Based Synergy and Reinforcement Learning},
+  author    = {Chen, Yuxuan and Li, Rongpeng and Chen, Xianfu and Wu, Celimuge and Peng, Chenghui and Zhao, Zhifeng and Zhang, Honggang},
+  year      = {2025},
+  eprint    = {2511.22217},
+  archivePrefix = {arXiv},
+  note      = {Preprint; venue unverified. BODY (section IV).}
+}
+
+@inproceedings{luo2026routelmt,
+  title     = {{RouteLMT}: Learned Sample Routing for Hybrid {LLM} Translation Deployment},
+  author    = {Luo, Yingfeng and Liu, Hongyu and Lin, DingYang and Chang, Kaiyan and Wang, Chenglong and Li, Bei and Du, Quan and Xiao, Tong and Zhu, JingBo},
+  booktitle = {Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Industry Track)},
+  year      = {2026},
+  pages     = {1886--1897},
+  doi       = {10.18653/v1/2026.acl-industry.129},
+  eprint    = {2604.22520},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref (ACL Anthology DOI). BODY (arXiv v1, sections 3, 4, 5.1--5.3, Limitations).}
+}
+
+@misc{wang2025iclrouter,
+  title     = {{ICL-Router}: In-Context Learned Model Representations for {LLM} Routing},
+  author    = {Wang, Chenxu and Li, Hao and Zhang, Yiqun and Chen, Linyao and Chen, Jianhao and Jian, Ping and Ye, Peng and Zhang, Qiaosheng and Hu, Shuyue},
+  year      = {2025},
+  eprint    = {2510.09719},
+  archivePrefix = {arXiv},
+  note      = {arXiv comment says "Accepted by AAAI 2026"; proceedings record not checked, so cited as arXiv. BODY (v3, sections 3.1--3.4, 4.2--4.3, App. A.4--A.5).}
+}
+
+@inproceedings{zheng2023judging,
+  title     = {Judging {LLM}-as-a-Judge with {MT-Bench} and {Chatbot Arena}},
+  author    = {Zheng, Lianmin and Chiang, Wei-Lin and Sheng, Ying and Zhuang, Siyuan and Wu, Zhanghao and Zhuang, Yonghao and Lin, Zi and Li, Zhuohan and Li, Dacheng and Xing, Eric P. and Zhang, Hao and Gonzalez, Joseph E. and Stoica, Ion},
+  booktitle = {Advances in Neural Information Processing Systems 36 (NeurIPS 2023), Datasets and Benchmarks Track},
+  year      = {2023},
+  pages     = {46595--46623},
+  doi       = {10.52202/075280-2020},
+  eprint    = {2306.05685},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. META (cited only for the term "LLM-as-a-judge"; see 04).}
+}
+
+% =====================================================================
+% Knowledge distillation and calibration
+% =====================================================================
+
+@misc{hinton2015distilling,
+  title     = {Distilling the Knowledge in a Neural Network},
+  author    = {Hinton, Geoffrey and Vinyals, Oriol and Dean, Jeff},
+  year      = {2015},
+  eprint    = {1503.02531},
+  archivePrefix = {arXiv},
+  primaryClass = {stat.ML},
+  note      = {arXiv comment: NIPS 2014 Deep Learning Workshop (no archival proceedings). BODY (sections 1--2, 6).}
+}
+
+@inproceedings{guo2017calibration,
+  title     = {On Calibration of Modern Neural Networks},
+  author    = {Guo, Chuan and Pleiss, Geoff and Sun, Yu and Weinberger, Kilian Q.},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {70},
+  pages     = {1321--1330},
+  publisher = {PMLR},
+  year      = {2017},
+  eprint    = {1706.04599},
+  archivePrefix = {arXiv},
+  note      = {Identity: proceedings.mlr.press/v70/guo17a. BODY (sections 2, 3, 4.1, 4.2).}
+}
+
+@inproceedings{muller2019labelsmoothing,
+  title     = {When does label smoothing help?},
+  author    = {M{\"u}ller, Rafael and Kornblith, Simon and Hinton, Geoffrey E.},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS 2019)},
+  year      = {2019},
+  eprint    = {1906.02629},
+  archivePrefix = {arXiv},
+  note      = {Identity: papers.nips.cc (no page range on record). BODY (sections 3, 4, 6).}
+}
+
+@inproceedings{menon2021statistical,
+  title     = {A statistical perspective on distillation},
+  author    = {Menon, Aditya K. and Rawat, Ankit Singh and Reddi, Sashank and Kim, Seungyeon and Kumar, Sanjiv},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {139},
+  pages     = {7632--7642},
+  publisher = {PMLR},
+  year      = {2021},
+  eprint    = {2005.10419},
+  archivePrefix = {arXiv},
+  note      = {Identity: proceedings.mlr.press/v139/menon21a. arXiv title "Why distillation helps: a statistical perspective". BODY (arXiv version, sections 1, 3).}
+}
+
+@inproceedings{lopezpaz2016unifying,
+  title     = {Unifying distillation and privileged information},
+  author    = {Lopez-Paz, David and Bottou, L{\'e}on and Sch{\"o}lkopf, Bernhard and Vapnik, Vladimir},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2016},
+  eprint    = {1511.03643},
+  archivePrefix = {arXiv},
+  note      = {Venue from the arXiv journal-ref (author-supplied); no proceedings page checked. BODY (sections 2, 4, 4.1).}
+}
+
+@inproceedings{stanton2021kd,
+  title     = {Does Knowledge Distillation Really Work?},
+  author    = {Stanton, Samuel and Izmailov, Pavel and Kirichenko, Polina and Alemi, Alexander A. and Wilson, Andrew G.},
+  booktitle = {Advances in Neural Information Processing Systems 34 (NeurIPS 2021)},
+  year      = {2021},
+  pages     = {6906--6919},
+  eprint    = {2106.05945},
+  archivePrefix = {arXiv},
+  note      = {Identity: papers.nips.cc. BODY for abstract and section 1 only.}
+}
+
+@inproceedings{furlanello2018bornagain,
+  title     = {Born Again Neural Networks},
+  author    = {Furlanello, Tommaso and Lipton, Zachary and Tschannen, Michael and Itti, Laurent and Anandkumar, Anima},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {80},
+  pages     = {1607--1616},
+  publisher = {PMLR},
+  year      = {2018},
+  eprint    = {1805.04770},
+  archivePrefix = {arXiv},
+  note      = {Identity: proceedings.mlr.press/v80/furlanello18a. BODY (section 3.2).}
+}
+
+@inproceedings{cho2019efficacy,
+  title     = {On the Efficacy of Knowledge Distillation},
+  author    = {Cho, Jang Hyun and Hariharan, Bharath},
+  booktitle = {2019 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  year      = {2019},
+  pages     = {4793--4801},
+  doi       = {10.1109/ICCV.2019.00489},
+  eprint    = {1910.01348},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. BODY (sections 5.2, 5.3).}
+}
+
+@inproceedings{yuan2020revisiting,
+  title     = {Revisiting Knowledge Distillation via Label Smoothing Regularization},
+  author    = {Yuan, Li and Tay, Francis E. H. and Li, Guilin and Wang, Tao and Feng, Jiashi},
+  booktitle = {2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2020},
+  pages     = {3902--3910},
+  doi       = {10.1109/CVPR42600.2020.00396},
+  eprint    = {1909.11723},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. BODY (abstract, sections 2.1--2.2, 3).}
+}
+
+@inproceedings{kim2016sequence,
+  title     = {Sequence-Level Knowledge Distillation},
+  author    = {Kim, Yoon and Rush, Alexander M.},
+  booktitle = {Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2016},
+  pages     = {1317--1327},
+  doi       = {10.18653/v1/D16-1139},
+  eprint    = {1606.07947},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref (ACL Anthology DOI). BODY for sections 3.1--3.2 only (teacher-generated hard targets as a KD variant).}
+}
+
+@misc{romero2014fitnets,
+  title     = {{FitNets}: Hints for Thin Deep Nets},
+  author    = {Romero, Adriana and Ballas, Nicolas and Kahou, Samira Ebrahimi and Chassang, Antoine and Gatta, Carlo and Bengio, Yoshua},
+  year      = {2014},
+  eprint    = {1412.6550},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.LG},
+  note      = {Published at ICLR 2015 per secondary sources; the arXiv record carries no venue and no proceedings page was checked, so cited as arXiv. BODY for section 2.2 only (hint = teacher hidden-layer output).}
+}
+
+% =====================================================================
+% Encoder backbones
+% =====================================================================
+
+@inproceedings{warner2025modernbert,
+  title     = {Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference},
+  author    = {Warner, Benjamin and Chaffin, Antoine and Clavi{\'e}, Benjamin and Weller, Orion and Hallstr{\"o}m, Oskar and Taghadouini, Said and Gallagher, Alexis and Biswas, Raja and Ladhak, Faisal and Aarsen, Tom and Adams, Griffin Thomas and Howard, Jeremy and Poli, Iacopo},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  year      = {2025},
+  pages     = {2526--2547},
+  doi       = {10.18653/v1/2025.acl-long.127},
+  eprint    = {2412.13663},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref (ACL Anthology). The arXiv version also lists Nathan Cooper; the Anthology list is used. BODY (sections 2.1.3, 2.2.1, 3.2, 4.2; Tables 1, 2, 4).}
+}
+
+@inproceedings{he2023debertav3,
+  title     = {{DeBERTaV3}: Improving {DeBERTa} using {ELECTRA}-Style Pre-Training with Gradient-Disentangled Embedding Sharing},
+  author    = {He, Pengcheng and Gao, Jianfeng and Chen, Weizhu},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2023},
+  eprint    = {2111.09543},
+  archivePrefix = {arXiv},
+  note      = {Venue: title present in the iclr.cc/virtual/2023 paper listing (OpenReview unreachable; no page range). BODY for Table 9 only.}
+}
+
+@inproceedings{wang2020minilm,
+  title     = {{MiniLM}: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers},
+  author    = {Wang, Wenhui and Wei, Furu and Dong, Li and Bao, Hangbo and Yang, Nan and Zhou, Ming},
+  booktitle = {Advances in Neural Information Processing Systems 33 (NeurIPS 2020)},
+  year      = {2020},
+  pages     = {5776--5788},
+  eprint    = {2002.10957},
+  archivePrefix = {arXiv},
+  note      = {Identity: papers.nips.cc. META only: cite for existence of the model family, not for any load-bearing claim.}
+}
+
+@inproceedings{weller2026ettin,
+  title     = {Seq vs Seq: An Open Suite of Paired Encoders and Decoders},
+  author    = {Weller, Orion and Ricci, Kathryn and Marone, Marc and Chaffin, Antoine and Lawrie, Dawn and Van Durme, Benjamin},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+  pages     = {143110--143133},
+  eprint    = {2507.11412},
+  archivePrefix = {arXiv},
+  note      = {Identity: proceedings.iclr.cc (2026). BODY (recipe differences, model sizes, GLUE table).}
+}
+
+% =====================================================================
+% Split computing, DNN partitioning and edge-cloud systems
+% =====================================================================
+
+@inproceedings{kang2017neurosurgeon,
+  title     = {Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge},
+  author    = {Kang, Yiping and Hauswald, Johann and Gao, Cao and Rovinski, Austin and Mudge, Trevor and Mars, Jason and Tang, Lingjia},
+  booktitle = {Proceedings of the Twenty-Second International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS)},
+  year      = {2017},
+  pages     = {615--629},
+  publisher = {ACM},
+  doi       = {10.1145/3037697.3037698},
+  note      = {Identity: Crossref (title + subtitle fields). META: cite only for runtime split-point selection under bandwidth/server load.}
+}
+
+@inproceedings{han2016mcdnn,
+  title     = {{MCDNN}: An Approximation-Based Execution Framework for Deep Stream Processing Under Resource Constraints},
+  author    = {Han, Seungyeop and Shen, Haichen and Philipose, Matthai and Agarwal, Sharad and Wolman, Alec and Krishnamurthy, Arvind},
+  booktitle = {Proceedings of the 14th Annual International Conference on Mobile Systems, Applications, and Services (MobiSys)},
+  year      = {2016},
+  pages     = {123--136},
+  publisher = {ACM},
+  doi       = {10.1145/2906388.2906396},
+  note      = {Identity: Crossref (title + subtitle fields). BODY (UW tech-report version, Alg. 1).}
+}
+
+@article{li2020edgent,
+  title     = {Edge {AI}: On-Demand Accelerating Deep Neural Network Inference via Edge Computing},
+  author    = {Li, En and Zeng, Liekang and Zhou, Zhi and Chen, Xu},
+  journal   = {IEEE Transactions on Wireless Communications},
+  volume    = {19},
+  number    = {1},
+  pages     = {447--457},
+  year      = {2020},
+  doi       = {10.1109/TWC.2019.2946140},
+  eprint    = {1910.05316},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. BODY (sections III--IV).}
+}
+
+@inproceedings{laskaridis2020spinn,
+  title     = {{SPINN}: Synergistic Progressive Inference of Neural Networks over Device and Cloud},
+  author    = {Laskaridis, Stefanos and Venieris, Stylianos I. and Almeida, Mario and Leontiadis, Ilias and Lane, Nicholas D.},
+  booktitle = {Proceedings of the 26th Annual International Conference on Mobile Computing and Networking (MobiCom)},
+  year      = {2020},
+  pages     = {1--15},
+  publisher = {ACM},
+  doi       = {10.1145/3372224.3419194},
+  eprint    = {2008.06402},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref + arXiv DOI tag. BODY (sections 3.2--3.6).}
+}
+
+@misc{mounesan2024edgerl,
+  title     = {{EdgeRL}: Reinforcement Learning-driven Deep Learning Model Inference Optimization at Edge},
+  author    = {Mounesan, Motahare and Zhang, Xiaojie and Debroy, Saptarshi},
+  year      = {2024},
+  eprint    = {2410.12221},
+  archivePrefix = {arXiv},
+  note      = {Venue unverified; cited as arXiv. BODY (sections II-B, II-C, Eq. 8).}
+}
+
+@inproceedings{younesi2025splitwise,
+  title     = {Splitwise: Collaborative Edge--Cloud Inference for {LLMs} via {Lyapunov}-Assisted {DRL}},
+  author    = {Younesi, Abolfazl and Maryan, Abbas Shabrang and Oustad, Elyas and Samani, Zahra Najafabadi and Ansari, Mohsen and Fahringer, Thomas},
+  booktitle = {Proceedings of the 18th IEEE/ACM International Conference on Utility and Cloud Computing (UCC)},
+  year      = {2025},
+  pages     = {1--11},
+  publisher = {ACM},
+  doi       = {10.1145/3773274.3774267},
+  eprint    = {2512.23310},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. Not the ISCA 2024 "Splitwise" (Patel et al.) prefill/decode paper. BODY (state/action, accuracy-loss proxy).}
+}
+
+@article{chen2025adaptivesplit,
+  title     = {Adaptive layer splitting for wireless large language model inference in edge computing: a model-based reinforcement learning approach},
+  author    = {Chen, Yuxuan and Li, Rongpeng and Yu, Xiaoxue and Zhao, Zhifeng and Zhang, Honggang},
+  journal   = {Frontiers of Information Technology \& Electronic Engineering},
+  volume    = {26},
+  number    = {2},
+  pages     = {278--292},
+  year      = {2025},
+  doi       = {10.1631/FITEE.2400468},
+  eprint    = {2406.02616},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. BODY (sections II--V).}
+}
+
+@article{matsubara2022splitsurvey,
+  title     = {Split Computing and Early Exiting for Deep Learning Applications: Survey and Research Challenges},
+  author    = {Matsubara, Yoshitomo and Levorato, Marco and Restuccia, Francesco},
+  journal   = {ACM Computing Surveys},
+  volume    = {55},
+  number    = {5},
+  pages     = {1--30},
+  year      = {2022},
+  doi       = {10.1145/3527155},
+  note      = {Identity: Crossref. META: cite only as a taxonomy/survey pointer.}
+}
+
+% =====================================================================
+% Numerical (non-)equivalence and early exit (Split equivalence, E0)
+% =====================================================================
+
+@misc{he2025nondeterminism,
+  title     = {Defeating Nondeterminism in {LLM} Inference},
+  author    = {He, Horace and {Thinking Machines Lab}},
+  howpublished = {Thinking Machines Lab: Connectionism (technical blog, not peer reviewed)},
+  year      = {2025},
+  month     = sep,
+  doi       = {10.64434/tml.20250910},
+  url       = {https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/},
+  note      = {Identity: Crossref (report DOI). BODY. Must be described as a technical report in the manuscript.}
+}
+
+@inproceedings{yuan2025nondeterminism,
+  title     = {Understanding and Mitigating Numerical Sources of Nondeterminism in {LLM} Inference},
+  author    = {Yuan, Jiayi and Li, Hao and Ding, Xinheng and Xie, Wenya and Li, Yu-Jhe and Zhao, Wentian and Wan, Kun and Shi, Jing and Hu, Xia and Liu, Zirui},
+  booktitle = {Advances in Neural Information Processing Systems 38 (NeurIPS 2025)},
+  year      = {2025},
+  pages     = {188045--188077},
+  doi       = {10.52202/085713-5653},
+  eprint    = {2506.09501},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref (resolves the venue question left open in 02). META (abstract): cite only for "batch size / GPU count / GPU type change BF16 greedy outputs".}
+}
+
+@inproceedings{schuster2022calm,
+  title     = {Confident Adaptive Language Modeling},
+  author    = {Schuster, Tal and Fisch, Adam and Gupta, Jai and Dehghani, Mostafa and Bahri, Dara and Tran, Vinh Q. and Tay, Yi and Metzler, Donald},
+  booktitle = {Advances in Neural Information Processing Systems 35 (NeurIPS 2022)},
+  year      = {2022},
+  pages     = {17456--17472},
+  doi       = {10.52202/068431-1269},
+  eprint    = {2207.07061},
+  archivePrefix = {arXiv},
+  note      = {Identity: Crossref. BODY for section 3.3.1 and section 4 (Defs. 1--2) only.}
+}
+
+@inproceedings{mai2024splitdenoise,
+  title     = {Split-and-Denoise: Protect large language model inference with local differential privacy},
+  author    = {Mai, Peihua and Yan, Ran and Huang, Zhe and Yang, Youjia and Pang, Yan},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {235},
+  pages     = {34281--34302},
+  publisher = {PMLR},
+  year      = {2024},
+  eprint    = {2310.09130},
+  archivePrefix = {arXiv},
+  note      = {Identity: proceedings.mlr.press/v235/mai24a. META (abstract): cite only for "noise added to transmitted embeddings".}
+}
+
+% =====================================================================
+% Evaluation data / grading
+% =====================================================================
+
+@misc{wei2024simpleqa,
+  title     = {Measuring short-form factuality in large language models},
+  author    = {Wei, Jason and Karina, Nguyen and Chung, Hyung Won and Jiao, Yunxin Joy and Papay, Spencer and Glaese, Amelia and Schulman, John and Fedus, William},
+  year      = {2024},
+  eprint    = {2411.04368},
+  archivePrefix = {arXiv},
+  note      = {Preprint (SimpleQA). BODY for section 2.4 and Table 3 only.}
+}
