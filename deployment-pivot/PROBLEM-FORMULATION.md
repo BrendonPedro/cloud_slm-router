@@ -130,7 +130,7 @@ Variables rejected and why (the "reject unnecessary complexity" pass):
 | Symbol | Meaning | Source |
 |---|---|---|
 | `t ∈ T ∪ {∅}` | task (recognizer class); `∅` = low-confidence / unknown | E3 recognizer label set |
-| `m ∈ M` | candidate models (2–4 total: e.g. one edge-class 8B, one mid 14–32B split candidate, one large remote) | HARDWARE-PLAN |
+| `m ∈ M` | candidate models (2–4 total). E0 fixes them: Qwen3-32B bf16 as the only split candidate; weight-quantised edge models (Qwen3-8B/14B/32B-AWQ, whichever fit the edge memory class); one large REMOTE model | E0 §1, §3.1; HARDWARE-PLAN |
 | `a = (m, p, d)`, `p ∈ {EDGE, SPLIT, REMOTE}` | action. SPLIT is in `A` **iff E0 passes**; d is fixed per model offline | E0 |
 | `c ∈ {open, no-raw-text, local-only}` | privacy class of the request (from application metadata or task, not inferred per query) | declared |
 | `A(c, R)` | admissible actions: `local-only` → EDGE; `no-raw-text` → EDGE ∪ SPLIT(d ≥ d_min); `open` → all. Only models resident in `R` may use EDGE/SPLIT | declared + `R` |
@@ -268,7 +268,8 @@ analysis paper.
   about 35% of tokens at an 8-layer cut, so `no-raw-text` must be defined as
   "raw text never leaves the device", and the measured leakage must be reported, not
   claimed as privacy.
-- **The quality entries for a mid-size split model (14–32B) are not cached.** They need
+- **Weight quantisation, not REMOTE, is SPLIT's real competitor** (E0 §1: vendor-reported Qwen3-32B-AWQ loses at most 2.0 pt against bf16). SPLIT can only add quality on edges with ≤ 24 GB of memory, so the formulation's edge class is fixed at ≤ 24 GB.
+- **The quality entries for the split model (Qwen3-32B) are not cached.** They need
   new labels on a small per-task sample. This is the only new quality measurement F3
   requires.
 - **All §1.1 numbers use assumed profiles.** They show which variables *can* matter;
