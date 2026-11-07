@@ -1,0 +1,331 @@
+R4_factored - R6_cluster_lookup
+  lam=0.000 dU=+0.08 [-0.48, +0.68] folds+=2
+  lam=0.002 dU=+0.14 [-0.43, +0.72] folds+=4
+  lam=0.005 dU=+0.09 [-0.48, +0.68] folds+=3
+  lam=0.010 dU=+0.32 [-0.28, +0.93] folds+=4
+  lam=0.020 dU=+0.71 [+0.09, +1.36] folds+=5
+  lam=0.030 dU=+0.87 [+0.19, +1.56] folds+=5
+  lam=0.050 dU=+0.16 [-0.54, +0.86] folds+=4
+  lam=0.075 dU=+0.05 [-0.68, +0.79] folds+=3
+  lam=0.100 dU=-0.46 [-1.20, +0.31] folds+=2
+  lam=0.150 dU=-1.24 [-2.05, -0.35] folds+=0
+  lam=0.200 dU=-1.94 [-2.92, -0.90] folds+=0
+  lam=0.300 dU=-3.85 [-4.93, -2.80] folds+=0
+  lam=0.500 dU=-7.10 [-8.47, -5.84] folds+=0
+R4s_factored_s_only - R6_cluster_lookup
+  lam=0.000 dU=+0.08 [-0.48, +0.68] folds+=2
+  lam=0.002 dU=+0.13 [-0.44, +0.71] folds+=4
+  lam=0.005 dU=+0.16 [-0.43, +0.75] folds+=4
+  lam=0.010 dU=+0.31 [-0.27, +0.90] folds+=4
+  lam=0.020 dU=+0.56 [-0.06, +1.20] folds+=5
+  lam=0.030 dU=+0.18 [-0.49, +0.87] folds+=3
+  lam=0.050 dU=-0.50 [-1.16, +0.15] folds+=1
+  lam=0.075 dU=-0.19 [-0.87, +0.52] folds+=2
+  lam=0.100 dU=-0.05 [-0.75, +0.70] folds+=1
+  lam=0.150 dU=+0.02 [-0.70, +0.79] folds+=2
+  lam=0.200 dU=-0.08 [-0.80, +0.74] folds+=3
+  lam=0.300 dU=-0.53 [-1.30, +0.25] folds+=3
+  lam=0.500 dU=-0.64 [-1.65, +0.37] folds+=2
+R5_knn50 - R6_cluster_lookup
+  lam=0.000 dU=-0.34 [-0.92, +0.23] folds+=2
+  lam=0.002 dU=-0.53 [-1.10, +0.06] folds+=1
+  lam=0.005 dU=-0.48 [-1.06, +0.09] folds+=2
+  lam=0.010 dU=-0.41 [-0.98, +0.18] folds+=2
+  lam=0.020 dU=+0.05 [-0.55, +0.70] folds+=3
+  lam=0.030 dU=+0.24 [-0.37, +0.93] folds+=4
+  lam=0.050 dU=-0.25 [-0.90, +0.39] folds+=2
+  lam=0.075 dU=-0.04 [-0.74, +0.67] folds+=3
+  lam=0.100 dU=+0.13 [-0.57, +0.86] folds+=3
+  lam=0.150 dU=+0.39 [-0.39, +1.16] folds+=4
+  lam=0.200 dU=+0.45 [-0.39, +1.28] folds+=5
+  lam=0.300 dU=+0.12 [-0.82, +1.03] folds+=3
+  lam=0.500 dU=-0.68 [-1.91, +0.50] folds+=2
+R4_factored - R5_knn50
+  lam=0.000 dU=+0.42 [-0.15, +1.01] folds+=4
+  lam=0.002 dU=+0.67 [+0.06, +1.23] folds+=5
+  lam=0.005 dU=+0.57 [-0.03, +1.16] folds+=5
+  lam=0.010 dU=+0.73 [+0.11, +1.32] folds+=5
+  lam=0.020 dU=+0.66 [+0.05, +1.28] folds+=5
+  lam=0.030 dU=+0.63 [-0.02, +1.28] folds+=5
+  lam=0.050 dU=+0.42 [-0.28, +1.12] folds+=4
+  lam=0.075 dU=+0.10 [-0.65, +0.84] folds+=4
+  lam=0.100 dU=-0.59 [-1.34, +0.20] folds+=0
+  lam=0.150 dU=-1.63 [-2.50, -0.77] folds+=0
+  lam=0.200 dU=-2.39 [-3.34, -1.42] folds+=0
+  lam=0.300 dU=-3.97 [-5.06, -2.92] folds+=0
+  lam=0.500 dU=-6.42 [-7.94, -4.91] folds+=0
+R4s_factored_s_only - R4_factored
+  lam=0.000 dU=+0.00 [+0.00, +0.00] folds+=0
+  lam=0.002 dU=-0.01 [-0.12, +0.10] folds+=1
+  lam=0.005 dU=+0.07 [-0.08, +0.23] folds+=3
+  lam=0.010 dU=-0.01 [-0.24, +0.23] folds+=3
+  lam=0.020 dU=-0.15 [-0.50, +0.18] folds+=1
+  lam=0.030 dU=-0.69 [-1.14, -0.23] folds+=0
+  lam=0.050 dU=-0.67 [-1.15, -0.18] folds+=0
+  lam=0.075 dU=-0.24 [-0.83, +0.39] folds+=3
+  lam=0.100 dU=+0.41 [-0.29, +1.07] folds+=4
+  lam=0.150 dU=+1.26 [+0.46, +2.07] folds+=5
+  lam=0.200 dU=+1.86 [+0.98, +2.74] folds+=5
+  lam=0.300 dU=+3.31 [+2.23, +4.47] folds+=5
+  lam=0.500 dU=+6.46 [+5.08, +7.95] folds+=5
+R6_cluster_lookup - R2_task_lookup
+  lam=0.000 dU=+0.34 [-0.16, +0.84] folds+=4
+  lam=0.002 dU=+0.31 [-0.17, +0.82] folds+=3
+  lam=0.005 dU=+0.40 [-0.08, +0.90] folds+=4
+  lam=0.010 dU=+0.61 [+0.08, +1.14] folds+=5
+  lam=0.020 dU=+0.63 [+0.07, +1.17] folds+=5
+  lam=0.030 dU=+1.12 [+0.52, +1.71] folds+=5
+  lam=0.050 dU=+2.01 [+1.41, +2.65] folds+=5
+  lam=0.075 dU=+0.72 [+0.12, +1.29] folds+=5
+  lam=0.100 dU=+0.32 [-0.23, +0.89] folds+=3
+  lam=0.150 dU=+0.25 [-0.38, +0.86] folds+=4
+  lam=0.200 dU=+0.27 [-0.39, +0.90] folds+=3
+  lam=0.300 dU=+0.13 [-0.42, +0.65] folds+=3
+  lam=0.500 dU=+0.12 [-0.70, +0.93] folds+=2
+R4 - R2 per benchmark at lambda=0.01:
+  korbench       n= 1248 dU= +8.19 dacc= +6.49 tok 5.20 -> 3.50
+  bbh            n= 1080 dU= +2.66 dacc= +1.76 tok 2.43 -> 1.53
+  mmlupro        n= 1000 dU= +1.52 dacc= +1.80 tok 3.00 -> 3.29
+  gpqa           n=  198 dU= +7.32 dacc= +6.06 tok 8.67 -> 7.41
+  meld           n= 1231 dU= +0.66 dacc= +0.81 tok 0.17 -> 0.32
+  kandk          n=  700 dU= +0.75 dacc= +0.29 tok 3.76 -> 3.29
+  humaneval      n=  164 dU= +3.05 dacc= +3.05 tok 0.56 -> 0.56
+  aime           n=   60 dU= +5.68 dacc= +5.00 tok 15.69 -> 15.01
+  livecodebench  n= 1055 dU= +0.22 dacc= +0.09 tok 12.65 -> 12.52
+  mathbench      n=  150 dU= +1.57 dacc= +2.00 tok 3.29 -> 3.72
+  math500        n=  500 dU= -0.67 dacc= +0.20 tok 2.61 -> 3.48
+  emorynlp       n=  696 dU= -1.62 dacc= -1.29 tok 0.12 -> 0.44
+  mbpp           n=  974 dU= -1.19 dacc= -1.03 tok 0.36 -> 0.52
+  finqa          n= 1138 dU= -2.09 dacc= -3.08 tok 3.04 -> 2.06
+  medqa          n= 1273 dU= -2.43 dacc= -2.75 tok 2.19 -> 1.87
+R4 - R2 per benchmark at lambda=0.02:
+  korbench       n= 1248 dU= +9.30 dacc= +5.45 tok 4.52 -> 2.59
+  bbh            n= 1080 dU= +4.08 dacc= +4.54 tok 1.09 -> 1.32
+  kandk          n=  700 dU= +3.03 dacc= +2.00 tok 3.77 -> 3.25
+  livecodebench  n= 1055 dU= +1.84 dacc= -3.60 tok 12.65 -> 9.93
+  gpqa           n=  198 dU= +8.01 dacc= +2.53 tok 8.20 -> 5.46
+  mmlupro        n= 1000 dU= +1.24 dacc= +1.40 tok 3.00 -> 3.08
+  humaneval      n=  164 dU= +3.11 dacc= +3.05 tok 0.56 -> 0.53
+  meld           n= 1231 dU= +0.35 dacc= +0.57 tok 0.17 -> 0.28
+  aime           n=   60 dU= +4.71 dacc= +3.33 tok 14.36 -> 13.68
+  mathbench      n=  150 dU= +1.69 dacc= +2.00 tok 3.29 -> 3.44
+  emorynlp       n=  696 dU= -1.06 dacc= -0.57 tok 0.12 -> 0.36
+  math500        n=  500 dU= -1.60 dacc= -0.60 tok 2.52 -> 3.02
+  mbpp           n=  974 dU= -1.63 dacc= -1.33 tok 0.36 -> 0.50
+  medqa          n= 1273 dU= -2.31 dacc= -3.14 tok 2.19 -> 1.77
+  finqa          n= 1138 dU= -2.62 dacc= -1.76 tok 0.98 -> 1.41
+R4 - R2 per benchmark at lambda=0.03:
+  korbench       n= 1248 dU=+11.91 dacc= +5.05 tok 4.52 -> 2.23
+  livecodebench  n= 1055 dU= +8.21 dacc= -4.17 tok 9.10 -> 4.98
+  bbh            n= 1080 dU= +2.64 dacc= +3.80 tok 0.81 -> 1.20
+  kandk          n=  700 dU= +3.99 dacc= +2.71 tok 3.66 -> 3.23
+  gpqa           n=  198 dU= +7.78 dacc= +1.01 tok 6.21 -> 3.95
+  mmlupro        n= 1000 dU= +1.16 dacc= +0.40 tok 3.00 -> 2.75
+  humaneval      n=  164 dU= +2.00 dacc= +2.44 tok 0.38 -> 0.53
+  mathbench      n=  150 dU= +1.60 dacc= +2.00 tok 3.29 -> 3.42
+  meld           n= 1231 dU= +0.12 dacc= +0.41 tok 0.17 -> 0.27
+  aime           n=   60 dU= -3.81 dacc= -6.67 tok 14.36 -> 13.41
+  emorynlp       n=  696 dU= -0.87 dacc= -0.29 tok 0.12 -> 0.31
+  mbpp           n=  974 dU= -1.29 dacc= -1.03 tok 0.36 -> 0.44
+  math500        n=  500 dU= -2.53 dacc= -1.60 tok 2.52 -> 2.83
+  finqa          n= 1138 dU= -2.55 dacc= -2.55 tok 0.98 -> 0.98
+  medqa          n= 1273 dU= -2.82 dacc= -4.48 tok 2.19 -> 1.64
+R4 - R2 per benchmark at lambda=0.05:
+  korbench       n= 1248 dU=+17.83 dacc= +6.81 tok 3.82 -> 1.61
+  livecodebench  n= 1055 dU= +3.60 dacc= +8.44 tok 0.27 -> 1.24
+  mmlupro        n= 1000 dU= +3.47 dacc= -0.20 tok 2.58 -> 1.85
+  bbh            n= 1080 dU= +1.48 dacc= +2.78 tok 0.81 -> 1.07
+  kandk          n=  700 dU= +2.12 dacc= +3.14 tok 3.01 -> 3.22
+  mathbench      n=  150 dU= +5.17 dacc= +3.33 tok 3.61 -> 3.24
+  meld           n= 1231 dU= +0.49 dacc= +0.89 tok 0.17 -> 0.25
+  aime           n=   60 dU= +2.00 dacc= +3.33 tok 8.05 -> 8.32
+  gpqa           n=  198 dU= -1.35 dacc= +6.57 tok 0.29 -> 1.88
+  humaneval      n=  164 dU= -1.87 dacc= -1.22 tok 0.38 -> 0.51
+  emorynlp       n=  696 dU= -0.47 dacc= +0.29 tok 0.12 -> 0.27
+  finqa          n= 1138 dU= -0.77 dacc= -2.02 tok 0.98 -> 0.73
+  mbpp           n=  974 dU= -1.29 dacc= -1.03 tok 0.36 -> 0.41
+  math500        n=  500 dU= -3.30 dacc= -2.80 tok 2.38 -> 2.48
+  medqa          n= 1273 dU= -3.49 dacc= -5.11 tok 1.67 -> 1.34
+{
+ "0.01": {
+  "R2_task_lookup": {
+   "DeepSeek-R1-0528-Qwen3-8B": 0.2376,
+   "Qwen3-8B": 0.1792,
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.1544,
+   "Intern-S1-mini": 0.1051,
+   "Qwen2.5-Coder-7B-Instruct": 0.093,
+   "cogito-v1-preview-llama-8B": 0.0667,
+   "GLM-Z1-9B-0414": 0.0564,
+   "glm-4-9b-chat": 0.0521,
+   "gemma-2-9b-it": 0.0492
+  },
+  "R4_factored": {
+   "Qwen3-8B": 0.207,
+   "DeepSeek-R1-0528-Qwen3-8B": 0.1626,
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.1145,
+   "Qwen2.5-Coder-7B-Instruct": 0.0965,
+   "GLM-Z1-9B-0414": 0.0963,
+   "Intern-S1-mini": 0.0624,
+   "glm-4-9b-chat": 0.0501,
+   "MiniCPM4.1-8B": 0.044,
+   "gemma-2-9b-it": 0.0363,
+   "cogito-v1-preview-llama-8B": 0.0321,
+   "Fin-R1": 0.0302,
+   "internlm3-8b-instruct": 0.0146,
+   "Llama-3.1-Nemotron-Nano-8B-v1": 0.0112,
+   "granite-3.3-8b-instruct": 0.0107,
+   "DeepSeek-R1-Distill-Qwen-7B": 0.0103
+  },
+  "R6_cluster_lookup": {
+   "DeepSeek-R1-0528-Qwen3-8B": 0.2153,
+   "Qwen3-8B": 0.1937,
+   "GLM-Z1-9B-0414": 0.1067,
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.1046,
+   "Qwen2.5-Coder-7B-Instruct": 0.0965,
+   "gemma-2-9b-it": 0.0667,
+   "Intern-S1-mini": 0.06,
+   "MiniCPM4.1-8B": 0.0585,
+   "cogito-v1-preview-llama-8B": 0.031,
+   "internlm3-8b-instruct": 0.0238,
+   "glm-4-9b-chat": 0.0235,
+   "Fin-R1": 0.0147
+  }
+ },
+ "0.02": {
+  "R2_task_lookup": {
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.3503,
+   "DeepSeek-R1-0528-Qwen3-8B": 0.1585,
+   "Qwen3-8B": 0.1135,
+   "Qwen2.5-Coder-7B-Instruct": 0.093,
+   "cogito-v1-preview-llama-8B": 0.0667,
+   "GLM-Z1-9B-0414": 0.0621,
+   "glm-4-9b-chat": 0.0521,
+   "gemma-2-9b-it": 0.0492,
+   "Intern-S1-mini": 0.0482
+  },
+  "R4_factored": {
+   "Qwen3-8B": 0.1769,
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.1329,
+   "DeepSeek-R1-0528-Qwen3-8B": 0.1203,
+   "GLM-Z1-9B-0414": 0.1146,
+   "Qwen2.5-Coder-7B-Instruct": 0.1027,
+   "Intern-S1-mini": 0.0579,
+   "glm-4-9b-chat": 0.053,
+   "gemma-2-9b-it": 0.0449,
+   "cogito-v1-preview-llama-8B": 0.0409,
+   "Fin-R1": 0.0331,
+   "MiniCPM4.1-8B": 0.0289,
+   "Llama-3.1-Nemotron-Nano-8B-v1": 0.0204,
+   "internlm3-8b-instruct": 0.0184,
+   "granite-3.3-8b-instruct": 0.016,
+   "DeepSeek-R1-Distill-Qwen-7B": 0.0103,
+   "Llama-3.1-8B-Instruct": 0.0101
+  },
+  "R6_cluster_lookup": {
+   "DeepSeek-R1-0528-Qwen3-8B": 0.1937,
+   "Qwen3-8B": 0.1582,
+   "GLM-Z1-9B-0414": 0.1304,
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.1249,
+   "Qwen2.5-Coder-7B-Instruct": 0.0985,
+   "gemma-2-9b-it": 0.0975,
+   "cogito-v1-preview-llama-8B": 0.0395,
+   "Intern-S1-mini": 0.0394,
+   "MiniCPM4.1-8B": 0.0356,
+   "Fin-R1": 0.0286,
+   "glm-4-9b-chat": 0.0257,
+   "internlm3-8b-instruct": 0.0204
+  }
+ },
+ "0.03": {
+  "R2_task_lookup": {
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.3691,
+   "DeepSeek-R1-0528-Qwen3-8B": 0.1337,
+   "GLM-Z1-9B-0414": 0.1011,
+   "Qwen2.5-Coder-7B-Instruct": 0.0992,
+   "glm-4-9b-chat": 0.0741,
+   "Qwen3-8B": 0.052,
+   "gemma-2-9b-it": 0.0492,
+   "cogito-v1-preview-llama-8B": 0.0474,
+   "Intern-S1-mini": 0.0372,
+   "Llama-3.1-Nemotron-Nano-8B-v1": 0.0371
+  },
+  "R4_factored": {
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.142,
+   "Qwen3-8B": 0.1319,
+   "Qwen2.5-Coder-7B-Instruct": 0.1216,
+   "GLM-Z1-9B-0414": 0.1159,
+   "DeepSeek-R1-0528-Qwen3-8B": 0.093,
+   "Intern-S1-mini": 0.0571,
+   "glm-4-9b-chat": 0.0566,
+   "gemma-2-9b-it": 0.0557,
+   "cogito-v1-preview-llama-8B": 0.0512,
+   "Fin-R1": 0.0344,
+   "Llama-3.1-Nemotron-Nano-8B-v1": 0.0274,
+   "granite-3.3-8b-instruct": 0.0239,
+   "internlm3-8b-instruct": 0.0235,
+   "MiniCPM4.1-8B": 0.0202,
+   "Llama-3.1-8B-Instruct": 0.0134,
+   "Llama-3.1-8B-UltraMedical": 0.0112,
+   "DeepHermes-3-Llama-3-8B-Preview": 0.0104
+  },
+  "R6_cluster_lookup": {
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.1876,
+   "GLM-Z1-9B-0414": 0.154,
+   "DeepSeek-R1-0528-Qwen3-8B": 0.125,
+   "Qwen2.5-Coder-7B-Instruct": 0.1142,
+   "gemma-2-9b-it": 0.1043,
+   "Qwen3-8B": 0.1002,
+   "cogito-v1-preview-llama-8B": 0.0517,
+   "Llama-3.1-Nemotron-Nano-8B-v1": 0.0349,
+   "Intern-S1-mini": 0.0339,
+   "glm-4-9b-chat": 0.0257,
+   "Fin-R1": 0.0224,
+   "MiniCPM4.1-8B": 0.0218,
+   "internlm3-8b-instruct": 0.0133
+  }
+ },
+ "0.05": {
+  "R2_task_lookup": {
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.3549,
+   "Qwen2.5-Coder-7B-Instruct": 0.1912,
+   "Qwen3-8B": 0.1721,
+   "cogito-v1-preview-llama-8B": 0.0815,
+   "glm-4-9b-chat": 0.0741,
+   "gemma-2-9b-it": 0.0701,
+   "GLM-Z1-9B-0414": 0.0502
+  },
+  "R4_factored": {
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.1513,
+   "Qwen2.5-Coder-7B-Instruct": 0.1507,
+   "Qwen3-8B": 0.0942,
+   "GLM-Z1-9B-0414": 0.0931,
+   "gemma-2-9b-it": 0.0731,
+   "cogito-v1-preview-llama-8B": 0.073,
+   "glm-4-9b-chat": 0.0631,
+   "Intern-S1-mini": 0.0574,
+   "DeepSeek-R1-0528-Qwen3-8B": 0.0555,
+   "granite-3.3-8b-instruct": 0.0342,
+   "Fin-R1": 0.0327,
+   "internlm3-8b-instruct": 0.0325,
+   "Llama-3.1-Nemotron-Nano-8B-v1": 0.0242,
+   "Llama-3.1-8B-Instruct": 0.0172,
+   "Llama-3.1-8B-UltraMedical": 0.0161,
+   "DeepHermes-3-Llama-3-8B-Preview": 0.0121,
+   "MiniCPM4.1-8B": 0.011
+  },
+  "R6_cluster_lookup": {
+   "Qwen2.5-Coder-7B-Instruct": 0.1849,
+   "NVIDIA-Nemotron-Nano-9B-v2": 0.1732,
+   "gemma-2-9b-it": 0.1497,
+   "cogito-v1-preview-llama-8B": 0.1074,
+   "Qwen3-8B": 0.1034,
+   "GLM-Z1-9B-0414": 0.1033,
+   "DeepSeek-R1-0528-Qwen3-8B": 0.0517,
+   "glm-4-9b-chat": 0.0336,
+   "Intern-S1-mini": 0.0311,
+   "Llama-3.1-Nemotron-Nano-8B-v1": 0.0222,
+   "internlm3-8b-instruct": 0.0133,
+   "Fin-R1": 0.013
+  }
+ }
+}

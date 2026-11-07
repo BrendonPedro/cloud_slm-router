@@ -1,0 +1,32 @@
+[pool20] fold 0 done task_acc=0.9939 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+[pool20] fold 1 done task_acc=0.9978 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+[pool20] fold 2 done task_acc=0.9969 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+[pool20] fold 3 done task_acc=0.9983 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+[pool20] fold 4 done task_acc=0.9965 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+
+== pool20 ==
+  OR_oracle                    acc=0.9043 macro=0.9186 d=+0.1976 [+0.1899,+0.2050] folds+=5 gap=1.0 tok=None H=None
+  R0_best_single               acc=0.6734 macro=0.6923 d=-0.0333 [-0.0408,-0.0260] folds+=0 gap=-0.169 tok=4098.836748931717 H=-0.0
+  R1_task_lookup_oracle        acc=0.7065 macro=0.7190 d=-0.0002 [-0.0004,+0.0000] folds+=0 gap=-0.001 tok=3728.629284032441 H=2.8048028792996487
+  R2_task_lookup_pred          acc=0.7067 macro=0.7192 d=+0.0000 [+0.0000,+0.0000] folds+=0 gap=0.0 tok=3730.110752594401 H=2.8039480554123792
+  R3_direct_utility            acc=0.7007 macro=0.7184 d=-0.0060 [-0.0128,+0.0007] folds+=0 gap=-0.03 tok=3596.7143978372724 H=3.642872966257462
+  R4_factored_prior_residual   acc=0.7109 macro=0.7312 d=+0.0042 [-0.0018,+0.0101] folds+=4 gap=0.021 tok=3602.2104299293624 H=3.4078796039242154
+  R5_knn50                     acc=0.7067 macro=0.7232 d=+0.0000 [-0.0062,+0.0062] folds+=2 gap=0.0 tok=3570.641754600157 H=3.1454916364756027
+  R* = R4_factored_prior_residual; VERDICT (pool20) = NO HEADROOM
+[pair_ds_qwen] fold 0 done task_acc=0.9939 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+[pair_ds_qwen] fold 1 done task_acc=0.9978 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+[pair_ds_qwen] fold 2 done task_acc=0.9969 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+[pair_ds_qwen] fold 3 done task_acc=0.9983 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+[pair_ds_qwen] fold 4 done task_acc=0.9965 {'R3_alpha': 1.0, 'R4_alpha': 10.0}
+
+== pair_ds_qwen ==
+  OR_oracle                    acc=0.7597 macro=0.7731 d=+0.0753 [+0.0705,+0.0800] folds+=5 gap=1.0 tok=None H=None
+  R0_best_single               acc=0.6734 macro=0.6923 d=-0.0110 [-0.0160,-0.0060] folds+=0 gap=-0.146 tok=4098.836748931717 H=-0.0
+  R1_task_lookup_oracle        acc=0.6842 macro=0.7004 d=-0.0002 [-0.0005,+0.0002] folds+=0 gap=-0.002 tok=4367.37987267812 H=0.9989328408233505
+  R2_task_lookup_pred          acc=0.6844 macro=0.6996 d=+0.0000 [+0.0000,+0.0000] folds+=0 gap=0.0 tok=4368.716839626755 H=0.9987929875499428
+  R3_direct_utility            acc=0.6860 macro=0.6991 d=+0.0016 [-0.0025,+0.0058] folds+=2 gap=0.021 tok=4428.333478677945 H=0.9818521109486088
+  R4_factored_prior_residual   acc=0.6854 macro=0.7002 d=+0.0010 [-0.0025,+0.0046] folds+=3 gap=0.014 tok=4416.318391907212 H=0.9797450948304925
+  R5_knn50                     acc=0.6856 macro=0.6989 d=+0.0012 [-0.0027,+0.0051] folds+=4 gap=0.016 tok=4288.82209819482 H=0.9336428764322896
+  R* = R3_direct_utility; VERDICT (pair_ds_qwen) = NO HEADROOM
+
+wrote /home/brendonpedro/dev/cloud_slm-router-gnhf-worktrees/your-job-is-not-to-v-a9879f/decision/E1-pool-headroom/results
