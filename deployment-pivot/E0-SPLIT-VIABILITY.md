@@ -15,9 +15,13 @@ GPU) cannot run it. Its hardware needs are stated in §5 and in `HARDWARE-PLAN.m
   - So SPLIT can add quality only on edges that **cannot** hold 32B-AWQ, i.e. about
     12–24 GB of accelerator memory.
   - It is useful only for traffic that may **not** go to REMOTE.
-- **Pre-registered expectation:**
-  - pass at 12–16 GB for the `no-raw-text` class with long deadlines;
-  - borderline at 24 GB, depending on KV-cache precision;
+- **Pre-registered expectation** (revised 2026-11-07, before any hardware access, after the upper bound
+  in `evidence/e0_r_prior.md`):
+  - **thinking mode: likely fail at every class for D ≤ 600 s.** Even the SPLIT-favouring upper bound
+    clears +3.0 pt in only 6/40 rows, all at D = 600 s, and in 0/10 rows at realistic runtime
+    efficiency. A thinking-mode quality tier exists only at D ≥ 1200 s (asynchronous traffic);
+  - **non-thinking mode: the one plausible pass**, at 12 GB and D = 30–60 s. This is not bounded by
+    cached data;
   - fail at ≥ 32 GB;
   - fail for the `open` class at any memory size.
 - **Pass** requires all three of **Q** (output equivalence), **F** (feasibility) and
@@ -84,6 +88,16 @@ regime; E0-Q3 (§4.3) measures the actual gap.
 | REMOTE reference | Qwen3-32B bf16 | server | same weights as SPLIT |
 | EDGE competitors | Qwen3-8B-AWQ, Qwen3-14B-AWQ, Qwen3-32B-AWQ (+FP8 KV at 24 GB), Qwen3-8B bf16 where it fits | edge | best per memory class is chosen *after* measurement |
 | Noise-floor pair | Qwen3-8B bf16 | edge **and** server | fits on both, so it measures the edge-vs-server numerical floor |
+
+**Mode variants (amendment 2026-11-07, before any hardware access; `evidence/e0_r_prior.md`).**
+Every model above enters Q3 and R in **both** thinking and non-thinking mode. Each
+(model, mode) pair is a separate action. Reason: the desk-check upper bound shows that
+thinking-mode SPLIT almost never clears R at D ≤ 600 s, because thinking traces are thousands
+of tokens long. Non-thinking 32B, however, is +12.1 pt (vendor mean) over non-thinking
+8B-AWQ and produces short outputs. So the one plausible short-deadline SPLIT regime
+(12 GB class, D = 30–60 s) involves non-thinking mode. Leaving mode out would make E0
+fail SPLIT for a reason the paper did not test. Adding it also gives the edge more
+competitors, so the amendment is not one-sided.
 
 Qwen3-30B-A3B is a strong edge candidate too: an MoE with 3B active parameters and vendor
 GPQA of 65.8 (thinking mode). It is **not** in E0 to keep the matrix small. If E0-R
@@ -170,6 +184,9 @@ Settings:
 - thinking mode;
 - the vendor-recommended sampling (T = 0.6, top-p 0.95, top-k 20);
 - 2 seeds, `max_new_tokens` = 16,384, with the truncation rate reported.
+- **Non-thinking runs as well** (§3.1 amendment): `enable_thinking=False`, with the vendor
+  non-thinking sampling (T = 0.7, top-p 0.8, top-k 20) and 2 seeds, for Qwen3-32B bf16 and
+  each EDGE competitor. Outputs are short, so this adds well under 1 GPU-h.
 
 Greedy decoding is not used here, because Qwen3 advises against it in thinking mode
 (repetition). Store per-query `(score, completion_tokens)`. F3's utility needs the
@@ -296,6 +313,9 @@ no class passes.**
    - `no-raw-text`: EDGE-best(M) (including 32B-AWQ+FP8-KV where it fits);
    - `open`: max(EDGE-best(M), REMOTE-32B).
 
+   The best is taken over (model, mode) pairs on both sides (§3.1 amendment). SPLIT may use
+   either mode, and so may each competitor.
+
 **R passes iff at least one cell shows `U_SPLIT − U_best-admissible ≥ 3.0 pt` with a
 paired-bootstrap 95% CI > 0 (10,000 resamples over queries).**
 - Report every cell, not just the winner.
@@ -316,9 +336,10 @@ Two cells are excluded **by construction**:
 | Q ∧ F pass, R fails | SPLIT removed, for lack of a regime. Report it as a negative result: "weight-quantised edge models dominate layer split" is itself a publishable measurement |
 
 **Early stop (pre-declared, saves E0-L).** If Q3 finds the measured gap between
-32B-bf16 and EDGE-best(16) to be < 3.0 pt on **every** task, R cannot pass at 16 or
-24 GB. On-time utility ≤ accuracy, and the edge actions are faster than SPLIT. Then
-run only the 12 GB class and the 6 core cells.
+32B-bf16 and EDGE-best(16) to be < 3.0 pt on **every** task, **in each mode separately**
+(thinking vs thinking, non-thinking vs non-thinking), R cannot pass at 16 or 24 GB.
+On-time utility ≤ accuracy, and in the same mode the edge actions are faster than SPLIT.
+Then run only the 12 GB class and the 6 core cells.
 
 ## 9. Order and effort
 

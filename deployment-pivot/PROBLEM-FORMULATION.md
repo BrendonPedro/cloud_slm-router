@@ -130,7 +130,7 @@ Variables rejected and why (the "reject unnecessary complexity" pass):
 | Symbol | Meaning | Source |
 |---|---|---|
 | `t ∈ T ∪ {∅}` | task (recognizer class); `∅` = low-confidence / unknown | E3 recognizer label set |
-| `m ∈ M` | candidate models (2–4 total). E0 fixes them: Qwen3-32B bf16 as the only split candidate; weight-quantised edge models (Qwen3-8B/14B/32B-AWQ, whichever fit the edge memory class); one large REMOTE model | E0 §1, §3.1; HARDWARE-PLAN |
+| `m ∈ M` | candidate models (2–4 total). E0 fixes them: Qwen3-32B bf16 as the only split candidate; weight-quantised edge models (Qwen3-8B/14B/32B-AWQ, whichever fit the edge memory class); one large REMOTE model. Each model is an action in **both thinking and non-thinking mode** (E0 §3.1 amendment; `evidence/e0_r_prior.md`) | E0 §1, §3.1; HARDWARE-PLAN |
 | `a = (m, p, d)`, `p ∈ {EDGE, SPLIT, REMOTE}` | action. SPLIT is in `A` **iff E0 passes**; d is fixed per model offline | E0 |
 | `c ∈ {open, no-raw-text, local-only}` | privacy class of the request (from application metadata or task, not inferred per query) | declared |
 | `A(c, R)` | admissible actions: `local-only` → EDGE; `no-raw-text` → EDGE ∪ SPLIT(d ≥ d_min); `open` → all. Only models resident in `R` may use EDGE/SPLIT | declared + `R` |

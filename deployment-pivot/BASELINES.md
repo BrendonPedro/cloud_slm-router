@@ -28,7 +28,7 @@ Quality and token counts are cached LLMRouterBench data. Throughputs are the sam
 - **H-joint is therefore judged against `B*`, the per-cell maximum over the whole
   baseline family** (§3). This tightens PROBLEM-FORMULATION's "strongest decomposed
   baseline".
-  - The pre-hardware estimate of `F3 − B*` on EDGE/REMOTE is **+0.0 to +1.7 pt**. That
+  - The pre-hardware estimate of `F3 − B*` on EDGE/REMOTE is **−0.8 to +0.0 pt** (§5 table; F3 is within ±1.7 pt of `B-route`). That
     misses the 3.0 pt margin, so **H-joint is expected to fail without SPLIT or a
     privacy class**. This is stated in advance.
 - **The quantised-edge baseline is mandatory** (`B-Q`, §2). Without it, any SPLIT result
