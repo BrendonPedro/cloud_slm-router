@@ -234,6 +234,11 @@ def main():
               "acc_at_budget_ktok": budgets, "heldout_R2": pred_r2, "fold_meta": fmeta,
               "posthoc_routers": POSTHOC}
     (OUT / "e2_results.json").write_text(json.dumps(report, indent=1, default=float))
+    # output-only addition (post-hoc, after the first complete run): per-query choices
+    # for every router and lambda, so paired contrasts (e.g. R4 - R6) can be computed
+    # without re-fitting. Does not affect any number above.
+    np.savez_compressed(OUT / "e2_choices.npz", lambdas=np.array(LAMBDAS), fold=fold,
+                        **{r: choice[r].astype(np.int8) for r in routers})
     print(f"\nband lambdas: {report['band_lambdas']} (cheapest {cheapest:.3f}k, best-single {best_single_tok:.3f}k)")
     print(f"mean band dU: {mean_band}")
     print(f"R* = {rstar}; pass lambdas = {report['pass_lambdas']}; VERDICT = {verdict}")

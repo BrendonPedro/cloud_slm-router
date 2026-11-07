@@ -1,0 +1,22 @@
+fold 0: G_gte_ridge=0.9939 L_tfidf_svm=0.9939 O_oracle_task=1.0000
+fold 1: G_gte_ridge=0.9978 L_tfidf_svm=0.9956 O_oracle_task=1.0000
+fold 2: G_gte_ridge=0.9969 L_tfidf_svm=0.9965 O_oracle_task=1.0000
+fold 3: G_gte_ridge=0.9983 L_tfidf_svm=0.9965 O_oracle_task=1.0000
+fold 4: G_gte_ridge=0.9965 L_tfidf_svm=0.9965 O_oracle_task=1.0000
+{"G_gte_ridge": 0.9966861428446847, "L_tfidf_svm": 0.9958140751722334, "O_oracle_task": 1.0}
+lam=0.000 U_G=0.7067 U_L=0.7065 U_O=0.7065 L-G=-0.02 [-0.07,+0.03]
+lam=0.002 U_G=0.6996 U_L=0.6997 U_O=0.6997 L-G=+0.00 [-0.05,+0.06]
+lam=0.005 U_G=0.6883 U_L=0.6884 U_O=0.6884 L-G=+0.01 [-0.04,+0.07]
+lam=0.010 U_G=0.6686 U_L=0.6688 U_O=0.6687 L-G=+0.02 [-0.05,+0.09]
+lam=0.020 U_G=0.6371 U_L=0.6374 U_O=0.6370 L-G=+0.03 [-0.02,+0.09]
+lam=0.030 U_G=0.6069 U_L=0.6074 U_O=0.6070 L-G=+0.04 [-0.01,+0.10]
+lam=0.050 U_G=0.5732 U_L=0.5734 U_O=0.5733 L-G=+0.02 [-0.05,+0.10]
+lam=0.075 U_G=0.5551 U_L=0.5552 U_O=0.5556 L-G=+0.01 [-0.10,+0.12]
+lam=0.100 U_G=0.5367 U_L=0.5363 U_O=0.5374 L-G=-0.04 [-0.17,+0.10]
+lam=0.150 U_G=0.5078 U_L=0.5069 U_O=0.5078 L-G=-0.09 [-0.22,+0.01]
+lam=0.200 U_G=0.4834 U_L=0.4826 U_O=0.4832 L-G=-0.08 [-0.18,+0.02]
+lam=0.300 U_G=0.4544 U_L=0.4530 U_O=0.4539 L-G=-0.14 [-0.28,-0.01]
+lam=0.500 U_G=0.4059 U_L=0.4063 U_O=0.4060 L-G=+0.04 [+0.01,+0.07]
+L ms/query (featurise+predict, CPU): 5.105
+top confusions: [('aime->math500', 33), ('mmlupro->medqa', 12), ('math500->aime', 2), ('mathbench->medqa', 1)]
+VERDICT = SUFFICIENT
