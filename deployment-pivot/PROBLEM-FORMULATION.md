@@ -242,12 +242,16 @@ The action set is ≤ 6 and the table has ≤ |T| × 3 × 6–18 cells, so the o
   output-equivalent, and in some measured (RTT, κ) regime it beats the better of
   EDGE-best-resident and REMOTE on on-time utility or on p95 at equal utility.
 - **H-joint.** For at least one non-trivial state (contended or `no-raw-text`; *not*
-  plain outage), joint + live on-time utility beats the **strongest decomposed
-  baseline** (BASELINES.md) by **≥ 3.0 pt** with a paired-bootstrap 95% CI > 0, on
-  measured profiles.
-  - Pre-hardware estimate for EDGE/REMOTE only: +0.0 to +2.7 pt (§1.1). This is
-    **expected to fail without SPLIT or a privacy constraint**, which is stated in
-    advance.
+  plain outage), joint + live on-time utility beats **`B*`, the per-cell best of the
+  whole baseline family** (BASELINES.md §3), by **≥ 3.0 pt** with a paired-bootstrap
+  95% CI > 0, cross-fitted, on measured profiles.
+  - *Tightened in BASELINES.md:* the "strongest decomposed baseline" used in §1.1 is
+    weaker than a live router over fixed deployments (`B-route`, the ECO-LLM-style design).
+    `B-route` ties F3 under contention.
+  - Pre-hardware estimate for EDGE/REMOTE only: +0.0 to +2.7 pt against the decomposed
+    baseline (§1.1, in-sample), but **−0.8 to +0.0 pt against `B*`** (cross-fitted,
+    `evidence/baseline_crossfit_check.md`). This is **expected to fail without SPLIT or a
+    privacy constraint**, which is stated in advance.
 - **H-state.** Live state changes `π*` for ≥ 20% of (task, class) cells between the
   good and contended buckets. Otherwise a static table suffices, and the formulation
   is F1, which is prior art.
@@ -279,7 +283,7 @@ analysis paper.
 
 | Name | Value | Used by |
 |---|---|---|
-| H-joint margin | ≥ 3.0 pt on-time utility vs strongest decomposed baseline, 95% CI > 0, in ≥ 1 non-outage state | GO-NOGO, BASELINES |
+| H-joint margin | ≥ 3.0 pt cross-fitted on-time utility vs `B*` (per-cell best baseline, BASELINES.md §3), 95% CI > 0, in ≥ 1 non-outage cell | GO-NOGO, BASELINES |
 | H-state threshold | `π*` changes in ≥ 20% of cells between good and contended | GO-NOGO |
 | Deadlines | {30, 60, 120, 300, 600} s per query | all |
 | State buckets | κ ∈ {1, 2, 4}; up ∈ {0, 1}; ρ buckets only with SPLIT | all |
