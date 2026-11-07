@@ -115,10 +115,11 @@ def route_fold(Xtr, Xte, Str, ytr_task, models_idx):
 def main():
     df, S, T, models = load_pool()
     assert len(df) == 11467 and S.shape == (11467, 20)
-    cache = cv.load_embedding_cache(cv.GTE_CACHE, cv.GTE_MODEL)
-    X = cv.embedding_matrix(df["query"].tolist(), cache)
-    X = X / np.linalg.norm(X, axis=1, keepdims=True)
-    del cache
+    # Pre-dumped by ../dump_gte.py (same GTE cache, same seed-42 row order, L2-normalised).
+    import hashlib
+    meta = json.loads((HERE.parent / "cache" / "gte_pool_meta.json").read_text())
+    assert meta["query_sha256"] == hashlib.sha256("\n".join(df["query"]).encode()).hexdigest()
+    X = np.load(HERE.parent / "cache" / "gte_pool.npy").astype(np.float64)
     task = df["dataset"].to_numpy()
     fold = df["fold"].to_numpy()
 
