@@ -197,7 +197,7 @@ correlation between length and correctness (PROBLEM-FORMULATION §3.4).
 | Endpoint | Requirement | Candidates (verify in HARDWARE-PLAN) |
 |---|---|---|
 | Edge | 1 NVIDIA GPU with ≥ 24 GB (Ampere or later, bf16); memory classes 12/16 GB **emulated** by capping (`torch.cuda.set_per_process_memory_fraction`, vLLM `gpu_memory_utilization`) | one RTX 3090 of the 2×3090 workstation (manuscript L202); the Asus machine if it has a suitable NVIDIA GPU (undocumented) |
-| Server | ≥ 80 GB GPU memory for 32B bf16 + KV (1×A100/H100-80GB or 2 GPUs); a second GPU for the Q1(c) in-host pipeline | DGX (undocumented; verify GPU type and count) |
+| Server | ≥ 80 GB GPU memory for 32B bf16 + KV (1×A100/H100-80GB or 2 GPUs); a second GPU for the Q1(c) in-host pipeline | DGX, only if it is A100/H100-class: a DGX Spark/GB10 (≈ 3 tok/s for 32B bf16) or a V100 DGX (no bf16) does not qualify (HARDWARE-PLAN §2.2) |
 | Link | wired LAN between the two; base RTT < 1 ms; `tc netem` on the edge egress plus an `ifb` ingress for RTT/BW control | — |
 
 **Emulation bias.** A capped RTX 3090 is faster and has more bandwidth than a real
