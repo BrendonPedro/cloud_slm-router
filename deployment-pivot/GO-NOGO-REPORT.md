@@ -328,7 +328,7 @@ In this order. Steps 2–5 fit in the first day.
 7. **Then re-run the EDGE/REMOTE baseline check with the measured profiles** (§9 row 4).
    It tells you whether anything other than SPLIT is still alive.
 8. **Write the split runtime only after steps 6–7 leave SPLIT alive.** The day-by-day
-   version of this, ordered by information gain, goes in `WEEK-EXECUTION-PLAN.md`.
+   version of this, ordered by information gain, is in `WEEK-EXECUTION-PLAN.md` (gates G0–G4).
 
 ---
 
@@ -345,3 +345,4 @@ In this order. Steps 2–5 fit in the first day.
 | Strong baselines | BASELINES §2–§3 (`B*`, `B-route`, `B-Q`, `B-MoS`) |
 | Falsification of the deployment thesis | §7–§8 above |
 | GO / MODIFY / ABANDON | **MODIFY** (top) |
+| Week plan ordered by information gain | `WEEK-EXECUTION-PLAN.md` §1 (ranking), §2 (gates) |

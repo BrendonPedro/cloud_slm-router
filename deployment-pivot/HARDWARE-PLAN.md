@@ -235,7 +235,7 @@ the same shaped link.
 | 1 | S5 EDGE profiles, S6 F edge half, S3 edge floor | edge | 3.5 h | inventory |
 | 2 | Early-stop decision from S1 | — | minutes | S1 |
 | 2 | S2 Q1 reference + pipeline floor, S4 REMOTE profiles | server | 3 h | S1 done (frees GPUs) |
-| 3 | Split runtime coding (two-process HF + socket) | WSL/edge | ≈ 1 day | — (parallel with 1–2) |
+| 3 | Split runtime coding (two-process HF + socket) | WSL/edge | ≈ 1 day | early-stop decision leaves SPLIT alive (GO-NOGO §10 step 8; WEEK-EXECUTION-PLAN G1) |
 | 4 | J1 Q1/Q2 | both | 2 h | runtime, S2 |
 | 5 | J2 E0-L (full or the 6 core cells only) | both, exclusive | 1.5–4 h | J1 passes Q |
 | 6 | R computation (replay with measured profiles) | WSL | 1 h | S1, S4, S5, J2 |
