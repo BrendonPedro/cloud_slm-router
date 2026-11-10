@@ -1,0 +1,430 @@
+% Advisor-review revision (major restructuring)
+% Date: 2026-10-08
+% Current method source: methods-v3
+% Derived from paper/main_revised_2026-10-07.tex (which remains unchanged); original main.tex remains unchanged
+% ---------------------------------------------------------------------------
+% Responds to advisor feedback of 2026-10-07: 10-page conference structure
+% (references included), compact Figure 1, 3 displayed equations, KD removed
+% from the core method, designed results tables with TBD entries.
+% Blue = newly written or materially revised material for review.
+% ---------------------------------------------------------------------------
+\documentclass[lettersize,journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{cite}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+
+\begin{document}
+
+\title{{\color{blue}Model-Utility Routing for Edge, Split, and Remote LLM Inference}}
+
+\author{Brendon Pedro, Sirapop Nuannimnoi, Panuwat Saetee, Hojjat Baghban, ~\IEEEmembership{Member,~IEEE,} \\ Karin Honda, and Ching-Yao Huang
+\thanks{This paper was produced by the IEEE Publication Technology Group. They are in Piscataway, NJ.}%
+\thanks{Manuscript received April 19, 2021; revised August 16, 2021.}}
+
+\markboth{IEEE Transactions on Engineering Management,~Vol.~14, No.~8, August~2021}%
+{Pedro \MakeLowercase{\textit{et al.}}: Model-Utility Routing for Edge, Split, and Remote LLM Inference}
+
+\IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
+
+\maketitle
+
+\begin{abstract}
+\color{blue}Serving large language models (LLMs) at the network edge offers three ways to answer a query: a small language model (SLM) on the device, split execution of a larger model across the device and a server, or remote execution on the server. No single option is best for every query, and the right choice depends both on what the query needs and on the current network and server conditions. We propose a router that separates these two questions. A compact encoder predicts, for each candidate \emph{model}, a calibrated utility $\hat U_\theta(M\mid q)$---the expected task score of model $M$ on query $q$---while a runtime layer prices the \emph{execution actions} Edge, Split at depth $d$, and Remote by their predicted end-to-end latency under live network and load measurements, and selects the best feasible action. Utility is attached to models rather than to actions because split depths of one model execute the same weights; they share that model's utility only if a split-equivalence test shows that split execution preserves task scores, and otherwise receive a correction. We describe the design and a pre-specified evaluation on a real edge--server testbed covering routing headroom, split equivalence, quality--latency trade-offs against fixed, content-blind and learned baselines, and behavior under changing network conditions. No experimental results are reported in this revision.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Large Language Models, Small Language Models, LLM-SLM collaboration, Collaborative Inference, Query Routing, Split Inference
+\end{IEEEkeywords}
+
+\section{Introduction}
+\IEEEPARstart{L}{arge} language models (LLMs) are increasingly served in edge--cloud settings in which a query can be answered by a small language model (SLM) on the device~\cite{slm1,slm2}, by a larger model running remotely, or by \emph{split} execution in which the first layers of a larger model run on the device and the remaining layers on a server~\cite{matsubara2022splitsurvey,Mai2023}. The three options differ sharply in cost: the edge model answers fastest and cheapest but fails on hard queries; remote execution is the most capable but pays for transferring the query and for server load; split execution keeps the raw query text and part of the computation on the device while transmitting intermediate activations, whose privacy is not guaranteed without additional mechanisms~\cite{Mai2023}, and its latency depends on the cut, the link and the server. Because easy and hard queries are mixed in real traffic, no fixed choice is best for every query, which motivates query-level routing~\cite{Ong2025,ding2024hybridllm,Song2025,Luo2026}.
+
+Existing routers largely decide between models in a datacenter~\cite{Ong2025,ding2024hybridllm,chen2024routerdc,ding2025bestroute}, while network-aware routers at the edge decide between a local and a remote model under a latency penalty~\cite{bao2025qualitylatency,chen2025netgptrouting,xue2026cr2}, and split-computing systems choose a partition point under measured bandwidth~\cite{kang2017neurosurgeon,laskaridis2020spinn,li2020edgent}. A router for the setting above must do all three at once: judge which model the query needs, and decide, under the current network state, whether that model should run on the device, split, or remotely.
+
+{\color{blue}\textbf{Proposed idea.} The proposed design factorizes semantic model selection from execution realization. The router predicts a query-conditioned utility $\hat U_\theta(M\mid q)$ for each underlying \emph{model} once, while a separate runtime layer chooses among the Edge, Split-depth and Remote \emph{realizations} using live execution cost. Two observations motivate this factorization. First, the question ``will model $M$ answer $q$ well?'' depends on the query and the model, not on where the model runs, so learning a separate semantic score for every split depth would estimate the same quantity several times and let estimation noise, rather than cost, pick the depth. Second, ``how long will action $a$ take now?'' depends on the network and server state, which changes faster than any training set, so it is better measured and predicted at decision time than learned into the router. The one place where the factorization could fail is split execution itself: if a split implementation changes outputs (through compression, numerical effects or early exit), the split depths of a model are not the same model. We therefore make the sharing of utility across depths conditional on a split-equivalence test (E0): depths share $\hat U_\theta(M\mid q)$ only when the test supports it, and otherwise receive a depth- or query-dependent correction.}
+
+The contributions of this paper are:
+{\color{blue}
+\begin{enumerate}
+    \item \textbf{A model/action factorization for edge--cloud routing.} Semantic utility is predicted at the level of candidate models by a compact encoder, while Edge, Split$(d)$ and Remote are priced as execution actions by a runtime latency estimator fed with offline profiles and live network and load state; the decision maximizes utility minus weighted latency over the feasible actions.
+    \item \textbf{E0-gated split utility sharing.} Split depths reuse the underlying model's utility only when an empirical equivalence test shows that split execution preserves task scores; otherwise a correction term is introduced, with a defined fallback hierarchy.
+    \item \textbf{A real-system evaluation.} We specify an evaluation on an edge--server testbed that measures routing headroom, split equivalence, quality--latency trade-offs against fixed, content-blind and learned routers, and behavior across bandwidth, round-trip time and server-load conditions.
+\end{enumerate}
+}
+Each component has precedents (Section~\ref{sec:bg-related}); the design is proposed as an integration whose value the experiments must establish, and we make no priority claim. Section~\ref{sec:problem} states the problem, Section~\ref{sec:proposed} the method, Section~\ref{sec:experiment} the experimental protocol, Section~\ref{sec:results} the designed results and analysis, and Section~\ref{sec:conclusion} concludes.
+
+\section{Related Work}
+\label{sec:bg-related}
+
+\textbf{Query-aware LLM routing.} Learned routers predict from the query which model to call. RouteLLM~\cite{Ong2025} trains binary strong-versus-weak routers on human pairwise preferences, augmented with pairwise labels from an LLM judge~\cite{zheng2023judging}; Hybrid LLM~\cite{ding2024hybridllm} and BEST-Route~\cite{ding2025bestroute} train encoder routers with per-model or per-action heads; RouterDC~\cite{chen2024routerdc} and IRT-Router~\cite{Song2025} learn model embeddings or ability--difficulty models for pools of many LLMs; HyDRA~\cite{garg2026hydra} fine-tunes a ModernBERT encoder~\cite{warner2025modernbert} with independent sigmoid heads that predict per-query capability requirements matched against static model profiles; RouteLMT~\cite{Luo2026} and the prefill-activation router of Varshney et al.~\cite{varshney2026prefill} read the small model's own hidden states; ICL-Router~\cite{Wang2026} and Arch-Router~\cite{Tran2025} route with in-context model representations or generated policy labels. Benchmarks such as LLMRouterBench~\cite{dataset} standardize datasets and pre-computed model outputs. These routers select a \emph{model}; where they run it is fixed.
+
+\textbf{Network- and cost-aware routing.} At the network edge, routers subtract a latency or communication penalty from predicted quality when deciding between a local and a remote model~\cite{bao2025qualitylatency,chen2025netgptrouting}, tune routing thresholds across device, edge and cloud tiers for latency~\cite{qiao2026consroute}, or distil a teacher router into an on-device gate~\cite{xue2026cr2}. Token-level and speculative schemes reduce the cost of collaboration itself~\cite{WZheng2025,CZheng2026,Xu2026}. These systems treat the remote option as a single action and do not include split execution.
+
+\textbf{Split computing and split-point selection.} Partitioning a neural network between device and server and choosing the cut under measured bandwidth and load is well studied~\cite{kang2017neurosurgeon,li2020edgent,laskaridis2020spinn,matsubara2022splitsurvey}, including learned split-point selection for LLMs under changing channel conditions~\cite{chen2025adaptivesplit,younesi2025splitwise} and noise-adding splits for privacy~\cite{Mai2023}. These works optimize the cut of one model; they do not decide whether a different model should answer.
+
+{\color{blue}\textbf{Positioning.} Compact encoder routers, network-aware penalties, split-point selection and router distillation therefore all exist. What this paper studies is their combination into one per-query decision over an edge model, split execution of a larger model at several depths, and remote execution, in which utility is predicted at the model level and the realization is chosen by a runtime-estimated, depth-aware latency model. Our literature search was bounded, and we do not claim the combination is new; its value is an empirical question that Section~\ref{sec:experiment} is designed to answer.}
+
+\section{Problem Formulation}
+\label{sec:problem}
+Let $\mathcal{M}=\{M_1,\dots,M_K\}$ be the candidate model specifications; a specification fixes the checkpoint, its quantization and data type, the prompt template and the decoding configuration. In the setting studied here $\mathcal{M}$ contains an edge SLM $M_E$ and a larger split-capable model $M_S$ (and, if the remote server runs a different strong model, that model as well). For a query $q\in\mathcal{Q}$, $U(M,q)\in[0,1]$ denotes the expected normalized task score of model $M$ on $q$ (for a binary metric, the probability that $M$ answers $q$ correctly), and $C(a,q)$ the cost of obtaining that answer through an execution action $a$. {\color{blue}The action set is
+$\mathcal{A}=\{\textsc{Edge},\ \textsc{Split}(d_1),\dots,\textsc{Split}(d_m),\ \textsc{Remote}\}$,
+where $\textsc{Split}(d)$ runs the first $d$ decoder layers of $M_S$ on the device and the remaining layers on the server. Every action executes exactly one model, written $M(a)$: $M(\textsc{Edge})=M_E$ and $M(\textsc{Split}(d))=M_S$ for every valid depth $d$, while $M(\textsc{Remote})$ is $M_S$ if the server runs the same specification or the strong model otherwise. The device observes a live system state $s$ (round-trip time to the server, uplink and downlink bandwidth, server queue and cold/warm status, free edge memory) before each decision.}
+
+The routing policy $R$ maps a query and the current state to an action, and the objective inherited from the original problem statement is the expected utility minus weighted cost,
+\begin{equation}
+    \max_{R}\ \mathbb{E}_{q\sim\mathcal{Q}}\big[\,U(M(R(q,s)),q)-\lambda\,C(R(q,s),q)\,\big],
+    \label{eq:objective}
+\end{equation}
+where $\lambda>0$ trades quality against cost. Because the objective is additive over queries, it is maximized by choosing the best action for each query separately once estimates of $U$ and $C$ are available. The router must run on the device with small overhead, must capture what the query needs, and must respect per-query latency, memory and data-policy constraints.
+
+\section{Proposed Method}
+\label{sec:proposed}
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/architecture-compact-2026-10-08.pdf}
+    {\color{blue}\caption{Model-utility routing. A compact encoder predicts one utility per candidate model, $\hat U_\theta(M\mid q)$ (blue, learned offline); a latency estimator turns live network and load state plus offline execution profiles into a latency per action, $\hat L(a\mid q,s)$ (orange, estimated at run time); the runtime optimizer selects one feasible action among Edge, Split$(d)$ and Remote. The offline split-equivalence test E0 decides whether split depths may share the model's utility.}\label{fig:architecture}}
+\end{figure*}
+
+\subsection{Overview}
+{\color{blue}Fig.~\ref{fig:architecture} shows the two paths that meet in the runtime optimizer. The \emph{semantic} path is learned offline and runs once per query: a compact bidirectional encoder maps $q$ to $K$ calibrated utility estimates, one per candidate model. The \emph{systems} path is not learned from query data: it combines execution profiles measured offline on the deployment hardware with the live state $s$ to predict the end-to-end latency of every action. The optimizer combines the two through the action-to-model map $M(a)$. The semantic router therefore never sees network state, and the latency estimator never sees query semantics beyond the prompt and expected output length; each part can be validated, re-profiled or replaced on its own.}
+
+\subsection{Model Utility}
+\label{sec:utility}
+The router is a compact bidirectional encoder $E_\theta$ with mean pooling and one sigmoid head per candidate model,
+\begin{equation}
+    f_\theta(q,M_k)\;:=\;\hat U_\theta(M_k\mid q)\;=\;\sigma\!\big(w_k^{\top}\,h_\theta(q)+b_k\big),
+    \label{eq:ftheta}
+\end{equation}
+for $k=1,\dots,K$, where $h_\theta(q)=\mathrm{pool}(E_\theta(q))$ is the mean-pooled encoder output, $w_k,b_k$ are the parameters of head $k$ and $\sigma$ is the logistic function. The heads are independent sigmoids rather than a softmax because the events ``$M_k$ answers $q$ correctly'' are not mutually exclusive: several models may all succeed or all fail, and the decision rule needs each model's expected score, not a distribution over models. Training labels are observed outcomes: every specification in $\mathcal{M}$ is run on the training queries and scored with the benchmark's own grader, giving $y_i(M)\in[0,1]$ (a single run, or the mean of $k$ sampled runs). Each head is trained with binary cross-entropy against these targets, which is a proper scoring rule for the expected score, and is then calibrated per model with Platt or temperature scaling~\cite{guo2017calibration} on a held-out split, so that $\hat U_\theta(M\mid q)$ can be compared with a latency term in Eq.~\eqref{eq:route} on a common scale. Utility depends on the query and the model only; it does not depend on network state, cost or $\lambda$. The encoder is a replaceable component chosen by engineering criteria (validation utility within a tolerance of the best candidate, lowest measured edge latency); the first implementation candidate is a ModernBERT-class encoder~\cite{warner2025modernbert}, with smaller encoders as alternatives. Adding a model to the pool requires outcome labels for that model and training of its head; adding a split depth of an existing model requires only the test of Section~\ref{sec:split} and a cost profile.
+
+\subsection{Runtime Action Selection}
+\label{sec:cost}
+At decision time the device reads the state $s$ and predicts the end-to-end latency of every action, $\hat L(a\mid q,s)$, as the sum of a time-to-first-token term and $(N-1)$ time-per-output-token terms, where $N$ is the expected output length (the per-model median on a profiling split). The compute parts of both terms come from offline profiles of each action on the deployment hardware; the communication parts are computed from the measured state: the transfer of the query or of the activation tensor at the cut (its size divided by the measured uplink bandwidth) and the round trips required per decoding step, plus the server's queueing and cold-start delays. Latency is the only priced cost in this first implementation; transferred bytes, energy, memory and monetary cost will be measured and reported separately rather than folded into one scalar with arbitrary weights. The controller then chooses
+\begin{equation}
+    a^{\star}=\operatorname*{arg\,max}_{a\in\mathcal{F}(q,s)}\Big[\hat U_\theta\big(M(a)\mid q\big)-\hat\Delta(a,q)-\lambda\,\hat L(a\mid q,s)\Big],
+    \label{eq:route}
+\end{equation}
+where $\hat\Delta(a,q)\ge 0$ is a split-quality correction that is identically zero unless the equivalence test of Section~\ref{sec:split} fails, and the feasible set $\mathcal{F}(q,s)\subseteq\mathcal{A}$ contains the actions whose predicted latency is within the per-query limit $L_{\mathrm{SLA}}$, whose edge memory requirement fits the free memory in $s$, and which the deployment's data policy permits (for example, a policy that forbids sending raw query text to the server removes \textsc{Remote}). If $\mathcal{F}(q,s)$ is empty, the controller runs \textsc{Edge} when it fits in memory and logs the violation. Eq.~\eqref{eq:route} is the per-query maximizer of Eq.~\eqref{eq:objective} with $U$ and $C$ replaced by their estimates; $\lambda$ has the unit of normalized score per second, is swept to trace quality--latency frontiers, and for headline results is fixed on validation data to meet a stated mean-latency or remote-call budget. Because network state enters only through $\hat L$, the router reacts to bandwidth and round-trip changes at the next query without any change to $\theta$; a router that took $s$ as an input is included as a baseline so that this design choice is tested rather than assumed.
+
+Two systems facts shape when split execution can win. For a standard dense decoder the tensor at the cut has size proportional to the number of prompt tokens and the hidden size, independent of the depth $d$, so depth moves compute between device and server rather than changing bytes; and under a pipeline split in which the server samples tokens, every decoding step costs a round trip. {\color{blue}When remote execution of the same model is available and the server is faster than the device, a latency-only cost will therefore rarely select $\textsc{Split}(d)$; split execution may become useful or selectable when direct remote execution is disallowed by the data policy or when a server-compute constraint applies, but neither condition guarantees that it is selected. How often each action is chosen under each condition is itself a reported result (Section~\ref{sec:results}).}
+
+\subsection{Split Equivalence}
+\label{sec:split}
+{\color{blue}Eq.~\eqref{eq:route} evaluates every split depth with the same utility $\hat U_\theta(M_S\mid q)$. This is a parameter-tying assumption, not a fact: exact tensor transfer does not guarantee identical outputs, because floating-point reductions depend on batch size and hardware and can change greedy outputs~\cite{yuan2025nondeterminism,he2025nondeterminism}, while quantizing or compressing the transmitted activations~\cite{laskaridis2020spinn}, adding noise to them~\cite{Mai2023} or exiting early~\cite{schuster2022calm} makes split execution approximate by design. Before the router is trained, we therefore run a \emph{split-equivalence test} (E0) for every valid depth and numerical configuration of the actual split implementation: on a fixed query set, the per-query task scores of $\textsc{Split}(d)$ are compared with those of unsplit execution of the same specification, against the unsplit model's own run-to-run variation, using a paired agreement rate and an equivalence test on the mean score difference with margins fixed before the test. Three outcomes follow. \emph{Equivalent:} the depth shares $\hat U_\theta(M_S\mid q)$ and reuses unsplit labels, $\hat\Delta\equiv 0$, and Eq.~\eqref{eq:route} reduces to choosing a model by utility and then its cheapest realization by latency. \emph{Uniform loss:} a per-depth constant $\hat\Delta(d)$, estimated on held-out queries, is subtracted. \emph{Query-dependent loss:} a small correction model $\hat\Delta(d,q)$ is trained on split-run labels at the failing depths, and only if that is insufficient does the depth receive its own utility head. An execution path that changes the computation itself (for example early exit) is treated as a different model specification with its own head and labels. The verdict is per configuration and depth and is never extrapolated.}
+
+\subsection{Training and Inference Summary}
+Offline, (i)~E0 is run for every valid depth and the branch of Section~\ref{sec:split} is set; (ii)~every model specification is run on the training queries and scored, with split labels taken from unsplit runs at depths that passed E0; (iii)~the encoder and its $K$ heads are trained with binary cross-entropy and tuned on the validation split with label smoothing, weight decay and early stopping in the search space; (iv)~each head is calibrated on the calibration split; and (v)~the compute terms of $\hat L$ are profiled for every action on the deployment hardware. Online, each query costs one encoder pass, a read of $s$, the evaluation of $\hat L$ for every action and the maximization of Eq.~\eqref{eq:route}; ties are broken toward lower server compute and then fewer transferred bytes, and $\hat U_\theta$, $\hat L$, $s$, the selected action and the measured latencies are logged for the analysis of Section~\ref{sec:results}.
+
+\section{Experimental Setup}
+\label{sec:experiment}
+No experiment for the proposed router has been run; this section specifies the planned protocol.
+
+\subsection{Testbed and Models}
+We plan an edge--server testbed representing an edge--cloud continuum. The original draft specified the edge machine as a server with an Intel Xeon W-2123 processor, 64\,GB of memory and two NVIDIA GeForce RTX 3090 GPUs; this configuration, the server configuration, and the split implementation details on which the latency model depends (valid depths, activation data type and compression at the cut, per-token communication pattern, network emulation) are pending confirmation and are not assumed. {\color{blue}The initial edge model and split-capable model will be selected after a routing-headroom pilot; the final checkpoints and numerical configurations will be reported in the completed paper. For each selected model the quantization configuration will be fixed and reported as part of the model specification.}
+
+\subsection{Datasets and Labels}
+SimpleQA~\cite{sqa} is the initial planned benchmark and LLMRouterBench~\cite{dataset} provides the evaluation pipeline and grader; because LLMRouterBench stores SimpleQA outcomes only for flagship API models, routing labels for the selected edge and split models will be generated by new inference runs, with the grader's correct/incorrect/not-attempted grades mapped to $\{0,1\}$. Because SimpleQA may provide limited routing headroom for the selected edge model, whether it is used alone or alongside a dataset with edge headroom (for example MMLU-Pro, BBH or MATH500) remains open until the pilot has been run. Splits for training, calibration, validation and test are fixed before any training.
+
+\subsection{Baselines}
+Table~\ref{tab:baselines} lists the comparison set. Binary baselines decide between $M_E$ and $M_S$; the shared cost step of Section~\ref{sec:cost} then chooses the realization, so every method is evaluated on the same action set. ICL-Router's 7B router and 8B embedding model are far larger than the proposed encoder, so its edge cost is reported with its accuracy; Arch-Router generates a policy label and has no head to fine-tune, so it is run zero-shot as a reference. {\color{blue}An optional distillation ablation will test whether a larger teacher router improves the compact router over the same tuned and calibrated non-distilled student; the proposed method does not depend on it.}
+
+\begin{table}[t]
+\centering
+\caption{Baselines and controls. \textcolor{blue}{All are evaluated on the same action set and cost step as the proposed router.}}
+\label{tab:baselines}
+\footnotesize
+\begin{tabular}{@{}p{1.45cm}p{3.75cm}p{2.5cm}@{}}
+\toprule
+Group & Method & Controls for \\
+\midrule
+Fixed & Always Edge / Split$(d)$ / Remote & value of any routing \\
+Content-blind & Random; dataset prior & query-agnostic policies \\
+Lexical & TF-IDF + logistic regression & need for an encoder \\
+Learned (query) & RouteLLM-style binary router~\cite{Ong2025} & preference-trained router \\
+Learned (hidden) & RouteLMT-style gain regression~\cite{Luo2026}; prefill-activation router~\cite{varshney2026prefill} & self-routing from $M_E$ states \\
+Reference & ICL-Router~\cite{Wang2026}; Arch-Router, zero-shot~\cite{Tran2025} & large / generative routers \\
+Network-aware & Bao-style and NetGPT-style rules~\cite{bao2025qualitylatency,chen2025netgptrouting} & quality minus latency penalty \\
+Integrated & Router with state $s$ as input & utility/cost separation \\
+Oracles & Oracle utility; oracle cost & upper bounds \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Metrics}
+Quality is the per-dataset mean task score (macro-averaged across datasets). Latency is end-to-end per query (time-to-first-token plus decoding), reported as p50 and p95, together with SLA-violation rate; throughput (requests and tokens per second), transferred bytes, device and server memory, router overhead (p50/p95 on the edge device) and, where a rented-GPU or serverless deployment is used, monetary cost per request are reported as secondary metrics. Calibration of $\hat U_\theta$ is reported with Brier score and expected calibration error. Differences are reported with paired bootstrap confidence intervals over queries and over at least five training seeds.
+
+\subsection{Experiment Plan}
+{\color{blue}
+\begin{enumerate}
+    \item \textbf{Routing headroom.} On about 500 stratified queries per dataset, every candidate model is run and scored to measure the oracle gain over the best single model and the fraction of queries the edge model answers as well as the larger model. This decides the first pool and the dataset list.
+    \item \textbf{Split equivalence (E0).} For every valid depth and configuration of the actual split implementation, split and unsplit execution are compared as in Section~\ref{sec:split}; the verdict decides whether depths share utility.
+    \item \textbf{Main routing comparison.} The proposed router is compared with Table~\ref{tab:baselines} on quality--latency frontiers obtained by sweeping $\lambda$, and at operating points fixed on validation data, in an \emph{open} regime (all actions allowed) and a \emph{raw-query-constrained} regime (data policy masks \textsc{Remote}).
+    \item \textbf{Real-system evaluation.} With $\theta$ and $\lambda$ fixed, bandwidth, round-trip time and server load are varied with network emulation and a load generator; decisions, latencies, action frequencies and regret against oracle-cost frontiers are recorded, together with two checks: whether transferred bytes depend on the split depth, and whether a latency-only cost ever selects split execution when remote execution of the same model is available.
+\end{enumerate}
+}
+
+\section{Results and Analysis}
+\label{sec:results}
+{\color{blue}\textit{[Advisor-review draft: the tables and the figure below are designed in advance; all values are to be determined (---) and will be filled from the experiments of Section~\ref{sec:experiment}. No number in this section is a result.]}}
+
+\begin{table*}[!t]
+\centering
+\caption{Main routing results (planned). Task score is the macro-averaged normalized score; latencies are end-to-end per query; SLA violations are the fraction of queries exceeding $L_{\mathrm{SLA}}$; the last three columns give the action distribution. Reported per regime (open / raw-query-constrained) with 95\% confidence intervals. \textcolor{blue}{All entries TBD.}}
+\label{tab:main}
+\footnotesize
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Method & Score $\uparrow$ & p50 lat.\ (s) $\downarrow$ & p95 lat.\ (s) $\downarrow$ & SLA viol.\ (\%) $\downarrow$ & Edge (\%) & Split (\%) & Remote (\%) \\
+\midrule
+Always Edge & --- & --- & --- & --- & 100 & 0 & 0 \\
+Always Remote & --- & --- & --- & --- & 0 & 0 & 100 \\
+Best content-blind baseline & --- & --- & --- & --- & --- & --- & --- \\
+Best learned routing baseline & --- & --- & --- & --- & --- & --- & --- \\
+Network-aware binary rule & --- & --- & --- & --- & --- & --- & --- \\
+Proposed (model-utility routing) & --- & --- & --- & --- & --- & --- & --- \\
+Oracle utility (upper bound) & --- & --- & --- & --- & --- & --- & --- \\
+\midrule
+Router overhead on device, p50 / p95 (ms) & \multicolumn{7}{c}{--- / ---} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{figure}[t]
+\centering
+\fbox{\parbox[c][0.19\textheight][c]{0.9\columnwidth}{\centering\color{blue}\textit{Placeholder: quality--latency frontier.}\\[4pt] Mean task score versus end-to-end latency (p50 and p95) obtained by sweeping $\lambda$ for the proposed router, with the fixed, content-blind, learned and network-aware baselines as points or curves; one panel per regime. To be inserted after Experiment~3.}}
+{\color{blue}\caption{Quality--latency frontier (placeholder). The frontier will show whether model-utility routing dominates fixed and baseline routing at matched latency.}}
+\label{fig:frontier}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\caption{Split equivalence and system behavior per valid depth (planned). Score difference is the mean paired difference between $\textsc{Split}(d)$ and unsplit execution of $M_S$ with its confidence interval; ``equivalent'' follows the E0 rule of Section~\ref{sec:split}. \textcolor{blue}{Depth labels are placeholders until the split implementation is confirmed.}}
+\label{tab:split}
+\footnotesize
+\setlength{\tabcolsep}{4pt}\begin{tabular}{@{}lccccc@{}}
+\toprule
+Depth & $\Delta$ score & Equiv. & TTFT (s) & TPOT (ms) & kB \\
+\midrule
+Unsplit $M_S$ (ref.) & 0 & --- & --- & --- & --- \\
+Valid depth 1 & --- & --- & --- & --- & --- \\
+Valid depth 2 & --- & --- & --- & --- & --- \\
+Valid depth 3 & --- & --- & --- & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Does query-aware routing improve the quality--latency trade-off?}
+{\color{blue}\textit{[To be written from Table~\ref{tab:main} and Fig.~\ref{fig:frontier}.]} The analysis will state (i)~the measured routing headroom (oracle gain over the best single model) that bounds what any router can achieve; (ii)~whether the proposed router's frontier dominates the fixed, content-blind and lexical baselines at the fixed operating points, with the paired confidence intervals; (iii)~how it compares with the learned routing baselines and the network-aware binary rules at matched latency; and (iv)~the router's own overhead on the device. A negative outcome at any step is reported as such.}
+
+\subsection{When is split execution useful?}
+{\color{blue}\textit{[To be written from Table~\ref{tab:split} and the action frequencies of Table~\ref{tab:main}.]} The analysis will report the E0 verdict per depth and which branch of Section~\ref{sec:split} was used; whether transferred bytes depended on depth; the measured TPOT of split execution relative to the round-trip time; and how often $\textsc{Split}(d)$ was selected in the open and raw-query-constrained regimes across the bandwidth, round-trip-time and server-load grid. If split execution is rarely chosen in the open regime, the cause (per-token round trips, a faster server) is stated and the case for split execution rests on the constrained regime.}
+
+\subsection{Ablation and limitations}
+{\color{blue}\textit{[To be written.]} This subsection will compare model-level utility with the action-level alternative (one head per depth) if E0 permits both to be trained; report the integrated state-input router against the separated design on in-range and held-out network conditions; report the optional distillation ablation only if it was run; and discuss failure cases, in particular queries on which the calibrated utility is confidently wrong and conditions under which the latency estimator's error changes the decision (its accuracy is measured separately against observed latencies).}
+
+\section{Conclusion and Limitations}
+\label{sec:conclusion}
+{\color{blue}This revision specifies a router for edge--cloud LLM serving whose central idea is to predict utility at the level of candidate models and to price Edge, Split$(d)$ and Remote as execution actions with runtime-estimated latency, with split depths sharing a model's utility only when a split-equivalence test supports it. The conclusion will be completed after the planned experiments and will state only what their results support.} The design has clear limitations. The router is trained once on a fixed model pool; adding a model requires outcome labels and a new head, and updating a deployed router under model or domain change is left to future work. Sharing utility across depths is valid only where E0 passes, and the lossy branches need depth-specific labels. The latency model is analytic, and decisions are only as good as the calibration of $\hat U_\theta$ and the accuracy of $\hat L$. A raw-query-constrained regime is a data-policy condition, not a privacy guarantee for transmitted activations. Several of the closest related routers are preprints, and our literature search was bounded, so no priority is claimed.
+
+\begin{thebibliography}{99}
+\providecommand{\url}[1]{#1}
+\csname url@samestyle\endcsname
+\providecommand{\newblock}{\relax}
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\BIBentrySTDinterwordspacing}{\spaceskip=0pt\relax}
+\providecommand{\BIBentryALTinterwordstretchfactor}{4}
+\providecommand{\BIBentryALTinterwordspacing}{\spaceskip=\fontdimen2\font plus
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
+  \fontdimen4\font\relax}
+\providecommand{\BIBforeignlanguage}[2]{{%
+\expandafter\ifx\csname l@#1\endcsname\relax
+\typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
+\typeout{** loaded for the language `#1'. Using the pattern for}%
+\typeout{** the default language instead.}%
+\else
+\language=\csname l@#1\endcsname
+\fi
+#2}}
+\providecommand{\BIBdecl}{\relax}
+\BIBdecl
+
+\bibitem{slm1}
+A. Patra, S. Kundu, A. Dey, T. Saha, S. Karmakar and S. K. Bishnu, "A Survey on On-Device Small Language Models: Architectures, Compression, Applications, and Open Challenges," 2026 9th International Conference on Electronics, Materials Engineering \& Nano-Technology (IEMENTech), Kolkata, India, 2026, pp. 1-6, doi: 10.1109/IEMENTech202669403.2026.11434122.
+
+\bibitem{slm2}
+F. Wang et al., "A Survey on Small Language Models in the Era of Large Language Models: Architecture, Capabilities, and Trustworthiness", in Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2, Toronto ON, Canada, 2025, pp. 6173–6183.
+
+\bibitem{matsubara2022splitsurvey}
+Y.~Matsubara, M.~Levorato, and F.~Restuccia, ``Split computing and early
+  exiting for deep learning applications: Survey and research challenges,''
+  \emph{ACM Computing Surveys}, vol.~55, no.~5, pp. 1--30, 2022.
+
+\bibitem{Mai2023}
+P. Mai, R. Yan, Z. Huang, Y. Yang, and Y. Pang, "Split-and-Denoise: Protect large language model inference with local differential privacy", arXiv preprint arXiv:2310. 09130, 2023.
+
+\bibitem{Ong2025}
+I. Ong et al., "RouteLLM: Learning to Route LLMs from Preference Data", in International Conference on Learning Representations, 2025, vol. 2025, pp. 34433–34448.
+
+\bibitem{ding2024hybridllm}
+D.~Ding, A.~Mallick, C.~Wang, R.~Sim, S.~Mukherjee, V.~R{\"u}hle, L.~V.~S.
+  Lakshmanan, and A.~H. Awadallah, ``Hybrid {LLM}: Cost-efficient and
+  quality-aware query routing,'' in \emph{International Conference on Learning
+  Representations (ICLR)}, 2024, pp. 41\,348--41\,366.
+
+\bibitem{Song2025}
+W. Song et al., "IRT‑Router: Effective and Interpretable Multi‑LLM Routing via Item Response Theory", in Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), 2025, pp. 15629–15644.
+
+\bibitem{Luo2026}
+Y. Luo et al., "RouteLMT: Learned Sample Routing for Hybrid LLM Translation Deployment", 2026.
+
+\bibitem{chen2024routerdc}
+S.~Chen, W.~Jiang, B.~Lin, J.~T. Kwok, and Y.~Zhang, ``{RouterDC}: Query-based
+  router by dual contrastive learning for assembling large language models,''
+  in \emph{Advances in Neural Information Processing Systems 37 (NeurIPS
+  2024)}, 2024, pp. 66\,305--66\,328.
+
+\bibitem{ding2025bestroute}
+D.~Ding, A.~Mallick, S.~Zhang, C.~Wang, D.~Madrigal, M.~D.~C. Hipolito~Garcia,
+  M.~Xia, L.~V.~S. Lakshmanan, Q.~Wu, and V.~R{\"u}hle, ``{BEST-Route}:
+  Adaptive {LLM} routing with test-time optimal compute,'' in \emph{Proceedings
+  of the 42nd International Conference on Machine Learning (ICML)}, ser.
+  Proceedings of Machine Learning Research, vol. 267.\hskip 1em plus 0.5em
+  minus 0.4em\relax PMLR, 2025, pp. 13\,870--13\,884.
+
+\bibitem{bao2025qualitylatency}
+R.~Bao, N.~Xue, Y.~Sun, and Z.~Chen, ``Dynamic quality-latency aware routing
+  for {LLM} inference in wireless edge-device networks,'' in \emph{2025
+  IEEE/CIC International Conference on Communications in China (ICCC
+  Workshops)}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2025, pp. 1--6.
+
+\bibitem{chen2025netgptrouting}
+Y.~Chen, R.~Li, X.~Chen, C.~Wu, C.~Peng, Z.~Zhao, and H.~Zhang, ``Optimizing
+  {NetGPT} via routing-based synergy and reinforcement learning,'' 2025, arXiv
+  preprint arXiv:2511.22217.
+
+\bibitem{xue2026cr2}
+N.~Xue, S.~Chen, Z.~Chen, J.~Yao, Y.~Sun, Z.~Hu, and M.~Tao, ``{CR}$^2$:
+  Cost-aware risk-controlled routing for wireless device-edge {LLM}
+  inference,'' 2026, arXiv preprint arXiv:2605.12001.
+
+\bibitem{kang2017neurosurgeon}
+Y.~Kang, J.~Hauswald, C.~Gao, A.~Rovinski, T.~Mudge, J.~Mars, and L.~Tang,
+  ``Neurosurgeon: Collaborative intelligence between the cloud and mobile
+  edge,'' in \emph{Proceedings of the Twenty-Second International Conference on
+  Architectural Support for Programming Languages and Operating Systems
+  (ASPLOS)}.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 2017, pp. 615--629.
+
+\bibitem{laskaridis2020spinn}
+S.~Laskaridis, S.~I. Venieris, M.~Almeida, I.~Leontiadis, and N.~D. Lane,
+  ``{SPINN}: Synergistic progressive inference of neural networks over device
+  and cloud,'' in \emph{Proceedings of the 26th Annual International Conference
+  on Mobile Computing and Networking (MobiCom)}.\hskip 1em plus 0.5em minus
+  0.4em\relax ACM, 2020, pp. 1--15.
+
+\bibitem{li2020edgent}
+E.~Li, L.~Zeng, Z.~Zhou, and X.~Chen, ``Edge {AI}: On-demand accelerating deep
+  neural network inference via edge computing,'' \emph{IEEE Transactions on
+  Wireless Communications}, vol.~19, no.~1, pp. 447--457, 2020.
+
+\bibitem{zheng2023judging}
+L.~Zheng, W.-L. Chiang, Y.~Sheng, S.~Zhuang, Z.~Wu, Y.~Zhuang, Z.~Lin, Z.~Li,
+  D.~Li, E.~P. Xing, H.~Zhang, J.~E. Gonzalez, and I.~Stoica, ``Judging
+  {LLM}-as-a-judge with {MT-Bench} and {Chatbot Arena},'' in \emph{Advances in
+  Neural Information Processing Systems 36 (NeurIPS 2023), Datasets and
+  Benchmarks Track}, 2023, pp. 46\,595--46\,623.
+
+\bibitem{garg2026hydra}
+A.~Garg, S.~Singha~Roy, J.~Jang, F.~Brancasi, and S.~Fu, ``{HyDRA}: Hybrid
+  dynamic routing architecture for heterogeneous {LLM} pools,'' 2026, arXiv
+  preprint arXiv:2605.17106.
+
+\bibitem{warner2025modernbert}
+B.~Warner, A.~Chaffin, B.~Clavi{\'e}, O.~Weller, O.~Hallstr{\"o}m,
+  S.~Taghadouini, A.~Gallagher, R.~Biswas, F.~Ladhak, T.~Aarsen, G.~T. Adams,
+  J.~Howard, and I.~Poli, ``Smarter, better, faster, longer: A modern
+  bidirectional encoder for fast, memory efficient, and long context finetuning
+  and inference,'' in \emph{Proceedings of the 63rd Annual Meeting of the
+  Association for Computational Linguistics (Volume 1: Long Papers)}, 2025, pp.
+  2526--2547.
+
+\bibitem{varshney2026prefill}
+T.~Varshney, A.~Surla, M.~Xu, G.~V. Krishnan, M.~Jeblick, D.~Austin, N.~Vaidya,
+  and D.~Onofrio, ``{LLM} router: Rethinking routing with prefill
+  activations,'' 2026, arXiv preprint arXiv:2603.20895.
+
+\bibitem{Wang2026}
+C. Wang et al., "ICL-Router: In‑Context Learned Model Representations for LLM Routing", in Proceedings of the AAAI Conference on Artificial Intelligence, 2026, vol. 40, pp. 33413–33421.
+
+\bibitem{Tran2025}
+C. Tran, S. Paracha, A. Hafeez, and S. Chen, "Arch-Router: Aligning LLM Routing with Human Preferences", arXiv preprint arXiv:2506. 16655, 2025.
+
+\bibitem{dataset}
+H. Li et al., "LLMRouterBench: A Massive Benchmark and Unified Framework for LLM Routing", in Findings of the Association for Computational Linguistics: ACL 2026, 2026, pp. 37733–37754.
+
+\bibitem{qiao2026consroute}
+H.~Qiao, H.~Zhang, S.~Mao, S.~Cheng, and J.~Liu, ``{ConsRoute}:
+  Consistency-aware adaptive query routing for cloud-edge-device large language
+  models,'' 2026, arXiv preprint arXiv:2603.21237.
+
+\bibitem{WZheng2025}
+W. Zheng et al., "CITER: Collaborative Inference for Efficient Large Language Model Decoding with Token-Level Routing", arXiv preprint arXiv:2502. 01976, 2025.
+
+\bibitem{CZheng2026}
+C. Zheng, K. Zhang, W. Zhang, Q. Liu, A. A. Tesfay, and Others, "Fast Collaborative Inference via Distributed Speculative Decoding", Journal of Information and Intelligence, 2026.
+
+\bibitem{Xu2026}
+Y. Xu, S. Zhou, and Z. Niu, "DiP-SD: Distributed Pipelined Speculative Decoding for Efficient LLM Inference at the Edge", arXiv preprint arXiv:2604. 20919, 2026.
+
+\bibitem{chen2025adaptivesplit}
+Y.~Chen, R.~Li, X.~Yu, Z.~Zhao, and H.~Zhang, ``Adaptive layer splitting for
+  wireless large language model inference in edge computing: a model-based
+  reinforcement learning approach,'' \emph{Frontiers of Information Technology
+  \& Electronic Engineering}, vol.~26, no.~2, pp. 278--292, 2025.
+
+\bibitem{younesi2025splitwise}
+A.~Younesi, A.~S. Maryan, E.~Oustad, Z.~N. Samani, M.~Ansari, and T.~Fahringer,
+  ``Splitwise: Collaborative edge--cloud inference for {LLMs} via
+  {Lyapunov}-assisted {DRL},'' in \emph{Proceedings of the 18th IEEE/ACM
+  International Conference on Utility and Cloud Computing (UCC)}.\hskip 1em
+  plus 0.5em minus 0.4em\relax ACM, 2025, pp. 1--11.
+
+\bibitem{guo2017calibration}
+C.~Guo, G.~Pleiss, Y.~Sun, and K.~Q. Weinberger, ``On calibration of modern
+  neural networks,'' in \emph{Proceedings of the 34th International Conference
+  on Machine Learning (ICML)}, ser. Proceedings of Machine Learning Research,
+  vol.~70.\hskip 1em plus 0.5em minus 0.4em\relax PMLR, 2017, pp. 1321--1330.
+
+\bibitem{yuan2025nondeterminism}
+J.~Yuan, H.~Li, X.~Ding, W.~Xie, Y.-J. Li, W.~Zhao, K.~Wan, J.~Shi, X.~Hu, and
+  Z.~Liu, ``Understanding and mitigating numerical sources of nondeterminism in
+  {LLM} inference,'' in \emph{Advances in Neural Information Processing Systems
+  38 (NeurIPS 2025)}, 2025, pp. 188\,045--188\,077.
+
+\bibitem{he2025nondeterminism}
+\BIBentryALTinterwordspacing
+H.~He and {Thinking Machines Lab}, ``Defeating nondeterminism in {LLM}
+  inference,'' Thinking Machines Lab: Connectionism, technical blog, Sep. 2025.
+  [Online]. Available:
+  \url{https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{schuster2022calm}
+T.~Schuster, A.~Fisch, J.~Gupta, M.~Dehghani, D.~Bahri, V.~Q. Tran, Y.~Tay, and
+  D.~Metzler, ``Confident adaptive language modeling,'' in \emph{Advances in
+  Neural Information Processing Systems 35 (NeurIPS 2022)}, 2022, pp.
+  17\,456--17\,472.
+
+\bibitem{sqa}
+J. Wei et al., "Measuring short-form factuality in large language models", arXiv preprint arXiv:2411. 04368, 2024.
+\end{thebibliography}
+
+\end{document}
