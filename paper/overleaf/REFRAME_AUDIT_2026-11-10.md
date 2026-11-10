@@ -288,3 +288,44 @@ Diff summary: `git diff --stat` → `paper/overleaf/main.tex | ~450 lines change
 **If a router is trained on repeated-sample utility (each model's expected success rate over several runs) instead of one-shot winner labels, does it gain within-benchmark discrimination beyond benchmark identity?**
 
 This follows directly from rows 3–5: aggregate signal is mostly benchmark identity, the training labels are noisy single draws, and unchanged scores already align better with the repeated target. It is the cheapest test that could change P1's verdict. It is also a learning question, not another encoder or classifier. It needs repeated generations at training scale (GPU) and its own pre-registration, so it is future work, not a pre-Wednesday task.
+
+---
+
+## 12. Second pass (2026-11-10, evening): additions and changes to this audit
+
+Scope: manuscript rewrite in place on `paper-reframe-2026-11-10` (parent `f957909`), CPU-only bootstrap, citation lookups, local compile. No GPU, no inference, no retraining, no protocol change. Not committed, not pushed.
+
+### 12.1 New evidence verified
+
+| Claim | Artifact | Status |
+|---|---|---|
+| Ordinal classification did not help | `diagnostics/stratified_cv/ordinal_router/ordinal_summary.csv` (2026-11-05 12:23) and `ordinal_router_mlp64_sklearn/summary.csv` (12:58); logs `diagnostics/ordinal_router_run.log`, `ordinal_mlp64_sklearn_run.log` | ✅ Three-class Macro-F1 over all 11,467 queries, MiniLM embeddings, same frozen folds. Always-tie 0.2956. Class-weighted LogReg: nominal 0.3798 vs ordinal cumulative 0.2647 (Δ −0.1151). MLP-64 with balanced resampling: nominal 0.3999 ± 0.0129 vs ordinal 0.4000 ± 0.0062 (Δ +0.0001). Pre-declared criterion: ordinal ≥ nominal + 0.02 and nonzero F1 on both winner classes. PROMISING = False in both logs. (`ordinal_mlp64_run.log` is a failed torch import, not a result.) Now §IV-D and Table III. |
+| Target-only bootstrap | `diagnostics/winner_label_stability/target_only_bootstrap.{py,json}` (new, untracked) on the exact 103 rows of `target_only_eval_rows.csv` | ✅ Observed within-benchmark macro AUC +0.0677; median +0.0666; 95% percentile interval [−0.0164, +0.1549]; 94.6% of replicates > 0. Macro-F1 +0.0401, interval [−0.0115, +0.0940]. Post hoc; interval includes 0; reported as descriptive. Resolves §8 A1. |
+| Stage-2 median decode step | `e0_stage2_VALID_UB2_STOP.tgz` → `stage2/P-server-U(k,k)-load0.jsonl`, `server_compute_ns` of single-token steps, 36 usable requests each | ✅ 70.9 / 66.4 / 61.7 / 50.0 ms at k = 1/3/5/9 (recomputed 2026-11-10). |
+| 24 GB competitor failure reason | `stage1/vllm_Qwen3-32B-AWQ_c24_a0.log`, `edge_fit_Qwen3-32B-AWQ_c24.json` | ✅ vLLM 0.8.5 refused to start: "max seq len (17920) is larger than the maximum number of tokens that can be stored in KV cache (12896)". `f_results.json` lists it under `edge_engine_failures` and blocks class 24 (`no_split_pass_classes: [24]`). The paper states the error and the rule; it does not say "Split failed at 24 GB". |
+| Stage-2 archive hash | `sha256sum e0_stage2_VALID_UB2_STOP.tgz` | ✅ f0df5369…fdae9 matches the brief. Stage-1 archive: 3984d73a…b84f. |
+| Repeat decoding settings | `winner_label_stability/generations.jsonl` request field | ✅ temperature 0.2, top_p 1.0; 1,200 rows, 0 error records (`main_score.log` l.3). The earlier "32,768-token context" detail was dropped from the paper because it is not in the request record. |
+| 44.5% / 48.3% / 7.2% | recomputed from `query_stability.csv` | ✅ 267 / 290 / 43 of 600. |
+
+### 12.2 Advisor hardware instruction search
+
+No explicit instruction from Film naming DGX, DGX Spark, ASUS or any other machine exists in either repository. The only source of "DGX" and "Asus" is the user's own brief `tasks/deployment-optimization-pivot-2026-11-07.md` §F ("We potentially have … Asus / edge machine; DGX / server-class hardware"). All later mentions (`HARDWARE-PLAN.md`, `GO-NOGO-REPORT.md`, `WEEK-EXECUTION-PLAN.md`, `deployment_e0/RUNBOOK.md`) call both machines undocumented. G-UB2 STOP makes a DGX-class server experiment unnecessary for E0 (see `FINAL_REVIEW_NOTES_2026-11-10.md` §4).
+
+### 12.3 Venue
+
+No confirmed venue in the repository. The IEEE Transactions on Engineering Management 2021 header is template placeholder text (`research/problem-as-written.md` l.34). Left unchanged; flagged.
+
+### 12.4 Manuscript changes (f957909 → working tree)
+
+- Title: "Lightweight LLM Routing at the Edge: Query Signal, Label Noise, and Split-Inference Feasibility". Alternatives are in the final report.
+- Structure: I Introduction; II Related work (3 subsections); III Questions and experimental design (design under test, RQ1–RQ4, decision rules, Table I); IV Semantic routing results (setup, corrected CV, within-benchmark, ordinal, label stability, target-only + bootstrap); V Deployment test (frozen design, S1, Stage 1, G-UB1, Stage 2/G-UB2); VI Discussion (7 short subsections); VII Conclusion.
+- Figures: Fig. 1 within-benchmark AUC (kept); Fig. 2 same scores vs two targets (new, pgfplots ybar); Fig. 3 gate sequence S1 → Stage 1 → UB1 → Stage 2 → UB2 STOP → Stage 3 not run (new, TikZ); Fig. 4 bounded Δ vs deadline with the +3.0 line and the +0.5 best cell annotated (legend moved below the axis).
+- Tables: I ledger (now 9 rows incl. ordinal and bootstrap); II CV; III ordinal (new); IV stability (footer rows moved to text); V two targets; VI S1 gaps.
+- Removed: all `\textbf` pseudo-headings, "negative results" keyword, the Discussion simulation paragraph (replaced by one labelled sentence in §III-C explaining why Split was isolated), em dashes (none remain).
+- Bibliography: added qwen3, deepseekr1, deepseekr1qwen3card, minilm, sbert, gte, vllm, awq. All 41 entries are cited; all citations resolve.
+- Compile: Tectonic 0.15 local build, exit 0, 10 pages, no undefined refs, no overfull boxes. Overleaf (pdfLaTeX) recompile still needed.
+- DOCX: `paper/overleaf/manual_edit_version.docx` generated with python-docx from `main.tex` (title, authors, abstract, keywords, headings, paragraphs, 6 tables, 4 figures rendered from the TikZ source, equation as readable text, 41 references). Citations appear as `[bibkey]`, cross-references as `<label>`.
+
+### 12.5 Items in §8 now resolved
+
+A1 (bootstrap): done, post hoc, interval includes 0. A3 (compile; model citations): compiled locally; model citations added; benchmark citations and template header remain. A4 (simulation paragraph): reduced to one labelled sentence in §III-C. B2 (24 GB failure reason): stated in §V-C. A2 (archive E0 in the repo) and the rest of §8 C/D are unchanged.

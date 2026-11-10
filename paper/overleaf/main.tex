@@ -1,23 +1,27 @@
-% Reframing revision for advisor review
+% Second revision pass for advisor review (Overleaf upload after manual check)
 % Date: 2026-11-10
-% Baseline: Overleaf main_revised_2026-10-08.tex (committed verbatim as the
-% parent of this change on local branch paper-reframe-2026-11-10).
+% Parent: f957909 "Checkpoint evidence-based paper reframe" (first pass).
+% Baseline: e1202db, the Overleaf manuscript of 2026-10-08.
 % ---------------------------------------------------------------------------
-% What changed: the 2026-10-08 draft proposed an Edge/Split/Remote router and
-% reported no results. Since then the two premises of that design were tested
-% with pre-declared gates. This revision reports those tests and reframes the
-% paper around what they support. Every number is traceable to an archived
-% artifact; see paper/overleaf/REFRAME_AUDIT_2026-11-10.md for the ledger.
-%  * Semantic-routing numbers: ~/research/LLMRouterBench/diagnostics/
-%    {stratified_cv,capability_profile,within_task_routing,winner_label_stability}
-%  * 20-model pool lookup comparison: decision/E1-pool-headroom/RESULTS.md
+% What this pass changed relative to f957909:
+%  * Restructured into: Introduction / Related work / Questions and design /
+%    Semantic routing results / Deployment test / Discussion / Conclusion.
+%  * Added the ordinal-classification result (diagnostics/stratified_cv/
+%    ordinal_router*, run 2026-11-05) and the post hoc paired bootstrap of the
+%    target-only diagnostic (see paper/overleaf/FINAL_REVIEW_NOTES_2026-11-10.md).
+%  * Added model citations (Qwen3, DeepSeek-R1 + model card, MiniLM, SBERT,
+%    GTE, vLLM, AWQ). Benchmark citations remain a TODO.
+%  * Added Fig. 2 (same scores, two targets) and Fig. 3 (gate sequence).
+%  * Plain-language rewrite of every section; no bold pseudo-headings.
+% Evidence ledger: paper/overleaf/REFRAME_AUDIT_2026-11-10.md (section 0).
+%  * Semantic numbers: ~/research/LLMRouterBench/diagnostics/{stratified_cv,
+%    capability_profile,within_task_routing,winner_label_stability}
 %  * S1: diagnostics/deployment_s1/results/s1_2026-11-08/S1_SUMMARY.md
-%  * E0 gates: e0_stage1_VALID_UB1_CONTINUE.tgz (gates/gate_ub1.json) and
-%    e0_stage2_VALID_UB2_STOP.tgz (gates/gate_ub2.json); both gates were
-%    recomputed on CPU from the archived profiles on 2026-11-10 and matched
-%    exactly.
-% \todo{} marks items that must be resolved before submission (red).
-% Not compile-tested on the drafting host (no TeX installation); uses pgfplots.
+%  * E0: e0_stage1_VALID_UB1_CONTINUE.tgz, e0_stage2_VALID_UB2_STOP.tgz
+%    (sha256 f0df5369...fdae9); gates/gate_ub1.json, gates/gate_ub2.json
+% Compiled locally with Tectonic 0.15 (XeTeX engine) on 2026-11-10; Overleaf
+% uses pdfLaTeX, so recompile there before sharing.
+% \todo{} marks items to resolve before submission (red).
 % ---------------------------------------------------------------------------
 \documentclass[lettersize,journal]{IEEEtran}
 \usepackage{amsmath,amsfonts}
@@ -30,6 +34,7 @@
 \usepackage{xcolor}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.17}
+\usetikzlibrary{positioning,arrows.meta}
 \usepackage{hyperref}
 \usepackage{cite}
 \newcommand{\todo}[1]{{\color{red}[TODO: #1]}}
@@ -37,113 +42,134 @@
 
 \begin{document}
 
-\title{What Can a Lightweight LLM Router Decide at the Edge? Routing Diagnostics and a Pre-Registered Test of Split Inference}
+\title{Lightweight LLM Routing at the Edge: Query Signal, Label Noise, and Split-Inference Feasibility}
 
 \author{Brendon Pedro, Sirapop Nuannimnoi, Panuwat Saetee, Hojjat Baghban, ~\IEEEmembership{Member,~IEEE,} \\ Karin Honda, and Ching-Yao Huang
 \thanks{This paper was produced by the IEEE Publication Technology Group. They are in Piscataway, NJ.}%
 \thanks{Manuscript received April 19, 2021; revised August 16, 2021.}}
+% \todo{Template boilerplate above (thanks lines, journal header, pubid, 2021 dates) is unchanged from the 2026-10-08 draft. No target venue is recorded in the repository. Replace once the venue is chosen.}
 
 \markboth{IEEE Transactions on Engineering Management,~Vol.~14, No.~8, August~2021}%
-{Pedro \MakeLowercase{\textit{et al.}}: What Can a Lightweight LLM Router Decide at the Edge?}
+{Pedro \MakeLowercase{\textit{et al.}}: Lightweight LLM Routing at the Edge}
 
 \IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
 
 \maketitle
 
 \begin{abstract}
-Edge LLM serving is often framed as a per-query choice among a small on-device model, split execution of a larger model across device and server, and remote execution. A common design separates a learned estimate of how well each model will answer a query from a runtime choice of where to execute it. We tested the two premises of that design before building it, using decision rules fixed in advance. For model choice, we evaluated lightweight routers between DeepSeek-R1-0528-Qwen3-8B and Qwen3-8B on 11,467 LLMRouterBench queries from 15 benchmarks with stratified 5-fold cross-validation. The best compact router reached Macro-F1 0.600 and AUC 0.670 on non-tie queries, but its AUC within individual benchmarks averaged 0.501, and a diagnostic that knows only the benchmark reached Macro-F1 0.613. Clear within-benchmark signal appeared only on BBH, KorBench and MBPP. Re-generating 120 originally non-tied queries five times per model showed that 26.7\% of one-shot winner labels were stable; scored against the repeated preference instead, the same held-out router scores gained 0.068 in within-benchmark AUC (0.573 to 0.640, five of six benchmarks). For the execution path, we tested whether splitting Qwen3-32B between a 12--24\,GB edge GPU and a server opens a quality tier over 4-bit edge models when raw query text may not leave the device. The split fitted in edge memory and passed an optimistic datasheet bound, but with measured H200 server-segment compute the best bounded advantage was $+0.5$ points against a required $+3.0$, and the pre-registered rule removed Split. We discuss what these results imply for lightweight edge routers and what they leave open.
+A lightweight router for edge LLM serving has to answer two questions: which model suits a query, and where that model should run. We tested both before building a full deployment optimiser, using decision rules fixed in advance. For model choice, we evaluated compact routers between DeepSeek-R1-0528-Qwen3-8B and Qwen3-8B on 11,467 LLMRouterBench queries under stratified 5-fold cross-validation. The best compact router reached Macro-F1 0.600 and AUC 0.670. Capability features and an ordinal three-class formulation did not pass their pre-declared improvement bars. Within single benchmarks the same router's AUC averaged 0.501, and a diagnostic that knows only the benchmark reached Macro-F1 0.613, so most of the aggregate signal came from recognising the benchmark. Re-generating 120 queries five times per model showed that 26.7\% of one-shot winner labels were stable, yet 84.5\% of queries with a nonzero repeated margin still preferred the original winner. Scored against that repeated preference, the unchanged held-out router scores gained 0.068 in within-benchmark AUC (0.573 to 0.640). Because the semantic router stayed too weak to carry a deployment system on its own, we moved the main problem to deployment optimisation and tested the one execution option whose value does not depend on a strong per-query router: splitting Qwen3-32B between a 12 to 24\,GB edge GPU and a server when raw query text may not leave the device. The split fitted in edge memory and passed an optimistic server bound. With measured H200 server-segment compute, the best bounded advantage over the best edge model was $+0.5$ points against a required $+3.0$, and the pre-registered rule removed Split before any network cost was added.
 \end{abstract}
 
 \begin{IEEEkeywords}
-LLM routing, edge inference, split inference, small language models, label noise, pre-registration, negative results
+LLM routing, edge inference, split inference, small language models, label noise, pre-registration
 \end{IEEEkeywords}
 
 % =====================================================================
 \section{Introduction}
-\IEEEPARstart{L}{arge} language models (LLMs) are increasingly served in edge--cloud settings in which a query can be answered by a small language model (SLM) on the device~\cite{slm1,slm2}, by a larger model running remotely, or by \emph{split} execution, in which some layers of a larger model run on the device and the rest on a server~\cite{matsubara2022splitsurvey,Mai2023,mudvari2024splitllm}. Because easy and hard queries are mixed in real traffic, no fixed choice is best for every query, which motivates query-level routing~\cite{Ong2025,ding2024hybridllm,Song2025,Luo2026}.
+\IEEEPARstart{A}{n} edge deployment of large language models (LLMs) can answer a query in three ways. A small language model (SLM) can run on the device~\cite{slm1,slm2}. A larger model can run on a remote server. Or a larger model can be split, with some layers on the device and the rest on a server~\cite{matsubara2022splitsurvey,Mai2023,mudvari2024splitllm}. Real traffic mixes easy and hard queries, so no single choice is best for every query, and several groups have proposed query-level routers~\cite{Ong2025,ding2024hybridllm,Song2025,Luo2026}.
 
-Our earlier draft proposed a router for this setting that separates two questions. A compact encoder predicts, for each candidate \emph{model}, the expected task score on query $q$; a runtime layer then prices the \emph{execution actions} Edge, Split and Remote by their latency under live network and server state and selects the best feasible one. That design rests on two premises. \textbf{P1 (model suitability):} a lightweight router can predict from the query text which model will answer it better, beyond what the query's task or benchmark already tells us. \textbf{P2 (execution path):} split execution of a model too large for the edge offers, in some realistic regime, a quality--deadline trade-off that neither the best edge-feasible model nor remote execution provides.
+Such a router has two parts that answer different questions. The semantic part asks which model is better suited to this query. The system part asks where that model should execute given the deadline, the device memory and the data policy. The second question only matters if the first has a useful answer: a deployment optimiser that cannot tell which model a query needs reduces to a fixed placement policy. We therefore tested the semantic question first, on released benchmark outputs, before spending any hardware time on deployment.
 
-Before building the full system we tested both premises, in sequence, with decision rules fixed before each experiment. This paper reports those tests. Neither premise held in the form the design needs. For P1, most of the aggregate routing signal on our model pair is associated with benchmark identity, and per-query signal is confined to three benchmarks; repeated generation shows that the one-shot winner labels used for training and evaluation are often unstable, and that they hide part of the per-query preference that does exist. For P2, a layer split of Qwen3-32B fits in 12--24\,GB of edge memory, but once measured server compute replaces an optimistic bound, no evaluated memory class, deadline or admissibility policy reaches the pre-declared utility advantage over a 4-bit edge model, and Split is removed.
+\IEEEpubidadjcol
+The semantic results stayed weak. On a pair of 8B-parameter models the best compact router reached Macro-F1 0.600 under stratified cross-validation, and neither hand-built capability features nor an ordinal three-class formulation improved on it by the margin we had set. Instead of adding classifier capacity, we asked why. Two findings explain most of the gap. First, within a single benchmark the router's AUC was close to 0.5, while a diagnostic that only knows the benchmark reached a higher Macro-F1 than the router. Most of the aggregate signal came from recognising the task, not from ranking queries within a task. Second, the one-shot winner labels used for training and evaluation were often unstable: when we regenerated 120 queries five times per model, only 26.7\% kept the original winner in at least four of five runs. Repeated evaluation also showed that a model preference does exist for most queries, and that the unchanged router scores agree better with that repeated preference than with the labels they were trained on.
 
-The contributions are:
+With the router too weak to be the main contribution, we changed the main problem to deployment optimisation and treated the router as one component of it. The deployment question that remained open was whether split execution adds an execution option beyond the best model that fits on the edge. Split runs the same weights as unsplit execution, so it can only help by making a larger model available when the raw query text may not leave the device and remote execution is therefore not allowed. We tested that hypothesis with a staged experiment whose stopping rules were written before any hardware was used. A quality screen (S1) showed enough headroom between Qwen3-32B and edge-sized models to justify the test. Stage~1 showed that a layer split of Qwen3-32B fits in 12, 16 and 24\,GB of edge memory, and an optimistic bound that uses datasheet server speed could not rule Split out. Stage~2 then measured the server segment on an H200. With that measurement in place of the datasheet figure, the best bounded advantage fell from $+12.25$ to $+0.5$ points, below the $+3.0$ required, and the rule removed Split. The network-latency stage was therefore not run.
+
+This paper reports that sequence. Its contributions are:
 \begin{enumerate}
-\item \textbf{A within-benchmark analysis of lightweight routers.} Under stratified 5-fold cross-validation, a 384-dimensional MiniLM router with an MLP-64 head reaches Macro-F1 0.600 and AUC 0.670, but its macro-averaged within-benchmark AUC is 0.501 and a benchmark-identity diagnostic reaches Macro-F1 0.613. Larger embeddings, nonlinear heads and capability features do not change this picture (Sections~\ref{sec:a-cv} and~\ref{sec:a-within}).
-\item \textbf{A repeated-generation audit of one-shot winner labels.} Of 120 originally non-tied queries, 26.7\% keep their winner in at least four of five repeats, yet the repeated preference agrees with the original winner on 84.5\% of queries with a nonzero repeated margin. Re-scoring the same held-out router outputs against the repeated preference raises within-benchmark AUC from 0.573 to 0.640 (Sections~\ref{sec:a-stability} and~\ref{sec:a-target}).
-\item \textbf{A pre-registered, staged falsification test of layer-split inference.} For Qwen3-32B split between an emulated 12/16/24\,GB edge GPU and an H200 server, we report memory feasibility, two analytic bounds and measured server-segment compute. The gate after measured compute stops the experiment: the best bounded advantage is $+0.5$ points against a required $+3.0$ (Section~\ref{sec:b}). The raw profiles are archived, and both gates recompute exactly from them.
+\item A within-benchmark analysis of lightweight routers under stratified 5-fold cross-validation, showing that most of the measured routing signal on this pair comes from benchmark identity (Sections~\ref{sec:a-cv} to~\ref{sec:a-ordinal}).
+\item A repeated-generation audit of one-shot winner labels, showing that the labels are unstable but usually noisy versions of a real preference, and that the same held-out router scores align better with the repeated preference (Sections~\ref{sec:a-stability} and~\ref{sec:a-target}).
+\item A pre-registered, staged test of layer-split inference for Qwen3-32B, with memory feasibility, two analytic bounds and measured H200 server compute, which removed Split under the rule fixed in advance (Section~\ref{sec:b}).
 \end{enumerate}
-The two studies use different model sets and different utility definitions, and we never combine their numbers. What links them is the design they test: each study asks whether one input of the model-utility router carries the information that the router would need.
+The semantic study and the deployment study use different model sets and different utility definitions, and we never combine their numbers. They are linked by the design they test: a lightweight router over Edge, Split and Remote execution needs the semantic layer to carry per-query information and needs Split to add an option that edge execution lacks. The experiments found limits in both.
 
 % =====================================================================
-\section{Related Work}
+\section{Related work}
 \label{sec:bg-related}
 
-\textbf{Query-aware LLM routing.} Learned routers predict from the query which model to call. RouteLLM~\cite{Ong2025} trains binary strong-versus-weak routers on human pairwise preferences, augmented with pairwise labels from an LLM judge~\cite{zheng2023judging}; Hybrid LLM~\cite{ding2024hybridllm} and BEST-Route~\cite{ding2025bestroute} train encoder routers with per-model or per-action heads; RouterDC~\cite{chen2024routerdc} and IRT-Router~\cite{Song2025} learn model embeddings or ability--difficulty models for pools of many LLMs; HyDRA~\cite{garg2026hydra} fine-tunes a ModernBERT encoder~\cite{warner2025modernbert} with sigmoid heads matched against static model profiles; RouteLMT~\cite{Luo2026} and the prefill-activation router of Varshney et al.~\cite{varshney2026prefill} read the small model's own hidden states; ICL-Router~\cite{Wang2026} and Arch-Router~\cite{Tran2025} route with in-context model representations or generated policy labels. LLMRouterBench~\cite{dataset} evaluates many routers on a common pool with pre-computed outputs and reports that several recent methods do not reliably outperform simple baselines. Our analysis is complementary: we ask how much of a lightweight router's measured signal survives once the benchmark is held fixed, and how reliable the single-run labels are. \todo{Add primary citations for the two routed models and for MiniLM and GTE-Qwen2; none is in the current bibliography.}
+\subsection{Query-level LLM routing}
+Learned routers predict from the query which model to call. RouteLLM~\cite{Ong2025} trains binary strong-versus-weak routers on human pairwise preferences, augmented with labels from an LLM judge~\cite{zheng2023judging}. Hybrid LLM~\cite{ding2024hybridllm} and BEST-Route~\cite{ding2025bestroute} train encoder routers with per-model or per-action heads. RouterDC~\cite{chen2024routerdc} and IRT-Router~\cite{Song2025} learn model embeddings or ability-difficulty models for pools of many LLMs. HyDRA~\cite{garg2026hydra} fine-tunes a ModernBERT encoder~\cite{warner2025modernbert} against static model profiles. RouteLMT~\cite{Luo2026} and the prefill-activation router of Varshney et al.~\cite{varshney2026prefill} read the small model's own hidden states. ICL-Router~\cite{Wang2026} and Arch-Router~\cite{Tran2025} route with in-context model representations or generated policy labels. LLMRouterBench~\cite{dataset} evaluates many routers on a common pool with pre-computed outputs and reports that several recent methods do not reliably beat simple baselines. Our analysis adds two checks that these papers do not report: how much of a router's signal survives when the benchmark is held fixed, and how stable the single-run labels are.
 
-\textbf{Network- and cost-aware routing.} At the network edge, routers subtract a latency or communication penalty from predicted quality when deciding between a local and a remote model~\cite{bao2025qualitylatency,chen2025netgptrouting}, tune routing thresholds across device, edge and cloud tiers~\cite{qiao2026consroute}, or distil a teacher router into an on-device gate~\cite{xue2026cr2}. Token-level and speculative schemes reduce the cost of collaboration itself~\cite{WZheng2025,CZheng2026,Xu2026}. PRISM~\cite{zhan2025prism} routes among cloud-only, edge-only and a collaborative mode according to privacy sensitivity.
+\subsection{Edge and cloud routing}
+At the network edge, routers subtract a latency or communication penalty from predicted quality when choosing between a local and a remote model~\cite{bao2025qualitylatency,chen2025netgptrouting}, tune thresholds across device, edge and cloud tiers~\cite{qiao2026consroute}, or distil a teacher router into an on-device gate~\cite{xue2026cr2}. Token-level and speculative schemes reduce the cost of collaboration itself~\cite{WZheng2025,CZheng2026,Xu2026}. PRISM~\cite{zhan2025prism} routes among cloud-only, edge-only and a collaborative mode according to privacy sensitivity.
 
-\textbf{Split computing for LLMs.} Partitioning a network between device and server under measured bandwidth and load is well studied for DNNs~\cite{kang2017neurosurgeon,li2020edgent,laskaridis2020spinn,matsubara2022splitsurvey} and for LLMs~\cite{chen2025adaptivesplit,younesi2025splitwise,mudvari2024splitllm}. Browser-based split inference reports that per-token round-trip time does not depend on the split point~\cite{lee2026browser}; Mix-or-Split schedules edge--cloud LLM inference under latency constraints~\cite{wang2026mix}; and transmitted activations can be partly inverted, with recovery rates that depend on split depth~\cite{cunningham2026privacy}, which noise-based defences trade against utility~\cite{Mai2023}. These works mostly evaluate where to split one model. We instead ask whether a split of a larger model beats the best model that fits entirely on the edge, under a deadline, with the comparison and threshold fixed in advance.
+\subsection{Split inference for LLMs}
+Partitioning a network between device and server under measured bandwidth and load has been studied for DNNs~\cite{kang2017neurosurgeon,li2020edgent,laskaridis2020spinn,matsubara2022splitsurvey} and for LLMs~\cite{chen2025adaptivesplit,younesi2025splitwise,mudvari2024splitllm}. Browser-based split inference reports that per-token round-trip time does not depend on the split point~\cite{lee2026browser}. Mix-or-Split schedules edge-cloud LLM inference under latency constraints~\cite{wang2026mix}. Transmitted activations can be partly inverted, with recovery rates that depend on split depth~\cite{cunningham2026privacy}, and noise-based defences trade this against utility~\cite{Mai2023}. These works mostly ask where to split one model. We ask whether a split of a larger model beats the best model that fits entirely on the edge, under a deadline, with the comparison and the threshold fixed in advance.
 
 % =====================================================================
-\section{Design Under Test and Its Premises}
+\section{Questions and experimental design}
+\label{sec:design}
+
+\subsection{The design under test}
 \label{sec:problem}
-Let $\mathcal{M}$ be the candidate model specifications (checkpoint, quantization, prompt template and decoding configuration). For a query $q$, $U(M,q)\in[0,1]$ is the expected task score of $M$ on $q$; for a binary metric, the probability that $M$ answers correctly. The action set is $\mathcal{A}=\{\textsc{Edge},\textsc{Split}(d),\textsc{Remote}\}$, and every action executes exactly one model $M(a)$. The design of our earlier draft chooses
+Let $\mathcal{M}$ be the candidate model specifications (checkpoint, quantisation, prompt template and decoding configuration). For a query $q$, $U(M,q)\in[0,1]$ is the expected task score of model $M$ on $q$; for a binary metric it is the probability that $M$ answers correctly. The action set is $\mathcal{A}=\{\textsc{Edge},\textsc{Split}(d),\textsc{Remote}\}$, and every action executes exactly one model $M(a)$. The router we set out to build chooses
 \begin{equation}
 a^{\star}=\operatorname*{arg\,max}_{a\in\mathcal{F}(q,s)}\Big[\hat U_\theta\big(M(a)\mid q\big)-\lambda\,\hat L(a\mid q,s)\Big],
 \label{eq:route}
 \end{equation}
-where $\hat U_\theta$ is a learned per-model utility, $\hat L$ a latency estimate from offline profiles and the live system state $s$, and $\mathcal{F}(q,s)$ the actions that meet the deadline, fit in edge memory and are admissible under the deployment's data policy. Eq.~\eqref{eq:route} is useful only if both of its inputs carry information that simpler policies lack.
+where $\hat U_\theta$ is a learned per-model utility, $\hat L$ is a latency estimate from offline profiles and the live system state $s$, and $\mathcal{F}(q,s)$ is the set of actions that meet the deadline, fit in edge memory and are admissible under the deployment's data policy. Eq.~\eqref{eq:route} is only useful if both of its inputs carry information that a simpler policy lacks. That gives four questions.
 
-\textbf{P1: model suitability.} Let $t(q)$ be the task (here, the benchmark) of $q$. A task-level policy selects the model that is best on average for $t(q)$. $\hat U_\theta$ adds value over it only if it ranks queries \emph{within} a task. We therefore measure within-benchmark discrimination, in addition to aggregate Macro-F1 and AUC.
+\subsection{Research questions}
+Let $t(q)$ be the task of query $q$; here the task is the benchmark. A task-level policy picks the model that is best on average for $t(q)$. The learned utility $\hat U_\theta$ adds value only if it can rank queries within a task.
 
-\textbf{P2: execution path.} $\textsc{Split}(d)$ executes the same weights as unsplit execution of its model, so it can add value only by making a model available that does not fit on the edge, under constraints that rule out sending the query to a server. We test this directly: does some memory class, deadline and admissibility policy exist in which the best split configuration beats every admissible competitor by a pre-declared margin?
+\begin{enumerate}
+\item[RQ1] How much of a lightweight router's measured performance comes from within-task query information, as opposed to recognising the task?
+\item[RQ2] How much do one-shot winner labels hide the model preference that repeated evaluation reveals?
+\item[RQ3] Does a model that does not fit on the edge have enough quality advantage over edge-feasible models to justify a split deployment path?
+\item[RQ4] Can that split path keep enough advantage over the best edge model once measured edge and server compute replace optimistic assumptions?
+\end{enumerate}
+RQ1 and RQ2 concern the semantic layer and are answered on released LLMRouterBench outputs plus one repeated-generation experiment. RQ3 and RQ4 concern the system layer and are answered with new generations and hardware measurements.
 
-\textbf{Admissibility is not privacy.} A \emph{no-raw-text} policy forbids sending the raw query text to the server, which removes \textsc{Remote} but not \textsc{Split}. It is a data-handling rule. Intermediate activations can be partly inverted~\cite{cunningham2026privacy}, so admitting \textsc{Split} under this policy implies no privacy or security guarantee, and we make none.
+\subsection{Decision rules}
+Each experiment was run only after its question, metric and decision rule had been written down, and each later experiment was conditional on the outcome of the earlier one. Table~\ref{tab:ledger} lists the sequence. Two rules of interpretation also apply throughout.
 
-\textbf{Hindsight oracles are references, not ceilings.} A per-query oracle that picks the model that happened to be correct in a single run is an upper bound on realised accuracy for those particular draws, but not an estimate of achievable headroom: part of its gain comes from sampling noise that no pre-generation router can predict (Section~\ref{sec:a-stability}). We report it only as a hindsight reference.
+A no-raw-text policy forbids sending the raw query text to the server. It removes \textsc{Remote} from the admissible set but not \textsc{Split}. It is a data-handling rule and not a privacy guarantee: intermediate activations can be partly inverted~\cite{cunningham2026privacy}, so admitting Split under this policy implies no privacy or security property, and we claim none.
 
-% =====================================================================
-\section{Study Design}
-\label{sec:design}
-Each experiment was run only after its question, metric and decision rule were written down, and the next experiment depended on the outcome. Table~\ref{tab:ledger} lists the sequence. The semantic study (Study~A) uses released LLMRouterBench outputs plus one repeated-generation experiment; the execution-path study (Study~B) uses new generations and hardware measurements. Study~B was started after Study~A had shown that a task-level policy captures most of the measurable routing signal, so it tests the execution path without assuming a strong per-query router.
+A per-query oracle that picks whichever model happened to be correct in a single run is a hindsight reference. It bounds the realised accuracy of those particular draws, but part of its gain is sampling noise that no router can predict before generation (Section~\ref{sec:a-stability}). We do not call it a ceiling and we do not treat it as achievable headroom.
+
+The deployment test was narrowed to Split for a reason that is itself a result. In a pre-hardware simulation on cached LLMRouterBench outputs with assumed throughputs and round-trip times, changing the round-trip time from 20 to 300\,ms changed the preferred Edge or Remote action for none of the five simulated tasks, and jointly choosing model and path did not beat the best decomposed baseline by its pre-declared margin. That simulation is exploratory and uses no hardware measurement, so we do not report its numbers as results. It did tell us that the only deployment action whose value a measurement could still establish was Split.
 
 \begin{table*}[!t]
 \centering
-\caption{Decision sequence. Each criterion was fixed before the corresponding experiment.}
+\caption{Decision sequence. Each criterion was fixed before the corresponding experiment. The semantic rows use the DeepSeek-R1-0528-Qwen3-8B versus Qwen3-8B pair; the deployment rows use the Qwen3 family.}
 \label{tab:ledger}
 \footnotesize
-\begin{tabular}{@{}p{0.4cm}p{3.6cm}p{4.3cm}p{4.3cm}p{3.2cm}@{}}
+\begin{tabular}{@{}p{0.5cm}p{3.5cm}p{4.2cm}p{4.4cm}p{3.1cm}@{}}
 \toprule
 & Question & Pre-declared criterion & Observed & Decision \\
 \midrule
-A1 & Is Macro-F1 $\approx$0.60 a protocol artifact? & Stratified 5-fold CV; a design must reach $\geq$0.70, or gain $\geq$0.03 over the MiniLM reference & Best compact router 0.600; best of all tested 0.626 (RBF-SVM on 7B embeddings); capability features $+0.007$ & Stop adding router capacity; diagnose \\
-A2 & Is the signal per-query or per-benchmark? & Clear within-task signal: AUC $>0.55$ and 95\% CI $>0.50$ & Macro within-benchmark AUC 0.501; 3/15 benchmarks clear; benchmark identity reaches Macro-F1 0.613 & Task recognition explains most of the signal \\
-A3 & Are one-shot winner labels stable? & Stable if original winner wins $\geq$4/5 repeats & 32/120 (26.7\%) stable & Labels are noisy single draws \\
-A4 & Do the same scores fit repeated preference better? & Within-benchmark Macro-F1 gain $\geq$0.03, AUC improves, not driven by one benchmark & F1 $+0.040$, AUC $+0.068$, 5/6 benchmarks & Passed (descriptive; no significance test) \\
-B1 & Is there a quality tier above edge-feasible models? (S1) & Continue if 32B-bf16 beats the best edge-feasible model by $\geq$3.0 pt on some benchmark$\times$mode & Gaps up to $+27.5$ pt at 12\,GB, $+7.5$ at 16\,GB & CONTINUE \\
-B2 & Does the split fit edge memory? (Stage 1) & A symmetric split passes the memory test at some class & U-max (3,3), (5,5), (9,9) at 12/16/24\,GB & Pass \\
-B3 & Can an optimistic bound rule Split out? (G-UB1) & STOP iff best bounded advantage $<$3.0 pt & $+12.25$ pt; 14/20 cells pass & CONTINUE (not latency evidence) \\
-B4 & With measured server compute? (G-UB2) & STOP iff best bounded advantage $<$3.0 pt & $+0.5$ pt; 0/20 cells pass & STOP: Split removed; Stage 3 not run \\
+A1 & Is Macro-F1 $\approx$0.60 a protocol artifact? & Stratified 5-fold CV; a design must reach $\geq$0.70, or gain $\geq$0.03 over the MiniLM reference & Compact router 0.600; best of all tested 0.626 (RBF-SVM on 7B embeddings); capability features $+0.007$ & Stop adding router capacity; diagnose \\
+A2 & Is the signal per-query or per-benchmark? & Clear within-task signal: AUC $>0.55$ with 95\% CI $>0.50$ & Within-benchmark macro AUC 0.501; 3 of 15 benchmarks clear; benchmark identity alone reaches Macro-F1 0.613 & Task recognition explains most of the signal \\
+A3 & Does an ordinal three-class formulation help? & Ordinal $\geq$ nominal $+0.02$ Macro-F1 (3 classes), nonzero F1 on both winner classes & Logistic: $-0.115$; MLP-64: $+0.0001$ & Not promising \\
+A4 & Are one-shot winner labels stable? & Stable if the original winner wins $\geq$4 of 5 repeats & 32/120 (26.7\%) stable; 87/103 nonzero-margin queries agree with the one-shot winner & Labels are noisy draws of a real preference \\
+A5 & Do the same scores fit repeated preference better? & Within-benchmark Macro-F1 gain $\geq$0.03, AUC up, not driven by one benchmark & F1 $+0.040$, AUC $+0.068$, 5 of 6 benchmarks & Passed (descriptive); bootstrap added post hoc \\
+B1 & Is there a quality tier above edge-feasible models? (S1) & Continue if 32B bf16 beats the best edge-feasible model by $\geq$3.0 pt on some benchmark and mode & Gaps up to $+27.5$ pt at 12\,GB and $+7.5$ at 16\,GB & CONTINUE \\
+B2 & Does the split fit in edge memory? (Stage 1) & A symmetric split passes the memory test in some class & U-max (3,3), (5,5), (9,9) at 12/16/24\,GB & Pass \\
+B3 & Can an optimistic bound rule Split out? (G-UB1) & STOP iff best bounded advantage $<3.0$ pt & $+12.25$ pt; 14 of 20 cells pass & CONTINUE (not latency evidence) \\
+B4 & With measured server compute? (G-UB2) & STOP iff best bounded advantage $<3.0$ pt & $+0.5$ pt; 0 of 20 cells pass & STOP; Split removed; Stage 3 not run \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
 % =====================================================================
-\section{Study A: Can a Lightweight Router Predict the Better Model?}
+\section{Semantic routing results}
 \label{sec:a}
 
 \subsection{Setup}
-The routed pair is DeepSeek-R1-0528-Qwen3-8B and Qwen3-8B, with released per-query binary correctness from LLMRouterBench~\cite{dataset}. The pool is the 11,467 unique queries of 15 benchmarks. Because scores are binary, a query is a \emph{tie} when both models are right or both wrong (9,134 queries, 79.7\%); the 2,333 non-tie queries define the winner label (990 DeepSeek, 1,343 Qwen). We use one stratified 5-fold partition (seed 42, stratified on DeepSeek-win/tie/Qwen-win), and every model, threshold and calibration step is fitted on training folds only. The primary metric is Macro-F1 on held-out non-tie queries; we also report AUC. The compact reference router (``MiniLM MLP-64'') encodes the query with frozen all-MiniLM-L6-v2 and scores it with an MLP-64 head distilled from a GTE-Qwen2-7B logistic-regression teacher trained inside each training fold.
+The routed pair is DeepSeek-R1-0528-Qwen3-8B~\cite{deepseekr1,deepseekr1qwen3card} and Qwen3-8B~\cite{qwen3}, with released per-query binary correctness from LLMRouterBench~\cite{dataset}. The pool is the 11,467 unique queries of 15 benchmarks. Because scores are binary, a query is a tie when both models are right or both wrong. There are 9,134 ties (79.7\%), and the 2,333 non-tie queries define the winner label (990 DeepSeek, 1,343 Qwen). We use one stratified 5-fold partition (seed 42, stratified on DeepSeek-win, tie and Qwen-win), and every model, threshold and calibration step is fitted on training folds only. The primary metric is Macro-F1 on held-out non-tie queries. We also report AUC. The compact reference router, called MiniLM MLP-64 below, encodes the query with frozen all-MiniLM-L6-v2~\cite{minilm,sbert} and scores it with a 64-unit MLP head distilled from a logistic-regression teacher on GTE-Qwen2-7B-instruct embeddings~\cite{gte}, with the teacher trained inside each training fold. The head has 24,705 parameters.
 
-\subsection{Is the 0.60 plateau a protocol artifact?}
+\subsection{Corrected cross-validation}
 \label{sec:a-cv}
-Table~\ref{tab:cv} gives the results. Stratified cross-validation did not change the estimate: all methods remain between 0.58 and 0.63 Macro-F1, within about one fold standard deviation of the earlier repeated-holdout numbers. The compact router reaches 0.6003$\pm$0.0154 with 24,705 head parameters. Nonlinear heads on the 3,584-dimensional GTE embedding reach at most 0.626, and the highest AUC (0.683) belongs to linear logistic regression. A capability-feature extension improved Macro-F1 by $+0.007$ over a threshold-matched reference, short of its pre-declared $+0.03$ criterion; with its pre-declared default threshold it changed Macro-F1 by $-0.004$. Longer queries were routed better than short ones (0.626 vs 0.556 for $>$256 vs $\leq$256 tokens), so input truncation is not the bottleneck.
+Earlier repeated-holdout runs had put this pair at about Macro-F1 0.60. We treated that as a baseline rather than a result and repeated the evaluation under stratified 5-fold cross-validation to see whether the number was a protocol artifact. Table~\ref{tab:cv} gives the results. The estimate did not move. All methods stay between 0.58 and 0.63 Macro-F1, within about one fold standard deviation of the earlier numbers. The compact router reaches 0.6003$\pm$0.0154. Nonlinear heads on the 3,584-dimensional GTE embedding reach at most 0.626, and the highest AUC (0.683) belongs to linear logistic regression.
+
+A capability-feature extension (15 label-free features computed from the query text, such as token count and the presence of code or equations) was then tested against a rule fixed in advance: it had to beat the MiniLM reference by $+0.03$ Macro-F1. With its pre-declared decision rule ($p\geq0.5$) it scored 0.5968, which is $-0.004$ against the reference. With a threshold chosen on training folds it scored 0.6082. That number is only comparable with the reference under the same threshold procedure, which gives 0.6009, so the fair gain is $+0.007$. The rule was not met. Longer queries were routed better than short ones (Macro-F1 0.626 for queries over 256 tokens against 0.556 for shorter ones), so input truncation at 256 tokens is not the limiting factor.
 
 \begin{table}[t]
 \centering
 \caption{Stratified 5-fold CV on held-out non-tie queries (mean$\pm$std over folds). ``thr'': threshold chosen on training folds only.}
 \label{tab:cv}
 \footnotesize
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcc@{}}
 \toprule
 Router & Macro-F1 & AUC \\
@@ -153,7 +179,8 @@ GTE-7B + logistic regression & 0.598$\pm$0.016 & 0.683 \\
 GTE-7B + logistic regression, thr & 0.615$\pm$0.018 & 0.683 \\
 GTE-7B + RBF-SVM, thr & 0.626$\pm$0.030 & 0.674 \\
 MiniLM + MLP-64 (compact reference) & 0.600$\pm$0.015 & 0.670 \\
-Capability + MiniLM, default (pre-declared) & 0.597$\pm$0.018 & 0.673 \\
+MiniLM + MLP-64, thr & 0.601$\pm$0.015 & 0.670 \\
+Capability + MiniLM, $p\geq0.5$ (declared) & 0.597$\pm$0.018 & 0.673 \\
 Capability + MiniLM, thr & 0.608$\pm$0.020 & 0.673 \\
 \midrule
 Benchmark identity (diagnostic only) & 0.613$\pm$0.009 & 0.657 \\
@@ -161,21 +188,21 @@ Benchmark identity (diagnostic only) & 0.613$\pm$0.009 & 0.657 \\
 \end{tabular}
 \end{table}
 
-\subsection{Where does the signal come from?}
+\subsection{Where the signal comes from}
 \label{sec:a-within}
-We computed AUC separately within each benchmark, using each query's held-out score from its own fold, and compared the router with a diagnostic reference that predicts, for every query of a benchmark, the winner that is more frequent in that benchmark's training folds. The reference uses the benchmark label, which a deployed router does not receive, so it is a diagnostic and not a baseline.
+To answer RQ1 we computed AUC separately within each benchmark, using each query's held-out score from its own fold, and compared the router with a diagnostic reference that predicts, for every query of a benchmark, the winner that is more frequent in that benchmark's training folds. The reference uses the benchmark label, which a deployed router does not receive. It is a diagnostic and not a baseline.
 
-The compact router's overall AUC is 0.670, but its macro-averaged within-benchmark AUC is 0.501 (95\% CI [0.457, 0.548]; 0.505 if scores are rank-normalised within each fold before pooling; 0.512 with capability features), and the benchmark-identity reference reaches a higher Macro-F1 (0.613 vs 0.600) with lower variance. Fig.~\ref{fig:within} shows the per-benchmark values. Under the pre-declared rule, clear within-task signal appears only on BBH (0.71), KorBench (0.68) and MBPP (0.67), which together hold 34\% of the non-tie queries. Most other benchmarks, including FinQA, MedQA and MELD, are near 0.5, and K\&K is below chance (0.40, CI entirely below 0.5): within that benchmark the scores order queries opposite to the true winner.
+The compact router's overall AUC is 0.670. Its macro-averaged within-benchmark AUC is 0.501 (95\% CI [0.457, 0.548]). The value is 0.505 if scores are rank-normalised within each fold before pooling, and 0.512 with capability features. The benchmark-identity reference reaches a higher Macro-F1 than the router (0.613 against 0.600) with lower variance. Fig.~\ref{fig:within} shows the per-benchmark values. Under the pre-declared rule, clear within-task signal appears only on BBH (0.71), KorBench (0.68) and MBPP (0.67), which together hold 34\% of the non-tie queries. FinQA, MedQA and MELD are near 0.5. Knights-and-Knaves (K\&K) is below chance (0.40, CI entirely below 0.5): within that benchmark the scores order queries opposite to the true winner.
 
-The same pattern holds on a different protocol. On the full 20-model LLMRouterBench pool, scored by accuracy on the same 11,467 queries and folds, the best query-level router added $+0.42$ points (95\% CI $[-0.18, +1.01]$) over a lookup table indexed by the predicted task, and the lookup itself was $+3.33$ points over the best single model.
+The same pattern holds under a different protocol. On the full 20-model LLMRouterBench pool, scored by accuracy on the same 11,467 queries and folds, the best query-level router added $+0.42$ points (95\% CI $[-0.18, +1.01]$) over a lookup table indexed by the predicted task, while the lookup itself was $+3.33$ points over the best single model.
 
-We conclude that much of the aggregate routing signal on this pair is associated with recognising the benchmark, not with predicting the winner of an individual query. This does \emph{not} show that per-query signal is absent: it is clearly present on three benchmarks.
+Most of the aggregate routing signal on this pair therefore comes from recognising the benchmark, not from predicting the winner of an individual query. This does not show that per-query signal is absent. It is clearly present on three benchmarks. This result changed the next step: more classifier capacity would not help if the input signal is mostly task identity, so we examined the formulation and the labels instead.
 
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-  width=0.95\columnwidth, height=6.6cm,
+  width=0.92\columnwidth, height=6.6cm,
   xmin=0, xmax=1, xlabel={Within-benchmark AUC (compact router)},
   symbolic y coords={math500,kandk,emorynlp,meld,finqa,livecodebench,mmlupro,medqa,gpqa,mbpp,korbench,bbh},
   ytick=data, yticklabel style={font=\scriptsize}, xticklabel style={font=\scriptsize},
@@ -204,49 +231,72 @@ table[x=auc, y=b, x error minus=lo, x error plus=hi, row sep=\\] {
 \draw[densely dotted, blue] (axis cs:0.670,math500) -- (axis cs:0.670,bbh);
 \end{axis}
 \end{tikzpicture}
-\caption{Within-benchmark AUC of the compact router with 95\% bootstrap CIs, pooled over the five held-out folds. Dashed: chance. Dotted: the router's overall AUC (0.670). AIME, HumanEval and MathBench are omitted because their minority class has fewer than 10 queries; MATH500 has 23 non-tie queries.}
+\caption{Within-benchmark AUC of the compact router with 95\% bootstrap CIs, pooled over the five held-out folds. Dashed line: chance. Dotted line: the router's overall AUC (0.670). The gap between the dotted line and most points is the part of the aggregate signal that comes from benchmark identity. AIME, HumanEval and MathBench are omitted because their minority class has fewer than 10 queries; MATH500 has 23 non-tie queries.}
 \label{fig:within}
 \end{figure}
 
-\subsection{Are one-shot winner labels stable?}
-\label{sec:a-stability}
-With binary scores and 80\% ties, a near-chance within-benchmark AUC has two explanations: the router may not see the relevant information, or the label may be a noisy single draw. To separate them, we re-generated a frozen sample of 120 originally non-tied queries, 20 from each of six benchmarks: three with clear within-task signal (BBH, KorBench, MBPP) and three near chance (FinQA, MedQA, MELD). Each query was generated five times by each model with the original decoding settings (temperature 0.2, top-$p$ 1.0, thinking enabled, 32,768-token context) and scored with the original evaluators, giving 1,200 successful generations. The serving stack was reconstructed from the benchmark's published description, so this is a reconstructed evaluation, not an exact reproduction of the original runs.
+\subsection{Ordinal classification}
+\label{sec:a-ordinal}
+The binary router discards the 79.7\% of queries that are ties. One suggestion was to keep them and treat the three outcomes as ordered classes (DeepSeek better, tie, Qwen better), so that a tie sits between the two winners and the classifier learns a single direction. We tested this on the same frozen folds with the same MiniLM embeddings, over all 11,467 queries. Each ordinal model is a cumulative decomposition into two binary boundaries (DeepSeek versus the rest; Qwen versus the rest), enforced to be consistent, and is compared with the matching nominal three-class model. The criterion, fixed before the run, was that the ordinal model had to beat its nominal counterpart by $+0.02$ three-class Macro-F1 with nonzero F1 on both winner classes.
 
-Only 32 of 120 queries (26.7\%) kept the original winner in at least four of five repeats (35.0\% in the signal group, 18.3\% in the chance group; Table~\ref{tab:stability}). Most instability was between a win and a tie, not a reversal: over all 600 repeated pairs, the original winner won 44.5\%, the pair tied 48.3\%, and the opposite model won 7.2\%.
-
-We define the repeated utility margin $m$ of a query as DeepSeek's success rate over five runs minus Qwen's. Its mean absolute value is 0.46; 65\% of queries have $|m|\geq 0.4$, 17 of 120 have $m=0$, and on the 103 queries with $m\neq 0$ the sign agrees with the original one-shot winner in 87 cases (84.5\%). Unstable labels are therefore usually noisy versions of a real preference, and the absence of a stable one-shot winner should not be read as the absence of a model preference.
+Table~\ref{tab:ordinal} gives the results. With class-weighted logistic regression the ordinal model was worse than the nominal one by 0.115 Macro-F1. With a 64-unit MLP head and balanced resampling of the training folds the two were equal (0.4000 against 0.3999). Neither met the criterion. The three-class Macro-F1 values are not comparable with the binary values in Table~\ref{tab:cv} because the tie class is included. The ordinal formulation did not change what the router can see, which is consistent with Section~\ref{sec:a-within}: the limiting factor is the input signal, not the output encoding.
 
 \begin{table}[t]
 \centering
-\caption{Winner-label stability under five repeats per query per model (reconstructed evaluation; 120 queries, 1,200 generations).}
-\label{tab:stability}
+\caption{Ordinal versus nominal three-class routing on all 11,467 queries, same folds, MiniLM embeddings. Three-class Macro-F1 (mean over folds).}
+\label{tab:ordinal}
 \footnotesize
-\begin{tabular}{@{}lccc@{}}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lcc@{}}
 \toprule
-Group & Queries & Stable ($\geq$4/5) & Mean $|m|$ \\
+Head (MiniLM embeddings) & Nominal & Ordinal \\
 \midrule
-Signal (BBH, KorBench, MBPP) & 60 & 21 (35.0\%) & 0.51 \\
-Chance (FinQA, MedQA, MELD) & 60 & 11 (18.3\%) & 0.41 \\
-All & 120 & 32 (26.7\%) & 0.46 \\
-\midrule
-\multicolumn{4}{@{}l}{Repeated outcomes: original winner wins 44.5\%, tie 48.3\%, opposite wins 7.2\%} \\
-\multicolumn{4}{@{}l}{Nonzero-margin queries agreeing with one-shot winner: 87/103 (84.5\%)} \\
+Always predict tie (reference) & \multicolumn{2}{c}{0.296} \\
+Logistic regression, class-weighted & 0.380 & 0.265 \\
+MLP-64, balanced resampling & 0.400 & 0.400 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Do router scores align better with repeated preference?}
-\label{sec:a-target}
-We took the compact router's existing held-out scores for the 103 nonzero-margin queries, with no retraining and no change to folds, thresholds or features, and evaluated them against two targets: the original one-shot winner and the sign of the repeated margin (Table~\ref{tab:target}). Within-benchmark macro Macro-F1 rose from 0.381 to 0.421 and within-benchmark macro AUC from 0.573 to 0.640; overall AUC rose from 0.544 to 0.619. Five of six benchmarks improved on both metrics; MedQA worsened. This meets the practical criterion we fixed in advance. These values are not comparable with Section~\ref{sec:a-within}: the sample is balanced across six chosen benchmarks and restricted to originally non-tied queries.
+\subsection{Winner-label stability}
+\label{sec:a-stability}
+With binary scores and 80\% ties, a near-chance within-benchmark AUC has two possible explanations. The router may not see the relevant information, or the label may be a noisy single draw. To separate them (RQ2), we re-generated a frozen sample of 120 originally non-tied queries, 20 from each of six benchmarks: three with clear within-task signal (BBH, KorBench, MBPP) and three near chance (FinQA, MedQA, MELD). Each query was generated five times by each model with the original decoding settings (temperature 0.2, top-$p$ 1.0, thinking enabled) and scored with the original evaluators, giving 1,200 successful generations and no generation errors. The serving stack was reconstructed from the benchmark's published description, so this is a reconstructed evaluation, not an exact reproduction of the original runs.
 
-The same scores, trained on one-shot labels, agree better with the repeated preference than with the labels they were trained on. Part of the per-query signal was hidden by label noise. The result rests on 16--19 queries per benchmark, no significance test has been applied, and it does not show that a router trained on repeated utility would route better. \todo{Paired, benchmark-stratified bootstrap of the within-benchmark AUC difference on the 103 queries (CPU, seconds). Report its CI here; if the CI includes 0, keep the result explicitly descriptive.}
+Only 32 of 120 queries (26.7\%) kept the original winner in at least four of five repeats: 35.0\% in the signal group and 18.3\% in the chance group (Table~\ref{tab:stability}). Most of the instability was between a win and a tie rather than a reversal. Over all 600 repeated pairs, the original winner won 44.5\%, the pair tied 48.3\%, and the opposite model won 7.2\%.
+
+We define the repeated utility margin $m$ of a query as DeepSeek's success rate over five runs minus Qwen's. Its mean absolute value is 0.46, and 65\% of queries have $|m|\geq0.4$. Only 17 of 120 queries have $m=0$. On the 103 queries with $m\neq0$, the sign of $m$ agrees with the original one-shot winner in 87 cases (84.5\%). Unstable labels are therefore usually noisy versions of a real preference. The absence of a stable one-shot winner should not be read as the absence of a model preference.
 
 \begin{table}[t]
 \centering
-\caption{Same held-out router scores, two targets (103 nonzero-margin queries). Per-benchmark $n$ = 16--19.}
+\caption{Winner-label stability under five repeats per query per model (reconstructed evaluation; 120 queries, 1,200 generations). Stable: the original winner wins at least 4 of 5 repeats. $|m|$: absolute repeated utility margin.}
+\label{tab:stability}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Group & Queries & Stable & Mean $|m|$ \\
+\midrule
+Signal: BBH, KorBench, MBPP & 60 & 21 (35.0\%) & 0.51 \\
+Chance: FinQA, MedQA, MELD & 60 & 11 (18.3\%) & 0.41 \\
+All & 120 & 32 (26.7\%) & 0.46 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Same router scores, repeated-preference target}
+\label{sec:a-target}
+If one-shot labels are noisy draws of a real preference, the router may be better than its one-shot scores suggest. We tested this without training anything new. We took the compact router's existing held-out scores for the 103 nonzero-margin queries, with no retraining, no new embeddings and no change to folds or thresholds, and evaluated them against two targets: the original one-shot winner and the sign of the repeated margin. Table~\ref{tab:target} and Fig.~\ref{fig:target} give the results. Within-benchmark macro Macro-F1 rose from 0.381 to 0.421, and within-benchmark macro AUC from 0.573 to 0.640. Overall AUC rose from 0.544 to 0.619. Five of six benchmarks improved on both metrics. MedQA worsened. This met the practical criterion we had fixed in advance. These values are not comparable with Section~\ref{sec:a-within}, because the sample is balanced across six chosen benchmarks and restricted to originally non-tied queries.
+
+Because the comparison rests on 16 to 19 queries per benchmark, we added a paired, benchmark-stratified bootstrap after the fact. This analysis was not pre-registered. It resamples queries with replacement within each benchmark (10,000 replicates, fixed seed), scores both targets on the same resampled rows, and records the difference in within-benchmark macro AUC. The observed difference is $+0.068$. The bootstrap median is $+0.067$, the 95\% percentile interval is $[-0.016, +0.155]$, and 94.6\% of replicates have a positive difference. For within-benchmark macro Macro-F1 the observed difference is $+0.040$ with interval $[-0.012, +0.094]$. The interval includes zero, so we do not call the gain statistically significant. The bootstrap is a check of sampling variability on a small, chosen sample, not a hypothesis test with a controlled error rate. Per benchmark, the AUC difference is positive in most replicates for FinQA (94\%), KorBench (76\%), MELD (77\%), BBH (68\%) and MBPP (64\%), and negative for MedQA (97\%).
+
+The same scores, trained on one-shot labels, agree better with the repeated preference than with the labels they were trained on. Some of the per-query signal was hidden by label noise. This does not show that routing on this pair is solved, and it does not show that a router trained on repeated-utility targets would route better. That remains untested.
+
+\begin{table}[t]
+\centering
+\caption{Same held-out router scores, two targets (103 nonzero-margin queries). Per-benchmark $n$ = 16 to 19.}
 \label{tab:target}
 \footnotesize
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
 & \multicolumn{2}{c}{Macro-F1} & \multicolumn{2}{c}{AUC} \\
@@ -265,17 +315,61 @@ Overall & 0.500 & 0.555 & 0.544 & 0.619 \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar, bar width=5pt,
+  width=0.95\columnwidth, height=5.4cm,
+  ymin=0.3, ymax=0.85, ylabel={Within-benchmark AUC},
+  symbolic x coords={BBH,KorBench,MBPP,FinQA,MedQA,MELD,Macro},
+  xtick=data, x tick label style={font=\scriptsize, rotate=30, anchor=east},
+  ytick={0.3,0.4,0.5,0.6,0.7,0.8}, yticklabel style={font=\scriptsize},
+  label style={font=\footnotesize},
+  legend style={font=\scriptsize, at={(0.98,0.97)}, anchor=north east, draw=none, fill=none},
+  enlarge x limits=0.1, ymajorgrids, grid style={gray!30},
+]
+% diagnostics/winner_label_stability/target_only_eval_benchmark.csv, _summary.csv
+\addplot[fill=white, draw=black] coordinates {(BBH,0.733) (KorBench,0.635) (MBPP,0.678) (FinQA,0.413) (MedQA,0.486) (MELD,0.492) (Macro,0.573)};
+\addplot[fill=black!70, draw=black] coordinates {(BBH,0.784) (KorBench,0.746) (MBPP,0.756) (FinQA,0.600) (MedQA,0.386) (MELD,0.571) (Macro,0.640)};
+\legend{One-shot winner target, Repeated-preference target}
+\draw[dashed, gray] ({rel axis cs:0,0}|-{axis cs:BBH,0.5}) -- ({rel axis cs:1,0}|-{axis cs:BBH,0.5});
+\end{axis}
+\end{tikzpicture}
+\caption{The same held-out MiniLM MLP-64 scores on the 103 nonzero-margin queries, evaluated against the original one-shot winner and against the sign of the five-run repeated margin. Dashed line: chance. The macro bars rise from 0.573 to 0.640; the post hoc bootstrap interval for that difference is given in Section~\ref{sec:a-target}.}
+\label{fig:target}
+\end{figure}
+
 % =====================================================================
-\section{Study B: Does Split Execution Open a Quality Tier?}
+\section{Deployment test: does Split add an execution option?}
 \label{sec:b}
 
-\subsection{Split architecture and decision rule}
-The split model is Qwen3-32B in bf16. The edge holds the embedding, the first $k$ and the last $k$ decoder layers, the final norm and the LM head; the server holds the middle $64-2k$ layers; each side keeps its own KV cache, and only hidden states cross the link, so the raw query text never leaves the device. The runtime is a two-process Hugging Face implementation with SDPA attention; to keep the test fixed, no further optimisation (CUDA graphs, compilation, batching, speculation, activation compression) was permitted. On CPU it reproduces unsplit forward passes and greedy generation bit for bit. Edge memory classes of 12, 16 and 24\,GB are emulated by capping one 24\,GB RTX~3090. The competitors are the 4-bit and bf16 Qwen3 models (8B-AWQ, 14B-AWQ, 32B-AWQ, 8B) that pass a measured fit test at each class, served with vLLM; under the \emph{open} policy, remote Qwen3-32B is added.
+\subsection{Frozen split design and decision rule}
+The split model is Qwen3-32B~\cite{qwen3} in bf16. The edge holds the embedding, the first $k$ and the last $k$ decoder layers, the final norm and the LM head. The server holds the middle $64-2k$ layers. Each side keeps its own KV cache, and only hidden states cross the link, so the raw query text never leaves the device. The runtime is a two-process Hugging Face implementation with SDPA attention. To keep the test fixed, no further optimisation (CUDA graphs, compilation, batching, speculation, activation compression) was permitted; the pre-registration lists this eager runtime as a known performance threat (Section~\ref{sec:discussion}). On CPU the runtime reproduces unsplit forward passes and greedy generation bit for bit. Edge memory classes of 12, 16 and 24\,GB are emulated by capping one 24\,GB RTX~3090; they are budgets on that card, not physical 12 or 16\,GB devices. The competitors are the Qwen3 models that pass a measured fit test at each class (8B-AWQ, 14B-AWQ, 32B-AWQ with 4-bit AWQ weights~\cite{awq}, and 8B in bf16), served with vLLM~\cite{vllm}. Under the open policy, remote Qwen3-32B is added.
 
-For an action $a$ and deadline $D$, utility is the mean over the 200 S1 queries and two seeds of $\text{score}(q)\cdot\mathbb{1}[T_a(q)\leq D]$: an answer that arrives late counts as wrong. For each cell (memory class, policy, deadline) the advantage is $\Delta=\max_{\text{mode}}U_{\textsc{Split}}-\max U_{\text{competitor}}$, with a paired bootstrap CI stratified by benchmark (10,000 resamples, both maxima re-selected in each replicate). Split earns a place in the action set only if some cell reaches $\Delta\geq 3.0$ points with a CI lower bound above 0. The experiment was staged so that each stage could end it cheaply.
+For an action $a$ and deadline $D$, utility is the mean over the 200 S1 queries and two seeds of $\text{score}(q)\cdot\mathbb{1}[T_a(q)\leq D]$: an answer that arrives late counts as wrong. For each cell (memory class, policy, deadline) the advantage is $\Delta=\max_{\text{mode}}U_{\textsc{Split}}-\max U_{\text{competitor}}$, with a paired bootstrap CI stratified by benchmark (10,000 resamples, both maxima re-selected in each replicate). Split earns a place in the action set only if some cell reaches $\Delta\geq3.0$ points with a CI lower bound above 0. The experiment was staged so that each stage could end it cheaply (Fig.~\ref{fig:flow}).
 
-\subsection{Is there quality headroom worth exposing? (S1)}
-S1 measured quality only. Five Qwen3 configurations (32B bf16, 8B bf16, 8B-AWQ, 14B-AWQ, 32B-AWQ), in thinking and non-thinking mode with two seeds, answered 200 queries (60 MMLU-Pro, 60 GPQA, 40 LiveMathBench, 40 LiveCodeBench) on one H200, for 4,000 scored generations. Qwen3-32B bf16 led the best 12\,GB-eligible model (8B-AWQ) by $+2.5$ to $+27.5$ points across benchmark$\times$mode cells, and the best 16\,GB-eligible model by up to $+7.5$ points (Table~\ref{tab:s1}). The gate's condition was met, so the experiment continued. S1 shows only that a quality gap exists; it says nothing about whether split execution can deliver that quality in time.
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=2.2mm,
+  box/.style={draw, rounded corners=1pt, align=left, text width=0.9\columnwidth, inner sep=3pt, font=\scriptsize},
+  stop/.style={box, fill=gray!15},
+  >=Stealth]
+\node[box] (s1) {S1 quality screen (H200, 4,000 generations). Qwen3-32B bf16 leads the best 12\,GB-eligible model by up to $+27.5$ pt. Gate: gap $\geq3.0$ pt somewhere. Result: CONTINUE.};
+\node[box, below=of s1] (st1) {Stage 1 memory feasibility (RTX 3090, capped to 12/16/24\,GB). Largest symmetric split (3,3), (5,5), (9,9). Competitor fit: 8B-AWQ at 12 and 16\,GB; 24\,GB class blocked by the competitor rule. Result: pass.};
+\node[box, below=of st1] (ub1) {G-UB1 optimistic bound: measured edge compute plus H200 datasheet speed for the server layers, zero network time. Best advantage $+12.25$ pt, 14 of 20 cells pass. Gate: STOP iff best $<3.0$ pt. Result: CONTINUE (not latency evidence).};
+\node[box, below=of ub1] (st2) {Stage 2 measured server compute (one H200, $k=1,3,5,9$; 36 usable requests per profile). Median decode step 66\,ms at $k=3$.};
+\node[stop, below=of st2] (ub2) {G-UB2: same bound with measured server compute, still zero network time. Best advantage $+0.5$ pt (95\% CI $[-4.75,+5.25]$), 0 of 20 cells pass. Result: STOP. Split removed.};
+\node[box, below=of ub2, dashed] (st3) {Stage 3 (real network, end-to-end latency): not run, by rule.};
+\draw[->] (s1) -- (st1); \draw[->] (st1) -- (ub1); \draw[->] (ub1) -- (st2); \draw[->] (st2) -- (ub2); \draw[->, dashed] (ub2) -- (st3);
+\end{tikzpicture}
+\caption{The staged deployment test. Each stage ran only because the previous gate said CONTINUE; the rules were written before any hardware was used.}
+\label{fig:flow}
+\end{figure}
+
+\subsection{Quality headroom (S1)}
+S1 answers RQ3 and measured quality only. Five Qwen3 configurations (32B bf16, 8B bf16, 8B-AWQ, 14B-AWQ, 32B-AWQ), in thinking and non-thinking mode with seeds 0 and 1, answered 200 queries (60 MMLU-Pro, 60 GPQA, 40 LiveMathBench, 40 LiveCodeBench) on one H200, for 4,000 scored generations. Qwen3-32B bf16 led the best 12\,GB-eligible model (8B-AWQ) by $+2.5$ to $+27.5$ points across the eight benchmark-and-mode cells, and led the best 16\,GB-eligible model by up to $+7.5$ points (Table~\ref{tab:s1}). The gate's condition was met, so the experiment continued. S1 shows only that a quality gap exists. It says nothing about whether split execution can deliver that quality in time, and it is not evidence that Split is useful.
 
 \begin{table}[t]
 \centering
@@ -299,29 +393,32 @@ LiveCode & no-think & $+10.0$ [$+0.0$, $+21.2$] & $-2.5$ [$-13.8$, $+8.8$] \\
 \end{tabular}
 \end{table}
 
-\subsection{Does the split fit in edge memory? (Stage 1)}
-On the capped RTX~3090 (a valid run with no harness defects and no fatal errors, after two earlier runs were invalidated by harness bugs and repaired without changing the protocol), the largest symmetric split that fits was $(k,k)=(3,3)$ at 12\,GB, $(5,5)$ at 16\,GB and $(9,9)$ at 24\,GB, as predicted by the analytic memory model. The only competitor that passed the measured fit at 12 and 16\,GB was Qwen3-8B-AWQ; at 16\,GB this is weaker than the desk check assumed, which favours Split. At 24\,GB, Qwen3-32B-AWQ failed for an engine reason rather than memory, so under a rule fixed in advance the 24\,GB class cannot produce a Split pass and is not evaluable. Edge-segment compute profiles were recorded for every frozen configuration.
+\subsection{Memory feasibility (Stage 1)}
+Stage~1 ran on the capped RTX~3090. Two earlier runs were invalidated by harness bugs and repaired without changing the protocol; the third run was valid, with no harness defects and no fatal errors. The largest symmetric split that fit was $(k,k)=(3,3)$ at 12\,GB, $(5,5)$ at 16\,GB and $(9,9)$ at 24\,GB, as the analytic memory model had predicted. The only competitor that passed the measured fit at 12 and 16\,GB was Qwen3-8B-AWQ. At 16\,GB this is weaker than the desk check had assumed, which favours Split. At 24\,GB the (9,9) split itself fitted, but the relevant competitor, Qwen3-32B-AWQ, did not start: the vLLM engine could not allocate a KV cache for the required 17,920-token context under the budget and refused to launch. Under the rule fixed in advance, a competitor that fails for a reason other than a recognised out-of-memory error leaves the competitor set incomplete, so the 24\,GB class cannot produce a Split pass and is not evaluable. Edge-segment compute profiles were recorded for every frozen configuration. Stage~1 shows that the split is physically feasible under these budgets. It is not latency evidence.
 
-\subsection{Can an optimistic bound rule Split out? (G-UB1)}
-G-UB1 bounds Split's time from below: 0.9$\times$ the measured edge-segment compute, plus the H200 datasheet roofline for the server layers, with zero network time; remote execution in open cells is given utility 0. Under this bound, 14 of 20 evaluable cells passed and the best advantage was $+12.25$ points (12\,GB, no-raw-text, $D=60$\,s; CI [$+6.5$, $+17.25$]). The gate's outcome was CONTINUE. This means only that the bound could not rule Split out; it is not evidence that Split meets any deadline.
+\subsection{Optimistic bound (G-UB1)}
+G-UB1 bounds Split's time from below: 0.9 times the measured edge-segment compute, plus the H200 datasheet roofline for the server layers, with zero network time. Remote execution in open cells is given utility 0, so the open cells reduce to the no-raw-text cells. Under this bound, 14 of 20 evaluable cells passed and the best advantage was $+12.25$ points (12\,GB, no-raw-text, $D=60$\,s; CI [$+6.5$, $+17.25$]). The gate's outcome was CONTINUE. This means only that an optimistic bound could not rule Split out. It is not evidence that Split meets any deadline.
 
-\subsection{With measured server compute? (G-UB2)}
-On one H200 (server self-test 13 pass, 0 fail, 1 skip), we measured the compute of the server segment at $k=1,3,5,9$ (36 usable requests per profile). A decode step of the middle segment took a median of 66\,ms at $k=3$ (58 layers) and 50\,ms at $k=9$ (46 layers). G-UB2 is G-UB1 with the roofline replaced by 0.9$\times$ this measured compute; network time is still zero and remote utility in open cells is still 0, so the bound still favours Split.
+\subsection{Measured server compute (G-UB2)}
+On one H200 (server self-test 13 pass, 0 fail, 1 skip), we measured the compute of the server segment at $k=1,3,5,9$ (38 requests per profile, of which 36 are usable after two warm-ups). A decode step of the middle segment took a median of 71\,ms at $k=1$ (62 layers), 66\,ms at $k=3$ (58 layers), 62\,ms at $k=5$ and 50\,ms at $k=9$ (46 layers). G-UB2 is G-UB1 with the datasheet roofline replaced by 0.9 times this measured compute. Network time is still zero and remote utility in open cells is still 0, so the bound still favours Split.
 
-No cell passed (Fig.~\ref{fig:ub}). The best advantage was $+0.5$ points, in the 12\,GB and 16\,GB classes at $D=60$\,s, where non-thinking Split reached $U=0.460$ against $0.455$ for Qwen3-8B-AWQ in thinking mode (95\% CI [$-4.75$, $+5.25$]). At $D=30$\,s Split lost by 17 points; at $D\geq 300$\,s the 4-bit 8B model in thinking mode (0.63) beat both Split modes, because long thinking traces through the split could not finish in time. Results for the open policy were identical, since remote execution was bounded at 0. Under the pre-registered rule the outcome was STOP, and Split was removed from the action set. The latency stage with a real network (Stage~3) was therefore not run, and we do not report end-to-end Split latencies. Both gates were recomputed from the archived profiles and matched exactly.
+No cell passed (Fig.~\ref{fig:ub}). The best advantage was $+0.5$ points, in the 12\,GB and 16\,GB classes at $D=60$\,s under no-raw-text, where non-thinking Split reached $U=0.460$ against $0.455$ for Qwen3-8B-AWQ in thinking mode (95\% CI [$-4.75$, $+5.25$]; Bonferroni-adjusted lower bound $-7.1$). The required advantage was $+3.0$. At $D=30$\,s Split lost by 17 points. At $D\geq300$\,s the 4-bit 8B model in thinking mode (0.63) beat both Split modes, because long thinking traces through the split could not finish in time. Results for the open policy were identical, since remote execution was bounded at 0. Under the pre-registered rule the outcome was STOP, and Split was removed from the action set. Stage~3, which would have added a real network, was therefore not run, and we report no end-to-end Split latency. Both gates were recomputed on CPU from the archived profiles and matched the archived gate files exactly.
+
+The change from G-UB1 to G-UB2 is the whole result of the deployment test. Stage~1 survived because the server term was a datasheet figure. Replacing that one term with the measured compute of the frozen runtime moved the best bound from $+12.25$ to $+0.5$ points. No network cost was needed to remove Split.
 
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-  width=0.95\columnwidth, height=5.6cm,
+  width=0.95\columnwidth, height=6.0cm,
   xmode=log, xmin=22, xmax=800,
   xtick={30,60,120,300,600}, xticklabels={30,60,120,300,600},
   xlabel={Deadline $D$ (s)}, ylabel={Bounded $\Delta$ (points)},
   ymin=-25, ymax=20,
   label style={font=\footnotesize}, tick label style={font=\scriptsize},
-  legend style={font=\scriptsize, at={(0.98,0.03)}, anchor=south east},
+  legend style={font=\scriptsize, at={(0.5,-0.30)}, anchor=north, legend columns=2, /tikz/every even column/.append style={column sep=4pt}},
 ]
+% gates/gate_ub1.json and gates/gate_ub2.json, no-raw-text cells
 \addplot+[mark=o, gray, dashed, mark options={solid}] coordinates {(30,11.25) (60,12.25) (120,0.25) (300,6.25) (600,11.75)};
 \addlegendentry{G-UB1, 12\,GB (datasheet server)}
 \addplot+[mark=square, gray!60, dashed, mark options={solid}] coordinates {(30,7.75) (60,11.75) (120,0.25) (300,1.75) (600,11.75)};
@@ -336,10 +433,12 @@ No cell passed (Fig.~\ref{fig:ub}). The best advantage was $+0.5$ points, in the
 \addplot+[mark=square*, black!60, mark options={solid}] coordinates {(30,-17.0) (60,0.5) (120,-2.25) (300,-5.0) (600,-2.75)};
 \addlegendentry{G-UB2, 16\,GB}
 \draw[red, thick] (axis cs:22,3) -- (axis cs:800,3);
+\node[font=\scriptsize, red, anchor=south west] at (axis cs:23,3.2) {required $+3.0$};
 \draw[gray] (axis cs:22,0) -- (axis cs:800,0);
+\node[font=\scriptsize, anchor=north west] at (axis cs:60,0.2) {best $+0.5$};
 \end{axis}
 \end{tikzpicture}
-\caption{Bounded Split advantage over the best admissible competitor (no-raw-text policy). Red line: the pre-declared $+3.0$-point requirement. Both bounds use zero network time. Error bars: 95\% paired bootstrap CI for G-UB2 at 12\,GB. The 24\,GB class was not evaluable (competitor engine failure).}
+\caption{Bounded Split advantage over the best admissible competitor (no-raw-text policy). Red line: the pre-declared $+3.0$-point requirement. Both bounds use zero network time. Error bars: 95\% paired bootstrap CI for G-UB2 at 12\,GB. Replacing the datasheet server term (grey) with measured H200 compute (black) is the only change between the two bounds. The 24\,GB class was not evaluable.}
 \label{fig:ub}
 \end{figure}
 
@@ -347,18 +446,31 @@ No cell passed (Fig.~\ref{fig:ub}). The best advantage was $+0.5$ points, in the
 \section{Discussion}
 \label{sec:discussion}
 
-\textbf{What the evidence supports.} On this model pair, a lightweight router's measured advantage comes mostly from recognising the benchmark. Per-query signal exists, but it is concentrated in a few benchmarks and partly hidden by noisy one-shot labels. For the deployment, the case for split execution of a 32B model rested on a narrow regime: edges too small for the large model, deadlines of about a minute, and queries whose raw text may not leave the device. Under measured server compute, even a bound that ignores the network does not reach the required margin in that regime. The competitor that removes Split is a 4-bit 8B model on the edge, often in thinking mode, not remote execution.
+\subsection{What the lightweight router recovers}
+On this model pair, a compact router's measured advantage comes mostly from recognising the benchmark. Three facts support this. Overall AUC is 0.670 while within-benchmark macro AUC is 0.501. A diagnostic that only knows the benchmark reaches a higher Macro-F1 than the router. On the 20-model pool, a task lookup captures $+3.33$ points over the best single model, and the best query-level router adds $+0.42$ points on top, with a CI that includes zero. Aggregate Macro-F1 and AUC overstated within-task signal because the benchmarks differ in which model wins on average, and the router can learn that difference from the query text. Per-query signal does exist, but it is concentrated in BBH, KorBench and MBPP, and it is partly hidden by the labels.
 
-\textbf{Implications for edge routers.} For workloads like these, the decision in Eq.~\eqref{eq:route} reduces to a task-level choice of model followed by a choice between Edge and Remote, and the semantic component can be as simple as a task recogniser. In a pre-hardware simulation on cached LLMRouterBench outputs with assumed throughputs and round-trip times, changing the round-trip time from 20 to 300\,ms did not change the optimal Edge/Remote action for any task, and jointly optimising model and path did not beat the strongest decomposed baseline by its pre-declared margin. These simulation results are not hardware measurements and we treat them only as context. \todo{Decide whether to keep this paragraph; if kept, cite the simulation artifact and state its assumed profiles.}
+\subsection{What repeated evaluation changed}
+The repeated-generation experiment changed the interpretation of the near-chance within-benchmark results. Only 26.7\% of one-shot winners were stable, so a single-run label is a poor target. But 103 of 120 queries had a nonzero five-run margin, and 84.5\% of those agreed with the one-shot winner, so the preference is real and the one-shot label is usually a noisy version of it. The unchanged router scores fit the repeated preference better than the labels they were trained on (within-benchmark AUC 0.573 to 0.640). The natural next test is a router trained on repeated-utility targets. We have not run it, and the present results do not predict its outcome.
 
-\textbf{What the results do not show.} (i) They do not show that per-query routing is impossible: the target-only result suggests that training on repeated utility might expose more signal, which we have not tested. (ii) They do not show that split LLM inference is useless. They falsify one frozen design: a symmetric layer split of Qwen3-32B in an eager Hugging Face runtime, against vLLM-served 4-bit edge models, on emulated 12--24\,GB budgets, for these four benchmarks and this deadline-utility rule. The change from G-UB1 ($+12.25$) to G-UB2 ($+0.5$) comes entirely from replacing the datasheet roofline with the measured compute of this runtime. We fixed in advance that this runtime difference may not overturn a failed gate, and the Stage~3 cell that would have separated ``this runtime'' from ``split itself'' was not reached. A faster split runtime is a different design and would need its own pre-registration. (iii) The 12 and 16\,GB results describe emulated memory budgets on a 24\,GB GPU, not physical devices.
+\subsection{Why Split was removed}
+The case for split execution of a 32B model rested on a narrow regime: edges too small for the large model, deadlines of about a minute, and queries whose raw text may not leave the device. S1 confirmed that the quality gap exists. Stage~1 confirmed that the split fits. The gate that removed Split used a bound that ignores the network entirely and discounts the measured edge time by 10\%. Even that bound could not reach the required $+3.0$ points once the server segment was measured rather than assumed. The competitor that removes Split is a 4-bit 8B model on the edge, often in thinking mode, not remote execution. At short deadlines Split loses because its decode step is slow; at long deadlines the 8B model's thinking traces finish and its accuracy catches up.
 
-\textbf{Limitations.} Study~A uses one model pair, binary scores and one partition; the repeated-generation sample is 120 queries, and its serving stack is reconstructed. Study~B uses one model family, 200 queries, four benchmarks, and a deadline utility in which late answers score zero; the S1 eligibility of edge models was chosen on the same queries it was scored on, a small selection effect in the edge's favour. The two studies use different models and utility definitions, and their numbers should not be combined.
+\subsection{Runtime limitation}
+The frozen split runtime is an eager Hugging Face implementation, while the competitors run in vLLM. Its measured decode step of 50 to 71\,ms for the middle segment on an H200 is far from the datasheet bound that G-UB1 used. The pre-registration named this as a known threat and stated that the runtime difference would never be used to overturn a failed gate. The Stage~3 cell that would have separated this runtime from split inference itself was not reached. The supported claim is therefore narrow: this frozen Qwen3-32B layer-split design, with this runtime, these workloads, these memory classes and this preregistered utility criterion did not keep enough advantage over the best eligible edge model once measured server compute was used. A faster split runtime is a different design and would need its own pre-registration. The result does not show that split LLM inference fails in general.
+
+\subsection{Emulated memory budgets and data policy}
+The 12 and 16\,GB results describe memory budgets emulated on a 24\,GB RTX~3090. A capped card keeps the bandwidth and compute of the full card, and real 12 to 16\,GB devices are usually slower, so the emulation is not conservative for Split's latency; per decoded token, the split's edge segment reads more bytes than the class's edge competitor. The no-raw-text policy is an admissibility rule. It controls where the query text goes, and nothing more. Intermediate activations can leak information about the input, and we did not measure that leakage.
+
+\subsection{Limitations}
+The semantic study uses one model pair, binary scores and one partition. The repeated-generation sample is 120 queries from six chosen benchmarks, and its serving stack is reconstructed. The bootstrap in Section~\ref{sec:a-target} was added after the fact. The deployment study uses one model family, 200 queries, four benchmarks, and a deadline utility in which late answers score zero. The S1 eligibility of edge models was chosen on the same queries it was scored on, a small selection effect in the edge's favour. The two studies use different models and utility definitions, and their numbers should not be combined.
+
+\subsection{Open questions}
+Two questions follow directly from the evidence. Does a router trained on repeated-utility targets gain within-benchmark discrimination beyond benchmark identity? And does an optimised split runtime, measured under a new pre-registration, close the gap between the datasheet bound and the measured one? A third question is practical rather than scientific: with Split removed, the deployment decision for these workloads reduces to a task-level model choice followed by an Edge or Remote placement, and the semantic component can be as simple as a task recogniser.
 
 % =====================================================================
 \section{Conclusion}
 \label{sec:conclusion}
-We set out to build a router that predicts each model's utility for a query and chooses among Edge, Split and Remote execution at run time, and we tested its two premises first. A lightweight router's aggregate signal on our pair is mostly benchmark recognition; one-shot winner labels are unstable, and the same router scores fit a repeated-utility target better than the labels they were trained on. Splitting Qwen3-32B fits in 12--24\,GB of edge memory and survives an optimistic bound, but not a bound built from measured server compute, so our pre-registered rule removed it. The open question that follows most directly from this evidence is whether a router trained on repeated-utility targets gains within-benchmark discrimination beyond benchmark identity.
+We set out to build a lightweight router that predicts each model's utility for a query and chooses among Edge, Split and Remote execution. Before building it we tested its two inputs. The semantic input was weaker than aggregate metrics suggested: on our model pair, most of the measured signal is benchmark recognition, the ordinal formulation did not help, and the one-shot labels are unstable. Repeated evaluation showed that a model preference exists for most queries and that the unchanged router scores track it better than the one-shot labels do. Following that result, we moved the main problem to deployment and tested the one execution option whose value does not depend on a strong per-query router. Splitting Qwen3-32B fits in 12 to 24\,GB of edge memory and passes a datasheet bound, but with measured H200 server compute the best bounded advantage over a 4-bit edge model was $+0.5$ points against the required $+3.0$, and the pre-registered rule removed Split before any network cost was counted. The next experiment that could change the semantic conclusion is a router trained on repeated-utility targets. The Split conclusion can only change under a new design, such as an optimised split runtime, tested under its own pre-registration.
 
 \begin{thebibliography}{99}
 \providecommand{\url}[1]{#1}
@@ -536,6 +648,30 @@ A.~Younesi, A.~S. Maryan, E.~Oustad, Z.~N. Samani, M.~Ansari, and T.~Fahringer,
   {Lyapunov}-assisted {DRL},'' in \emph{Proceedings of the 18th IEEE/ACM
   International Conference on Utility and Cloud Computing (UCC)}.\hskip 1em
   plus 0.5em minus 0.4em\relax ACM, 2025, pp. 1--11.
+
+\bibitem{qwen3}
+A.~Yang et al., ``Qwen3 technical report,'' 2025, arXiv preprint arXiv:2505.09388.
+
+\bibitem{deepseekr1}
+D.~Guo, D.~Yang, H.~Zhang, et al., ``{DeepSeek-R1} incentivizes reasoning in {LLMs} through reinforcement learning,'' \emph{Nature}, vol.~645, pp. 633--638, 2025, doi: 10.1038/s41586-025-09422-z.
+
+\bibitem{deepseekr1qwen3card}
+DeepSeek-AI, ``{DeepSeek-R1-0528-Qwen3-8B} model card,'' Hugging Face, 2025. [Online]. Available: \url{https://huggingface.co/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B}
+
+\bibitem{minilm}
+W.~Wang, F.~Wei, L.~Dong, H.~Bao, N.~Yang, and M.~Zhou, ``{MiniLM}: Deep self-attention distillation for task-agnostic compression of pre-trained transformers,'' in \emph{Advances in Neural Information Processing Systems 33 (NeurIPS 2020)}, 2020, pp. 5776--5788.
+
+\bibitem{sbert}
+N.~Reimers and I.~Gurevych, ``{Sentence-BERT}: Sentence embeddings using {Siamese} {BERT}-networks,'' in \emph{Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)}, 2019, pp. 3982--3992.
+
+\bibitem{gte}
+Z.~Li, X.~Zhang, Y.~Zhang, D.~Long, P.~Xie, and M.~Zhang, ``Towards general text embeddings with multi-stage contrastive learning,'' 2023, arXiv preprint arXiv:2308.03281. Model: \url{https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct}
+
+\bibitem{vllm}
+W.~Kwon, Z.~Li, S.~Zhuang, Y.~Sheng, L.~Zheng, C.~H. Yu, J.~E. Gonzalez, H.~Zhang, and I.~Stoica, ``Efficient memory management for large language model serving with {PagedAttention},'' in \emph{Proceedings of the 29th Symposium on Operating Systems Principles (SOSP)}.\hskip 1em plus 0.5em minus 0.4em\relax ACM, 2023, pp. 611--626.
+
+\bibitem{awq}
+J.~Lin, J.~Tang, H.~Tang, S.~Yang, W.-M. Chen, W.-C. Wang, G.~Xiao, X.~Dang, C.~Gan, and S.~Han, ``{AWQ}: Activation-aware weight quantization for on-device {LLM} compression and acceleration,'' in \emph{Proceedings of Machine Learning and Systems (MLSys)}, vol.~6, 2024, pp. 87--100.
 
 \end{thebibliography}
 
