@@ -1,4 +1,4 @@
-# Final review notes for the second revision pass (2026-11-10)
+# Final review notes for the second and third revision passes (2026-11-10, updated 2026-11-11)
 
 Scope of this file: remaining TODOs, unverified claims, compile issues, advisor hardware references, the optional bootstrap result, and sentences to review by hand. Nothing else.
 
@@ -9,7 +9,11 @@ Scope of this file: remaining TODOs, unverified claims, compile issues, advisor 
 3. `paper/overleaf/architecture-compact-2026-10-08.pdf` is still tracked in the repo but is no longer referenced by `main.tex`. It shows the Edge/Split/Remote optimiser that was never built. Delete it with `git rm` when you commit, or keep it for history; the manuscript does not use it.
 4. E0 archives. The Stage-1 and Stage-2 tarballs are untracked in `~/research/LLMRouterBench`. The paper says the gates "recompute from the archived profiles"; archive them in the experiment repo (audit §8 A2) before submission.
 5. Overleaf compile. The local build used Tectonic (XeTeX engine, Computer Modern fallback for Times). Overleaf uses pdfLaTeX. Expect identical layout logic but recheck page breaks and the four figures after upload.
-6. Memory classes in Table I row B2 say "U-max (3,3), (5,5), (9,9) at 12/16/24 GB" and the text explains that the 24 GB class is blocked by the competitor rule. Check that this reads correctly to you; the split itself fits at 24 GB.
+6. Freeze E1-OPT. Review `~/research/LLMRouterBench/diagnostics/deployment_e1opt/PREREG_E1OPT.md`, then tag `e1opt-prereg-v1` before any GPU time. Nothing in E1-OPT has run on a GPU.
+7. Lab inventory (E1-OPT Stage 0). Run the RUNBOOK §1 commands on the Asus server and the DGX Spark, decide roles from the output, run the desk gate with the server GPU's datasheet bandwidth. Ask the lab who assigns roles, whether `tc netem` is allowed, and whether the 2 x RTX 3090 edge server of the October manuscript is the Asus machine.
+8. E1-OPT GPU equivalence driver (`e1_bench.py equivalence`), the runtime freeze writer, the edge-segment profiler and the joint cell driver remain to be written (IMPLEMENTATION_PLAN work items 1 to 5).
+9. Overleaf recompile of the third pass: Fig. 5 uses `x dir=reverse` and a rotated node; check it renders under pdfLaTeX. Local Tectonic build: see §3.
+10. Memory classes in Table I row B2 say "U-max (3,3), (5,5), (9,9) at 12/16/24 GB" and the text explains that the 24 GB class is blocked by the competitor rule. Check that this reads correctly to you; the split itself fits at 24 GB.
 
 ## 2. Unverified or deliberately weak claims
 
@@ -21,20 +25,21 @@ Scope of this file: remaining TODOs, unverified claims, compile issues, advisor 
 
 ## 3. Compile status
 
-- `main.tex` compiles with Tectonic 0.15.0 (`tectonic main.tex`), exit 0, 10 pages, no undefined references or citations, no overfull boxes after the table and figure fixes. Local PDF: `/tmp/claude-1000/-home-brendonpedro-dev-cloud-slm-router/d68b30c1-dbbe-4d0d-a08d-ec28f5930c16/scratchpad/main_revised_local_build.pdf` (scratch; not in the repo).
+- Third pass (2026-11-11): `main.tex` compiles with the same Tectonic binary, exit 0; page count and the new Fig. 5 checked in the local PDF (see the final report). Static checks repeated: zero em dashes; every `\ref` has a label (`sec:b-reanalysis`, `fig:speedup` added).
+- Second pass: `main.tex` compiles with Tectonic 0.15.0 (`tectonic main.tex`), exit 0, 10 pages, no undefined references or citations, no overfull boxes after the table and figure fixes. Local PDF: `/tmp/claude-1000/-home-brendonpedro-dev-cloud-slm-router/d68b30c1-dbbe-4d0d-a08d-ec28f5930c16/scratchpad/main_revised_local_build.pdf` (scratch; not in the repo).
 - All four pgfplots/TikZ figures render: Fig. 1 within-benchmark AUC, Fig. 2 same scores two targets, Fig. 3 gate sequence, Fig. 4 bounded advantage vs deadline.
 - `\IEEEpubidadjcol` was added at the start of the third introduction paragraph to stop the pubid footer overlapping column 1 on page 1. If Overleaf's column break differs, move it to whatever paragraph starts column 2 of page 1.
 - Static checks: every `\cite` key has a `\bibitem` and vice versa; every `\ref` has a label; zero em dashes; zero `\textbf` in the body.
 
-## 4. Advisor hardware references found
+## 4. Advisor hardware instruction (corrected 2026-11-11)
 
-Searched: `~/dev/cloud_slm-router` (all .md/.txt/.tex, the untracked `tasks/` files, the memory directory) and `~/research/LLMRouterBench` (.md) for DGX, DGX Spark, Spark, ASUS, Ascent, GB10, Jetson, Orin, and for quoted instructions from Film.
+The 2026-11-10 version of this section said that no explicit instruction from the advisor naming a hardware platform exists. That statement was wrong and is withdrawn. The instruction was missing from the repositories, not from the record. The advisor stated that the model pool is the SLMs and Split-LLMs in the paper and that "the computational resources will be the Asus server and DGX Spark", and later that the router would be tested "with our server resources" once it performed well.
 
-- No explicit instruction from Film naming a hardware platform was found.
-- The only origin of "DGX" and "Asus" is your own task brief `tasks/deployment-optimization-pivot-2026-11-07.md` §F ("We potentially have: local desktop / laptop-class edge hardware; Asus / edge machine; DGX / server-class hardware. Do not assume exact capabilities without checking repository documentation."). It is a list of possibly available machines, not an experimental requirement.
-- Everything else (`deployment-pivot/HARDWARE-PLAN.md`, `GO-NOGO-REPORT.md`, `WEEK-EXECUTION-PLAN.md`, `diagnostics/deployment_e0/RUNBOOK.md`) is derived planning text that calls both machines "undocumented" and pre-declares what to do if the DGX turns out to be a DGX Spark/GB10 (not a valid E0 server) or a V100 DGX (no bf16).
-- Does G-UB2 STOP remove the need for such hardware? Yes for E0. The gate stopped on measured H200 server compute with zero network time; a slower server (GB10 at 273 GB/s) could only lower the bound further, and the edge side was already measured on a physical RTX 3090.
-- Would a small physical validation still answer a different question? Only two candidates, both outside E0: (a) running the best 12 GB edge competitor (Qwen3-8B-AWQ, vLLM) on a physical 12 or 16 GB device to check that the emulated-cap latency is not optimistic for the competitor (this can only make Split look better by a bounded amount and cannot flip UB2 unless the physical device is dramatically slower); (b) measuring the eager split runtime against an optimised one, which is a new design and needs its own pre-registration. Neither is needed for the current manuscript's claims.
+What follows from it:
+- The RTX 3090 (Stage 1, emulated 12/16/24 GB budgets) and the rented H200 (S1, Stage 2) are controlled screening hardware. The manuscript now says so in the abstract, Section V-A, the Limitations and the Conclusion, and says that the target-hardware measurement has not been made.
+- The intended final system is the lab's Asus server and DGX Spark. The manuscript names them as the intended target system without naming the advisor.
+- Roles are not assigned anywhere. The Asus machine's GPU, memory, OS and network are undocumented in both repositories. The DGX Spark is known only as a product (public spec: GB10, 128 GB unified at 273 GB/s, aarch64, 10 GbE + 2 x ConnectX-7). The physical link between the two machines and any SSH access are undocumented. The full audit table is in `SPLIT_RUNTIME_REASSESSMENT_2026-11-11.md` §6.3; the inventory commands are in the E1-OPT RUNBOOK §1.
+- Does G-UB2 STOP remove the need for such hardware? No. G-UB2 removed the frozen eager implementation; the reanalysis shows the rule would have been met by a 1.2x faster server step while the measured step ran 5.7x above its roofline. The final deployment conclusion waits for the pre-registered E1-OPT on the lab pair. One derived fact constrains the roles: a server with 273 GB/s fails the gate at its bandwidth roofline in every cell, so the DGX Spark cannot be the Split server; the Asus machine's GPU decides whether the pair can host the experiment at all.
 
 ## 5. Optional bootstrap (run; post hoc)
 
@@ -48,13 +53,14 @@ Searched: `~/dev/cloud_slm-router` (all .md/.txt/.tex, the untracked `tasks/` fi
 
 ## 6. Sentences to review by hand (may still not sound like you)
 
-1. Abstract, last two sentences ("Because the semantic router stayed too weak to carry a deployment system on its own, we moved the main problem to deployment optimisation and tested the one execution option whose value does not depend on a strong per-query router"). Long; split if you prefer.
-2. Introduction ¶2: "a deployment optimiser that cannot tell which model a query needs reduces to a fixed placement policy." Check that this is how you would put it.
-3. Section III-C, last paragraph (the simulation justification). Delete if unwanted.
-4. Section IV-C, last paragraph: "This result changed the next step: more classifier capacity would not help if the input signal is mostly task identity, so we examined the formulation and the labels instead."
+1. Abstract: now 343 words after the third pass (the screening-hardware sentence and the reanalysis sentence were added). IEEE journals usually want about 250. Cut the semantic numbers first if you need to shorten; keep the hardware and reanalysis sentences.
+2. Introduction ¶2 now reads: "Without useful query-level model-suitability information, the semantic choice reduces to a fixed or task-level model policy, although placement may still respond to memory, deadline and system state."
+3. Section III-C, last paragraph: the simulation paragraph is gone; the structural argument replaced it. Check that the three sentences are how you would argue it.
+4. Section IV-C, last paragraph now reads: "Adding representation or classifier capacity had produced gains of at most 0.03 Macro-F1 and had not changed the within-benchmark picture, so we examined the formulation and the labels instead."
 5. Section IV-D (ordinal): the description of "cumulative decomposition into two binary boundaries ... enforced to be consistent" summarises `run_ordinal_cv.py`; adjust wording to how you described it to Film.
-6. Section V-E, last paragraph: "The change from G-UB1 to G-UB2 is the whole result of the deployment test."
+6. Section V-E, last paragraph now reads: "G-UB1 and G-UB2 differ only in the server-compute term. Replacing the datasheet estimate with the measured H200 compute of the frozen runtime reduced the best bound from +12.25 to +0.5 points."
+6b. New Section V-F (reanalysis) and Discussion VI-D (runtime limitation and the pre-registered follow-up): long paragraphs; split them if you prefer. They name the Asus server and DGX Spark as the intended target system; check that this is acceptable in a submitted paper, or replace with "the laboratory's edge and server machines".
 7. Discussion A: "Aggregate Macro-F1 and AUC overstated within-task signal because the benchmarks differ in which model wins on average, and the router can learn that difference from the query text."
-8. Discussion C, last sentence: "At short deadlines Split loses because its decode step is slow; at long deadlines the 8B model's thinking traces finish and its accuracy catches up."
-9. Conclusion, last two sentences (next experiment for the semantic conclusion; new design needed for the Split conclusion). Check that you agree with naming an optimised split runtime as the only route to a different Split result.
+8. Discussion C, last sentences now quantify the mechanism (27 % late at 60 s; 0.63 vs 0.58 at long deadlines).
+9. Conclusion now says the deployment conclusion is provisional until E1-OPT runs on the target system, and that the Split conclusion can change only under that pre-registration. Check that you agree.
 10. Contribution list in the Introduction: three items, not four. Film's "deployment pivot" is in the narrative and in contribution 3; add a fourth item only if you want the pivot itself listed.

@@ -329,3 +329,47 @@ No confirmed venue in the repository. The IEEE Transactions on Engineering Manag
 ### 12.5 Items in §8 now resolved
 
 A1 (bootstrap): done, post hoc, interval includes 0. A3 (compile; model citations): compiled locally; model citations added; benchmark citations and template header remain. A4 (simulation paragraph): reduced to one labelled sentence in §III-C. B2 (24 GB failure reason): stated in §V-C. A2 (archive E0 in the repo) and the rest of §8 C/D are unchanged.
+
+---
+
+## 13. Third pass (2026-11-11): runtime reassessment, corrected hardware record, E1-OPT
+
+Scope: CPU reanalysis of the archived E0 profiles, a runtime and framework audit, manuscript revision in place on `paper-reframe-2026-11-10` (parent `96c316d`), a new experiment namespace in the experiment repository. No GPU, no inference, no paid instance, no change to E0 or to `e0-prereg-v1`. Not committed, not pushed. Full detail: `SPLIT_RUNTIME_REASSESSMENT_2026-11-11.md`.
+
+### 13.1 Correction to §12.2 and to FINAL_REVIEW_NOTES §4
+
+§12.2 said no advisor instruction naming hardware exists. Wrong. The instruction exists outside the repositories (quoted by the user on 2026-11-10): the model pool is the SLMs and Split-LLMs in the paper, and "the computational resources will be the Asus server and DGX Spark"; the router was to be tested "with our server resources" once it performed well. Consequences: the RTX 3090 and the rented H200 are controlled screening hardware, not the final evaluation; the manuscript must not present them as such; the final test has not happened. Roles of the two lab machines are not assigned anywhere; their specifications are undocumented in both repositories except the DGX Spark's public product spec.
+
+### 13.2 New evidence (all CPU, all from the two archives; scripts in `~/research/LLMRouterBench/diagnostics/deployment_e1opt/reanalysis/`)
+
+| Claim | Artifact | Status |
+|---|---|---|
+| Scaling the Stage-2 server profile by f = 1 reproduces `gate_ub2.json` | `server_speedup_curve.py` | ✅ exact on every evaluated cell |
+| +3.0 reached at f = 0.830 (1.2×); full pass at f = 0.705 (1.42×) | `out/thresholds.json` | ✅ bisection, 22 steps |
+| Measured server step 66.9 ms at k = 3 vs H200 roofline 11.8 ms (5.7×); per layer 1.2 vs 0.2 ms; edge segment 11.7 vs 7.9 ms roofline (68 %) | `out/profiles.json` | ✅ |
+| 12 GB / 60 s best cell: 27 % of split answers late at f = 1; 30 query-seed pairs cross the deadline by f = 0.705, 19 correct | `breakdown.py` | ✅ |
+| f = 0 ceiling +15.25; 8B-AWQ thinking U = 0.63 beats non-thinking split 0.58 at D ≥ 300 s regardless of speed | `out/curve.json` | ✅ |
+| Server effective bandwidth must be ≥ 1,127 GB/s (Δ ≥ 3) / ≥ 1,322 GB/s (pass); GB10 at 273 GB/s: best −5.0 at roofline | `bw_threshold.py`, `out/gb10_bound.json` | ✅ (GB10 figure is a public datasheet value, not lab-verified) |
+| Per-step RTT of 5 ms costs ≤ 1.5 pt at f = 0.5; 20 ms removes most of the advantage | `out/link_whatif.json` | ✅ what-if, not a gate |
+| vLLM PP: contiguous ranges only; embedding first rank, norm + LM head last rank; one worker per GPU; `IntermediateTensors` internal | vLLM main-branch source, fetched 2026-11-10 (URLs in the reassessment §2) | ✅ |
+| HF 4.51.3: Qwen3 `_supports_static_cache`; SDPA path copies the GQA cache over the full key length each step | transformers source in `venv-e0` | ✅ |
+| E1 runtime on CPU: prefix mode bitwise = HF = E0; static mode greedy = HF; Qwen3-0.6B real weights | `deployment_e1opt/tests/test_e1_cpu.py`, 9/9 pass | ✅ |
+
+### 13.3 Manuscript changes (96c316d → working tree)
+
+- Title: "… and a Pre-Registered Test of Split Inference".
+- Abstract: budgets "emulated on a physical RTX 3090"; H200 rented; both screening; "removed that implementation"; the 5.7× / 1.2× reanalysis sentence; conclusion left open until the target-hardware run.
+- Introduction: the "fixed placement policy" sentence replaced by the precise one; "can only help" → "In the tested setting, the remaining case for Split was …"; screening hardware and the intended target system named (Asus server, DGX Spark), without naming the advisor; contribution 3 extended by the reanalysis.
+- III-C: the simulation paragraph removed; replaced by the structural reason for isolating Split.
+- Table I: B4 wording; new row B5 (reanalysis, post hoc, not a decision).
+- IV-C: "more classifier capacity would not help" removed; replaced by the measured ≤ 0.03 gain.
+- V-A: why eager HF (vLLM pipeline structure stated); screening vs target hardware.
+- V-E: "the frozen Split implementation was removed"; "G-UB1 and G-UB2 differ only in the server-compute term …".
+- New V-F and Fig. 5 (reanalysis curve: best Δ and CI low vs server step; G-UB2 point; H200 roofline line; +3.0 line).
+- Fig. 3: node wording; E1-OPT node (pre-registered, not run).
+- VI-C renamed and the late-answer mechanism quantified; VI-D rewritten (runtime limitation, why no engine can express the partition, the E1-OPT follow-up, the bandwidth criterion, the DGX Spark's public bandwidth excluding it from the server role, no claim that the follow-up will pass); Limitations: screening hardware; Open questions and Conclusion: provisional deployment conclusion.
+- Untouched: all semantic-study numbers, the bootstrap wording (interval includes zero; not significant), the G-UB2 numbers, the E0 gate description.
+
+### 13.4 Decision
+
+GO for the optimised-runtime follow-up as the pre-registered E1-OPT (`~/research/LLMRouterBench/diagnostics/deployment_e1opt/PREREG_E1OPT.md`, draft to be frozen by tag `e1opt-prereg-v1` after review). Its Stage 0 is a desk gate on the lab inventory; a 273 GB/s server fails it in every cell.
