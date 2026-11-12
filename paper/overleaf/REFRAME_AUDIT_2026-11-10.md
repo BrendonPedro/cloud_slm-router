@@ -345,11 +345,11 @@ Scope: CPU reanalysis of the archived E0 profiles, a runtime and framework audit
 | Claim | Artifact | Status |
 |---|---|---|
 | Scaling the Stage-2 server profile by f = 1 reproduces `gate_ub2.json` | `server_speedup_curve.py` | ✅ exact on every evaluated cell |
-| +3.0 reached at f = 0.830 (1.2×); full pass at f = 0.705 (1.42×) | `out/thresholds.json` | ✅ bisection, 22 steps |
+| +3.0 reached at f = 0.8297 (1.21×; 1.19× in exact arithmetic); full pass (CI low > 0, strict) at f = 0.6888 (1.45×). The 0.705 / 1.42× figure of the first version used CI low ≥ 0 and is withdrawn (§13.5) | `out/thresholds.json`, `threshold_audit.py`, `tests/test_reanalysis.py` | ✅ 40-step bisection, strict predicate |
 | Measured server step 66.9 ms at k = 3 vs H200 roofline 11.8 ms (5.7×); per layer 1.2 vs 0.2 ms; edge segment 11.7 vs 7.9 ms roofline (68 %) | `out/profiles.json` | ✅ |
-| 12 GB / 60 s best cell: 27 % of split answers late at f = 1; 30 query-seed pairs cross the deadline by f = 0.705, 19 correct | `breakdown.py` | ✅ |
+| 12 GB / 60 s best cell: 27 % of split answers late at f = 1; 33 query-seed pairs cross the deadline by f = 0.6888, 20 correct (+5.0 pt); 14 / 11 by f = 0.8297 | `breakdown.py` | ✅ |
 | f = 0 ceiling +15.25; 8B-AWQ thinking U = 0.63 beats non-thinking split 0.58 at D ≥ 300 s regardless of speed | `out/curve.json` | ✅ |
-| Server effective bandwidth must be ≥ 1,127 GB/s (Δ ≥ 3) / ≥ 1,322 GB/s (pass); GB10 at 273 GB/s: best −5.0 at roofline | `bw_threshold.py`, `out/gb10_bound.json` | ✅ (GB10 figure is a public datasheet value, not lab-verified) |
+| With the archived RTX 3090 edge profiles: server effective bandwidth ≥ 1,127 GB/s (Δ ≥ 3) / ≥ 1,357 GB/s (strict pass; was 1,322); GB10 at 273 GB/s: best −5.0 at roofline **for that edge** | `bw_threshold.py`, `out/gb10_bound.json` | ✅ (GB10 figure is a public datasheet value, not lab-verified; not a bound for every target edge) |
 | Per-step RTT of 5 ms costs ≤ 1.5 pt at f = 0.5; 20 ms removes most of the advantage | `out/link_whatif.json` | ✅ what-if, not a gate |
 | vLLM PP: contiguous ranges only; embedding first rank, norm + LM head last rank; one worker per GPU; `IntermediateTensors` internal | vLLM main-branch source, fetched 2026-11-10 (URLs in the reassessment §2) | ✅ |
 | HF 4.51.3: Qwen3 `_supports_static_cache`; SDPA path copies the GQA cache over the full key length each step | transformers source in `venv-e0` | ✅ |
@@ -366,10 +366,17 @@ Scope: CPU reanalysis of the archived E0 profiles, a runtime and framework audit
 - V-A: why eager HF (vLLM pipeline structure stated); screening vs target hardware.
 - V-E: "the frozen Split implementation was removed"; "G-UB1 and G-UB2 differ only in the server-compute term …".
 - New V-F and Fig. 5 (reanalysis curve: best Δ and CI low vs server step; G-UB2 point; H200 roofline line; +3.0 line).
-- Fig. 3: node wording; E1-OPT node (pre-registered, not run).
-- VI-C renamed and the late-answer mechanism quantified; VI-D rewritten (runtime limitation, why no engine can express the partition, the E1-OPT follow-up, the bandwidth criterion, the DGX Spark's public bandwidth excluding it from the server role, no claim that the follow-up will pass); Limitations: screening hardware; Open questions and Conclusion: provisional deployment conclusion.
+- Fig. 3: node wording; E1-OPT node (protocol drafted, not frozen, not run).
+- VI-C renamed and the late-answer mechanism quantified; VI-D rewritten (runtime limitation, why no engine can express the partition, the E1-OPT follow-up protocol, the bandwidth screen, the DGX Spark's public bandwidth failing that screen with the archived edge profiles, no claim that the follow-up will pass); Limitations: screening hardware; Open questions and Conclusion: provisional deployment conclusion.
 - Untouched: all semantic-study numbers, the bootstrap wording (interval includes zero; not significant), the G-UB2 numbers, the E0 gate description.
 
 ### 13.4 Decision
 
-GO for the optimised-runtime follow-up as the pre-registered E1-OPT (`~/research/LLMRouterBench/diagnostics/deployment_e1opt/PREREG_E1OPT.md`, draft to be frozen by tag `e1opt-prereg-v1` after review). Its Stage 0 is a desk gate on the lab inventory; a 273 GB/s server fails it in every cell.
+GO for the optimised-runtime follow-up as the E1-OPT protocol (`~/research/LLMRouterBench/diagnostics/deployment_e1opt/PREREG_E1OPT.md`, draft, **not pre-registered** until the tag `e1opt-prereg-v1` exists after review). Its Stage 0 is an inventory and role-feasibility check with no performance input.
+
+### 13.5 Correction pass (2026-11-11, later the same day)
+
+- Root cause of the 0.705 versus 0.700 inconsistency: the first bisection accepted a CI lower bound of exactly 0 (`min(Δ − 3, CI_low) ≥ 0`); the gate requires `> 0`; the bootstrap statistic is quantised to 0.25 pt and sits at exactly 0.0 for f in (0.6888, 0.7054]. The table row at 0.705 was hand-filled from that bisection. Corrected: full pass at f = 0.6888 (1.45×). Per-cell U_SPLIT, Δ, CI low and pass are monotone in f (0.005 grid, zero violations). f = 1 reproduces every evaluated G-UB2 cell bitwise.
+- Second finding: `e0_r.py` compares Δ ≥ 3.0 on floats; an exact 3.00 evaluates to 2.9999999999999973 and fails (f in [0.8297, 0.8410]). E0's own decision is unaffected. The E1 draft pre-specifies rounding to 1e-6 pt (`e1_spec.decide_cell`), subject to the reviewer's approval.
+- Protocol hardening in the E1 draft (revision 2): freeze before any GPU execution; compatibility fallback only, no speed comparison; `torch.compile` off; equivalence without timers; Stage 0 is inventory and feasibility only (the archived-edge desk bound is not conservative for a different edge); fresh profiles on the target machines for every decision input; one server GPU with reason; variables table E0 vs E1-OPT; items the reviewer must settle (§14).
+- Manuscript: V-F, Fig. 5, Table I row B5, Fig. 3 node, abstract, introduction, VI-D, Open questions and Conclusion corrected (numbers, "pre-registered E1-OPT" → "follow-up protocol", launch-overhead hypothesis wording, DGX Spark scope). Semantic results and E0 measurements unchanged.

@@ -1,0 +1,761 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/ewPQZaHFOIwENc33YuINCEFXBis</id>
+  <title>arXiv Query: search_query=&amp;id_list=2406.01574,2311.12022,2412.13147,2403.07974,2210.09261,2410.06526,2108.07732,1810.02508,2009.13081,2109.00122,2410.23123,2103.03874,2107.03374,2405.12209,1708.04299&amp;start=0&amp;max_results=30</title>
+  <updated>2026-11-12T12:41:04Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=30&amp;id_list=2406.01574,2311.12022,2412.13147,2403.07974,2210.09261,2410.06526,2108.07732,1810.02508,2009.13081,2109.00122,2410.23123,2103.03874,2107.03374,2405.12209,1708.04299" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>30</opensearch:itemsPerPage>
+  <opensearch:totalResults>15</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2410.23123v2</id>
+    <title>On Memorization of Large Language Models in Logical Reasoning</title>
+    <updated>2025-03-04T06:22:40Z</updated>
+    <link href="https://arxiv.org/abs/2410.23123v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2410.23123v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Large language models (LLMs) achieve good performance on challenging reasoning benchmarks, yet could also make basic reasoning mistakes. This contrasting behavior is puzzling when it comes to understanding the mechanisms behind LLMs' reasoning capabilities. One hypothesis is that the increasingly high and nearly saturated performance on common reasoning benchmarks could be due to the memorization of similar problems. In this paper, we systematically investigate this hypothesis with a quantitative measurement of memorization in reasoning tasks, using a dynamically generated logical reasoning benchmark based on Knights and Knaves (K&amp;K) puzzles. We find that LLMs could interpolate and memorize the training puzzles (achieving near-perfect accuracy) after fine-tuning, yet they struggle with slight variations of these puzzles. On the other hand, we show that while fine-tuning leads to heavy memorization, it also consistently improves generalization performance. Through in-depth analyses with perturbation tests, cross difficulty-level transferability, probing model internals, and fine-tuning with wrong answers, we establish that LLMs develop reasoning skills on K&amp;K puzzles alongside memorization. Finally, our analysis based on a per-sample memorization score sheds light on how LLMs switch between reasoning and memorization when solving logical puzzles. Our code and data are available at https://memkklogic.github.io.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-10-30T15:31:54Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Chulin Xie</name>
+    </author>
+    <author>
+      <name>Yangsibo Huang</name>
+    </author>
+    <author>
+      <name>Chiyuan Zhang</name>
+    </author>
+    <author>
+      <name>Da Yu</name>
+    </author>
+    <author>
+      <name>Xinyun Chen</name>
+    </author>
+    <author>
+      <name>Bill Yuchen Lin</name>
+    </author>
+    <author>
+      <name>Bo Li</name>
+    </author>
+    <author>
+      <name>Badih Ghazi</name>
+    </author>
+    <author>
+      <name>Ravi Kumar</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2410.06526v3</id>
+    <title>KOR-Bench: Benchmarking Language Models on Knowledge-Orthogonal Reasoning Tasks</title>
+    <updated>2025-03-01T12:34:10Z</updated>
+    <link href="https://arxiv.org/abs/2410.06526v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2410.06526v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this paper, we introduce Knowledge-Orthogonal Reasoning (KOR), a concept aimed at minimizing reliance on domain-specific knowledge, enabling more accurate evaluation of models' reasoning abilities in out-of-distribution settings. Based on this concept, we propose the Knowledge-Orthogonal Reasoning Benchmark (KOR-Bench), encompassing five task categories: Operation, Logic, Cipher, Puzzle, and Counterfactual. KOR-Bench emphasizes models' effectiveness in applying new rule descriptions to solve novel rule-driven questions. O1-Preview and O1-Mini achieve accuracies of 72.88% and 70.16%, surpassing Claude-3.5-Sonnet and GPT-4o (58.96% and 58.00%), highlighting the effectiveness of KOR-Bench. We perform detailed analyses, identifying bottlenecks in the Cipher task with Stepwise Prompting, where two rounds of Self-Correction yield optimal results. We evaluate performance across three integrated tasks, explore the impact of Tricks on the Puzzle task, and visualize rule-focused attention. Additionally, we conduct an ablation study on dataset size, benchmark correlations, and zero-shot and three-shot "only questions" experiments. KOR-Bench aims to enhance reasoning evaluation and support further research in this area.</summary>
+    <category term="cs.DB" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-10-09T03:56:50Z</published>
+    <arxiv:primary_category term="cs.DB"/>
+    <author>
+      <name>Kaijing Ma</name>
+    </author>
+    <author>
+      <name>Xinrun Du</name>
+    </author>
+    <author>
+      <name>Yunran Wang</name>
+    </author>
+    <author>
+      <name>Haoran Zhang</name>
+    </author>
+    <author>
+      <name>Zhoufutu Wen</name>
+    </author>
+    <author>
+      <name>Xingwei Qu</name>
+    </author>
+    <author>
+      <name>Jian Yang</name>
+    </author>
+    <author>
+      <name>Jiaheng Liu</name>
+    </author>
+    <author>
+      <name>Minghao Liu</name>
+    </author>
+    <author>
+      <name>Xiang Yue</name>
+    </author>
+    <author>
+      <name>Wenhao Huang</name>
+    </author>
+    <author>
+      <name>Ge Zhang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2107.03374v2</id>
+    <title>Evaluating Large Language Models Trained on Code</title>
+    <updated>2021-07-14T17:16:02Z</updated>
+    <link href="https://arxiv.org/abs/2107.03374v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2107.03374v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We introduce Codex, a GPT language model fine-tuned on publicly available code from GitHub, and study its Python code-writing capabilities. A distinct production version of Codex powers GitHub Copilot. On HumanEval, a new evaluation set we release to measure functional correctness for synthesizing programs from docstrings, our model solves 28.8% of the problems, while GPT-3 solves 0% and GPT-J solves 11.4%. Furthermore, we find that repeated sampling from the model is a surprisingly effective strategy for producing working solutions to difficult prompts. Using this method, we solve 70.2% of our problems with 100 samples per problem. Careful investigation of our model reveals its limitations, including difficulty with docstrings describing long chains of operations and with binding operations to variables. Finally, we discuss the potential broader impacts of deploying powerful code generation technologies, covering safety, security, and economics.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-07-07T17:41:24Z</published>
+    <arxiv:comment>corrected typos, added references, added authors, added acknowledgements</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Mark Chen</name>
+    </author>
+    <author>
+      <name>Jerry Tworek</name>
+    </author>
+    <author>
+      <name>Heewoo Jun</name>
+    </author>
+    <author>
+      <name>Qiming Yuan</name>
+    </author>
+    <author>
+      <name>Henrique Ponde de Oliveira Pinto</name>
+    </author>
+    <author>
+      <name>Jared Kaplan</name>
+    </author>
+    <author>
+      <name>Harri Edwards</name>
+    </author>
+    <author>
+      <name>Yuri Burda</name>
+    </author>
+    <author>
+      <name>Nicholas Joseph</name>
+    </author>
+    <author>
+      <name>Greg Brockman</name>
+    </author>
+    <author>
+      <name>Alex Ray</name>
+    </author>
+    <author>
+      <name>Raul Puri</name>
+    </author>
+    <author>
+      <name>Gretchen Krueger</name>
+    </author>
+    <author>
+      <name>Michael Petrov</name>
+    </author>
+    <author>
+      <name>Heidy Khlaaf</name>
+    </author>
+    <author>
+      <name>Girish Sastry</name>
+    </author>
+    <author>
+      <name>Pamela Mishkin</name>
+    </author>
+    <author>
+      <name>Brooke Chan</name>
+    </author>
+    <author>
+      <name>Scott Gray</name>
+    </author>
+    <author>
+      <name>Nick Ryder</name>
+    </author>
+    <author>
+      <name>Mikhail Pavlov</name>
+    </author>
+    <author>
+      <name>Alethea Power</name>
+    </author>
+    <author>
+      <name>Lukasz Kaiser</name>
+    </author>
+    <author>
+      <name>Mohammad Bavarian</name>
+    </author>
+    <author>
+      <name>Clemens Winter</name>
+    </author>
+    <author>
+      <name>Philippe Tillet</name>
+    </author>
+    <author>
+      <name>Felipe Petroski Such</name>
+    </author>
+    <author>
+      <name>Dave Cummings</name>
+    </author>
+    <author>
+      <name>Matthias Plappert</name>
+    </author>
+    <author>
+      <name>Fotios Chantzis</name>
+    </author>
+    <author>
+      <name>Elizabeth Barnes</name>
+    </author>
+    <author>
+      <name>Ariel Herbert-Voss</name>
+    </author>
+    <author>
+      <name>William Hebgen Guss</name>
+    </author>
+    <author>
+      <name>Alex Nichol</name>
+    </author>
+    <author>
+      <name>Alex Paino</name>
+    </author>
+    <author>
+      <name>Nikolas Tezak</name>
+    </author>
+    <author>
+      <name>Jie Tang</name>
+    </author>
+    <author>
+      <name>Igor Babuschkin</name>
+    </author>
+    <author>
+      <name>Suchir Balaji</name>
+    </author>
+    <author>
+      <name>Shantanu Jain</name>
+    </author>
+    <author>
+      <name>William Saunders</name>
+    </author>
+    <author>
+      <name>Christopher Hesse</name>
+    </author>
+    <author>
+      <name>Andrew N. Carr</name>
+    </author>
+    <author>
+      <name>Jan Leike</name>
+    </author>
+    <author>
+      <name>Josh Achiam</name>
+    </author>
+    <author>
+      <name>Vedant Misra</name>
+    </author>
+    <author>
+      <name>Evan Morikawa</name>
+    </author>
+    <author>
+      <name>Alec Radford</name>
+    </author>
+    <author>
+      <name>Matthew Knight</name>
+    </author>
+    <author>
+      <name>Miles Brundage</name>
+    </author>
+    <author>
+      <name>Mira Murati</name>
+    </author>
+    <author>
+      <name>Katie Mayer</name>
+    </author>
+    <author>
+      <name>Peter Welinder</name>
+    </author>
+    <author>
+      <name>Bob McGrew</name>
+    </author>
+    <author>
+      <name>Dario Amodei</name>
+    </author>
+    <author>
+      <name>Sam McCandlish</name>
+    </author>
+    <author>
+      <name>Ilya Sutskever</name>
+    </author>
+    <author>
+      <name>Wojciech Zaremba</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1810.02508v6</id>
+    <title>MELD: A Multimodal Multi-Party Dataset for Emotion Recognition in Conversations</title>
+    <updated>2019-06-04T12:33:49Z</updated>
+    <link href="https://arxiv.org/abs/1810.02508v6" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1810.02508v6" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Emotion recognition in conversations is a challenging task that has recently gained popularity due to its potential applications. Until now, however, a large-scale multimodal multi-party emotional conversational database containing more than two speakers per dialogue was missing. Thus, we propose the Multimodal EmotionLines Dataset (MELD), an extension and enhancement of EmotionLines. MELD contains about 13,000 utterances from 1,433 dialogues from the TV-series Friends. Each utterance is annotated with emotion and sentiment labels, and encompasses audio, visual and textual modalities. We propose several strong multimodal baselines and show the importance of contextual and multimodal information for emotion recognition in conversations. The full dataset is available for use at http:// affective-meld.github.io.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2018-10-05T03:50:24Z</published>
+    <arxiv:comment>https://affective-meld.github.io</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Soujanya Poria</name>
+    </author>
+    <author>
+      <name>Devamanyu Hazarika</name>
+    </author>
+    <author>
+      <name>Navonil Majumder</name>
+    </author>
+    <author>
+      <name>Gautam Naik</name>
+    </author>
+    <author>
+      <name>Erik Cambria</name>
+    </author>
+    <author>
+      <name>Rada Mihalcea</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2009.13081v1</id>
+    <title>What Disease does this Patient Have? A Large-scale Open Domain Question Answering Dataset from Medical Exams</title>
+    <updated>2020-09-28T05:07:51Z</updated>
+    <link href="https://arxiv.org/abs/2009.13081v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2009.13081v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Open domain question answering (OpenQA) tasks have been recently attracting more and more attention from the natural language processing (NLP) community. In this work, we present the first free-form multiple-choice OpenQA dataset for solving medical problems, MedQA, collected from the professional medical board exams. It covers three languages: English, simplified Chinese, and traditional Chinese, and contains 12,723, 34,251, and 14,123 questions for the three languages, respectively. We implement both rule-based and popular neural methods by sequentially combining a document retriever and a machine comprehension model. Through experiments, we find that even the current best method can only achieve 36.7\%, 42.0\%, and 70.1\% of test accuracy on the English, traditional Chinese, and simplified Chinese questions, respectively. We expect MedQA to present great challenges to existing OpenQA systems and hope that it can serve as a platform to promote much stronger OpenQA models from the NLP community in the future.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2020-09-28T05:07:51Z</published>
+    <arxiv:comment>Submitted to AAAI 2021</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Di Jin</name>
+    </author>
+    <author>
+      <name>Eileen Pan</name>
+    </author>
+    <author>
+      <name>Nassim Oufattole</name>
+    </author>
+    <author>
+      <name>Wei-Hung Weng</name>
+    </author>
+    <author>
+      <name>Hanyi Fang</name>
+    </author>
+    <author>
+      <name>Peter Szolovits</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2109.00122v3</id>
+    <title>FinQA: A Dataset of Numerical Reasoning over Financial Data</title>
+    <updated>2022-05-07T07:52:39Z</updated>
+    <link href="https://arxiv.org/abs/2109.00122v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2109.00122v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The sheer volume of financial statements makes it difficult for humans to access and analyze a business's financials. Robust numerical reasoning likewise faces unique challenges in this domain. In this work, we focus on answering deep questions over financial data, aiming to automate the analysis of a large corpus of financial documents. In contrast to existing tasks on general domain, the finance domain includes complex numerical reasoning and understanding of heterogeneous representations. To facilitate analytical progress, we propose a new large-scale dataset, FinQA, with Question-Answering pairs over Financial reports, written by financial experts. We also annotate the gold reasoning programs to ensure full explainability. We further introduce baselines and conduct comprehensive experiments in our dataset. The results demonstrate that popular, large, pre-trained models fall far short of expert humans in acquiring finance knowledge and in complex multi-step numerical reasoning on that knowledge. Our dataset -- the first of its kind -- should therefore enable significant, new community research into complex application domains. The dataset and code are publicly available\url{https://github.com/czyssrs/FinQA}.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-09-01T00:08:14Z</published>
+    <arxiv:comment>EMNLP 2021</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Zhiyu Chen</name>
+    </author>
+    <author>
+      <name>Wenhu Chen</name>
+    </author>
+    <author>
+      <name>Charese Smiley</name>
+    </author>
+    <author>
+      <name>Sameena Shah</name>
+    </author>
+    <author>
+      <name>Iana Borova</name>
+    </author>
+    <author>
+      <name>Dylan Langdon</name>
+    </author>
+    <author>
+      <name>Reema Moussa</name>
+    </author>
+    <author>
+      <name>Matt Beane</name>
+    </author>
+    <author>
+      <name>Ting-Hao Huang</name>
+    </author>
+    <author>
+      <name>Bryan Routledge</name>
+    </author>
+    <author>
+      <name>William Yang Wang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2210.09261v1</id>
+    <title>Challenging BIG-Bench Tasks and Whether Chain-of-Thought Can Solve Them</title>
+    <updated>2022-10-17T17:08:26Z</updated>
+    <link href="https://arxiv.org/abs/2210.09261v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2210.09261v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>BIG-Bench (Srivastava et al., 2022) is a diverse evaluation suite that focuses on tasks believed to be beyond the capabilities of current language models. Language models have already made good progress on this benchmark, with the best model in the BIG-Bench paper outperforming average reported human-rater results on 65% of the BIG-Bench tasks via few-shot prompting. But on what tasks do language models fall short of average human-rater performance, and are those tasks actually unsolvable by current language models?
+  In this work, we focus on a suite of 23 challenging BIG-Bench tasks which we call BIG-Bench Hard (BBH). These are the task for which prior language model evaluations did not outperform the average human-rater. We find that applying chain-of-thought (CoT) prompting to BBH tasks enables PaLM to surpass the average human-rater performance on 10 of the 23 tasks, and Codex (code-davinci-002) to surpass the average human-rater performance on 17 of the 23 tasks. Since many tasks in BBH require multi-step reasoning, few-shot prompting without CoT, as done in the BIG-Bench evaluations (Srivastava et al., 2022), substantially underestimates the best performance and capabilities of language models, which is better captured via CoT prompting. As further analysis, we explore the interaction between CoT and model scale on BBH, finding that CoT enables emergent task performance on several BBH tasks with otherwise flat scaling curves.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-10-17T17:08:26Z</published>
+    <arxiv:comment>GitHub repository: https://github.com/suzgunmirac/BIG-Bench-Hard</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Mirac Suzgun</name>
+    </author>
+    <author>
+      <name>Nathan Scales</name>
+    </author>
+    <author>
+      <name>Nathanael Schärli</name>
+    </author>
+    <author>
+      <name>Sebastian Gehrmann</name>
+    </author>
+    <author>
+      <name>Yi Tay</name>
+    </author>
+    <author>
+      <name>Hyung Won Chung</name>
+    </author>
+    <author>
+      <name>Aakanksha Chowdhery</name>
+    </author>
+    <author>
+      <name>Quoc V. Le</name>
+    </author>
+    <author>
+      <name>Ed H. Chi</name>
+    </author>
+    <author>
+      <name>Denny Zhou</name>
+    </author>
+    <author>
+      <name>Jason Wei</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2405.12209v1</id>
+    <title>MathBench: Evaluating the Theory and Application Proficiency of LLMs with a Hierarchical Mathematics Benchmark</title>
+    <updated>2024-05-20T17:52:29Z</updated>
+    <link href="https://arxiv.org/abs/2405.12209v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2405.12209v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Recent advancements in large language models (LLMs) have showcased significant improvements in mathematics. However, traditional math benchmarks like GSM8k offer a unidimensional perspective, falling short in providing a holistic assessment of the LLMs' math capabilities. To address this gap, we introduce MathBench, a new benchmark that rigorously assesses the mathematical capabilities of large language models. MathBench spans a wide range of mathematical disciplines, offering a detailed evaluation of both theoretical understanding and practical problem-solving skills. The benchmark progresses through five distinct stages, from basic arithmetic to college mathematics, and is structured to evaluate models at various depths of knowledge. Each stage includes theoretical questions and application problems, allowing us to measure a model's mathematical proficiency and its ability to apply concepts in practical scenarios. MathBench aims to enhance the evaluation of LLMs' mathematical abilities, providing a nuanced view of their knowledge understanding levels and problem solving skills in a bilingual context. The project is released at https://github.com/open-compass/MathBench .</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-05-20T17:52:29Z</published>
+    <arxiv:comment>Project: https://github.com/open-compass/MathBench</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Hongwei Liu</name>
+    </author>
+    <author>
+      <name>Zilong Zheng</name>
+    </author>
+    <author>
+      <name>Yuxuan Qiao</name>
+    </author>
+    <author>
+      <name>Haodong Duan</name>
+    </author>
+    <author>
+      <name>Zhiwei Fei</name>
+    </author>
+    <author>
+      <name>Fengzhe Zhou</name>
+    </author>
+    <author>
+      <name>Wenwei Zhang</name>
+    </author>
+    <author>
+      <name>Songyang Zhang</name>
+    </author>
+    <author>
+      <name>Dahua Lin</name>
+    </author>
+    <author>
+      <name>Kai Chen</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2406.01574v6</id>
+    <title>MMLU-Pro: A More Robust and Challenging Multi-Task Language Understanding Benchmark</title>
+    <updated>2024-11-06T02:54:00Z</updated>
+    <link href="https://arxiv.org/abs/2406.01574v6" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2406.01574v6" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In the age of large-scale language models, benchmarks like the Massive Multitask Language Understanding (MMLU) have been pivotal in pushing the boundaries of what AI can achieve in language comprehension and reasoning across diverse domains. However, as models continue to improve, their performance on these benchmarks has begun to plateau, making it increasingly difficult to discern differences in model capabilities. This paper introduces MMLU-Pro, an enhanced dataset designed to extend the mostly knowledge-driven MMLU benchmark by integrating more challenging, reasoning-focused questions and expanding the choice set from four to ten options. Additionally, MMLU-Pro eliminates the trivial and noisy questions in MMLU. Our experimental results show that MMLU-Pro not only raises the challenge, causing a significant drop in accuracy by 16% to 33% compared to MMLU but also demonstrates greater stability under varying prompts. With 24 different prompt styles tested, the sensitivity of model scores to prompt variations decreased from 4-5% in MMLU to just 2% in MMLU-Pro. Additionally, we found that models utilizing Chain of Thought (CoT) reasoning achieved better performance on MMLU-Pro compared to direct answering, which is in stark contrast to the findings on the original MMLU, indicating that MMLU-Pro includes more complex reasoning questions. Our assessments confirm that MMLU-Pro is a more discriminative benchmark to better track progress in the field.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-06-03T17:53:00Z</published>
+    <arxiv:comment>This version has been accepted and published at NeurIPS 2024 Track Datasets and Benchmarks (Spotlight)</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Yubo Wang</name>
+    </author>
+    <author>
+      <name>Xueguang Ma</name>
+    </author>
+    <author>
+      <name>Ge Zhang</name>
+    </author>
+    <author>
+      <name>Yuansheng Ni</name>
+    </author>
+    <author>
+      <name>Abhranil Chandra</name>
+    </author>
+    <author>
+      <name>Shiguang Guo</name>
+    </author>
+    <author>
+      <name>Weiming Ren</name>
+    </author>
+    <author>
+      <name>Aaran Arulraj</name>
+    </author>
+    <author>
+      <name>Xuan He</name>
+    </author>
+    <author>
+      <name>Ziyan Jiang</name>
+    </author>
+    <author>
+      <name>Tianle Li</name>
+    </author>
+    <author>
+      <name>Max Ku</name>
+    </author>
+    <author>
+      <name>Kai Wang</name>
+    </author>
+    <author>
+      <name>Alex Zhuang</name>
+    </author>
+    <author>
+      <name>Rongqi Fan</name>
+    </author>
+    <author>
+      <name>Xiang Yue</name>
+    </author>
+    <author>
+      <name>Wenhu Chen</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2412.13147v5</id>
+    <title>Are Your LLMs Capable of Stable Reasoning?</title>
+    <updated>2025-08-08T15:28:01Z</updated>
+    <link href="https://arxiv.org/abs/2412.13147v5" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2412.13147v5" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The rapid advancement of large language models (LLMs) has shown remarkable progress in complex reasoning tasks. However, a significant disparity exists between benchmark performances and real-world applications. We attribute this gap primarily to current evaluation protocols and metrics, which inadequately capture the full spectrum of LLM capabilities, especially in complex reasoning tasks where both accuracy and consistency are essential. In this paper, we introduce G-Pass@$k$, a novel evaluation metric that continuously assesses model performance across multiple sampling attempts, quantifying both the model's performance potential and its stability. Through extensive experiments on various public and newly constructed benchmarks, we employ G-Pass@$k$ in conjunction with state-of-the-art large language models to provide comprehensive insights into their potential capabilities and operational consistency. Our findings reveal a significant opportunity to enhance the realistic reasoning abilities of LLMs, underscoring the necessity for more robust evaluation metrics.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-12-17T18:12:47Z</published>
+    <arxiv:comment>ACL 2025 Camera, Benchmark: https://huggingface.co/datasets/opencompass/LiveMathBench, Code: https://github.com/open-compass/GPassK</arxiv:comment>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Junnan Liu</name>
+    </author>
+    <author>
+      <name>Hongwei Liu</name>
+    </author>
+    <author>
+      <name>Linchen Xiao</name>
+    </author>
+    <author>
+      <name>Ziyi Wang</name>
+    </author>
+    <author>
+      <name>Kuikun Liu</name>
+    </author>
+    <author>
+      <name>Songyang Gao</name>
+    </author>
+    <author>
+      <name>Wenwei Zhang</name>
+    </author>
+    <author>
+      <name>Songyang Zhang</name>
+    </author>
+    <author>
+      <name>Kai Chen</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2311.12022v1</id>
+    <title>GPQA: A Graduate-Level Google-Proof Q&amp;A Benchmark</title>
+    <updated>2023-11-20T18:57:34Z</updated>
+    <link href="https://arxiv.org/abs/2311.12022v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2311.12022v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We present GPQA, a challenging dataset of 448 multiple-choice questions written by domain experts in biology, physics, and chemistry. We ensure that the questions are high-quality and extremely difficult: experts who have or are pursuing PhDs in the corresponding domains reach 65% accuracy (74% when discounting clear mistakes the experts identified in retrospect), while highly skilled non-expert validators only reach 34% accuracy, despite spending on average over 30 minutes with unrestricted access to the web (i.e., the questions are "Google-proof"). The questions are also difficult for state-of-the-art AI systems, with our strongest GPT-4 based baseline achieving 39% accuracy. If we are to use future AI systems to help us answer very hard questions, for example, when developing new scientific knowledge, we need to develop scalable oversight methods that enable humans to supervise their outputs, which may be difficult even if the supervisors are themselves skilled and knowledgeable. The difficulty of GPQA both for skilled non-experts and frontier AI systems should enable realistic scalable oversight experiments, which we hope can help devise ways for human experts to reliably get truthful information from AI systems that surpass human capabilities.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-11-20T18:57:34Z</published>
+    <arxiv:comment>28 pages, 5 figures, 7 tables</arxiv:comment>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>David Rein</name>
+    </author>
+    <author>
+      <name>Betty Li Hou</name>
+    </author>
+    <author>
+      <name>Asa Cooper Stickland</name>
+    </author>
+    <author>
+      <name>Jackson Petty</name>
+    </author>
+    <author>
+      <name>Richard Yuanzhe Pang</name>
+    </author>
+    <author>
+      <name>Julien Dirani</name>
+    </author>
+    <author>
+      <name>Julian Michael</name>
+    </author>
+    <author>
+      <name>Samuel R. Bowman</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2108.07732v1</id>
+    <title>Program Synthesis with Large Language Models</title>
+    <updated>2021-08-16T03:57:30Z</updated>
+    <link href="https://arxiv.org/abs/2108.07732v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2108.07732v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper explores the limits of the current generation of large language models for program synthesis in general purpose programming languages. We evaluate a collection of such models (with between 244M and 137B parameters) on two new benchmarks, MBPP and MathQA-Python, in both the few-shot and fine-tuning regimes. Our benchmarks are designed to measure the ability of these models to synthesize short Python programs from natural language descriptions. The Mostly Basic Programming Problems (MBPP) dataset contains 974 programming tasks, designed to be solvable by entry-level programmers. The MathQA-Python dataset, a Python version of the MathQA benchmark, contains 23914 problems that evaluate the ability of the models to synthesize code from more complex text. On both datasets, we find that synthesis performance scales log-linearly with model size. Our largest models, even without finetuning on a code dataset, can synthesize solutions to 59.6 percent of the problems from MBPP using few-shot learning with a well-designed prompt. Fine-tuning on a held-out portion of the dataset improves performance by about 10 percentage points across most model sizes. On the MathQA-Python dataset, the largest fine-tuned model achieves 83.8 percent accuracy. Going further, we study the model's ability to engage in dialog about code, incorporating human feedback to improve its solutions. We find that natural language feedback from a human halves the error rate compared to the model's initial prediction. Additionally, we conduct an error analysis to shed light on where these models fall short and what types of programs are most difficult to generate. Finally, we explore the semantic grounding of these models by fine-tuning them to predict the results of program execution. We find that even our best models are generally unable to predict the output of a program given a specific input.</summary>
+    <category term="cs.PL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-08-16T03:57:30Z</published>
+    <arxiv:comment>Jacob and Augustus contributed equally</arxiv:comment>
+    <arxiv:primary_category term="cs.PL"/>
+    <author>
+      <name>Jacob Austin</name>
+    </author>
+    <author>
+      <name>Augustus Odena</name>
+    </author>
+    <author>
+      <name>Maxwell Nye</name>
+    </author>
+    <author>
+      <name>Maarten Bosma</name>
+    </author>
+    <author>
+      <name>Henryk Michalewski</name>
+    </author>
+    <author>
+      <name>David Dohan</name>
+    </author>
+    <author>
+      <name>Ellen Jiang</name>
+    </author>
+    <author>
+      <name>Carrie Cai</name>
+    </author>
+    <author>
+      <name>Michael Terry</name>
+    </author>
+    <author>
+      <name>Quoc Le</name>
+    </author>
+    <author>
+      <name>Charles Sutton</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2103.03874v2</id>
+    <title>Measuring Mathematical Problem Solving With the MATH Dataset</title>
+    <updated>2021-11-08T21:30:18Z</updated>
+    <link href="https://arxiv.org/abs/2103.03874v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2103.03874v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Many intellectual endeavors require mathematical problem solving, but this skill remains beyond the capabilities of computers. To measure this ability in machine learning models, we introduce MATH, a new dataset of 12,500 challenging competition mathematics problems. Each problem in MATH has a full step-by-step solution which can be used to teach models to generate answer derivations and explanations. To facilitate future research and increase accuracy on MATH, we also contribute a large auxiliary pretraining dataset which helps teach models the fundamentals of mathematics. Even though we are able to increase accuracy on MATH, our results show that accuracy remains relatively low, even with enormous Transformer models. Moreover, we find that simply increasing budgets and model parameter counts will be impractical for achieving strong mathematical reasoning if scaling trends continue. While scaling Transformers is automatically solving most other text-based tasks, scaling is not currently solving MATH. To have more traction on mathematical problem solving we will likely need new algorithmic advancements from the broader research community.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-03-05T18:59:39Z</published>
+    <arxiv:comment>NeurIPS 2021. Code and the MATH dataset is available at https://github.com/hendrycks/math/</arxiv:comment>
+    <arxiv:primary_category term="cs.LG"/>
+    <author>
+      <name>Dan Hendrycks</name>
+    </author>
+    <author>
+      <name>Collin Burns</name>
+    </author>
+    <author>
+      <name>Saurav Kadavath</name>
+    </author>
+    <author>
+      <name>Akul Arora</name>
+    </author>
+    <author>
+      <name>Steven Basart</name>
+    </author>
+    <author>
+      <name>Eric Tang</name>
+    </author>
+    <author>
+      <name>Dawn Song</name>
+    </author>
+    <author>
+      <name>Jacob Steinhardt</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1708.04299v1</id>
+    <title>Emotion Detection on TV Show Transcripts with Sequence-based Convolutional Neural Networks</title>
+    <updated>2017-08-14T20:01:44Z</updated>
+    <link href="https://arxiv.org/abs/1708.04299v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1708.04299v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>While there have been significant advances in detecting emotions from speech and image recognition, emotion detection on text is still under-explored and remained as an active research field. This paper introduces a corpus for text-based emotion detection on multiparty dialogue as well as deep neural models that outperform the existing approaches for document classification. We first present a new corpus that provides annotation of seven emotions on consecutive utterances in dialogues extracted from the show, Friends. We then suggest four types of sequence-based convolutional neural network models with attention that leverage the sequence information encapsulated in dialogue. Our best model shows the accuracies of 37.9% and 54% for fine- and coarse-grained emotions, respectively. Given the difficulty of this task, this is promising.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2017-08-14T20:01:44Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Sayyed M. Zahiri</name>
+    </author>
+    <author>
+      <name>Jinho D. Choi</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2403.07974v2</id>
+    <title>LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language Models for Code</title>
+    <updated>2024-06-06T17:41:21Z</updated>
+    <link href="https://arxiv.org/abs/2403.07974v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2403.07974v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Large Language Models (LLMs) applied to code-related applications have emerged as a prominent field, attracting significant interest from both academia and industry. However, as new and improved LLMs are developed, existing evaluation benchmarks (e.g., HumanEval, MBPP) are no longer sufficient for assessing their capabilities. In this work, we propose LiveCodeBench, a comprehensive and contamination-free evaluation of LLMs for code, which continuously collects new problems over time from contests across three competition platforms, namely LeetCode, AtCoder, and CodeForces. Notably, our benchmark also focuses on a broader range of code related capabilities, such as self-repair, code execution, and test output prediction, beyond just code generation. Currently, LiveCodeBench hosts four hundred high-quality coding problems that were published between May 2023 and May 2024. We have evaluated 18 base LLMs and 34 instruction-tuned LLMs on LiveCodeBench. We present empirical findings on contamination, holistic performance comparisons, potential overfitting in existing benchmarks as well as individual model comparisons. We will release all prompts and model completions for further community analysis, along with a general toolkit for adding new scenarios and model</summary>
+    <category term="cs.SE" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-03-12T17:58:04Z</published>
+    <arxiv:comment>Website - https://livecodebench.github.io/</arxiv:comment>
+    <arxiv:primary_category term="cs.SE"/>
+    <author>
+      <name>Naman Jain</name>
+    </author>
+    <author>
+      <name>King Han</name>
+    </author>
+    <author>
+      <name>Alex Gu</name>
+    </author>
+    <author>
+      <name>Wen-Ding Li</name>
+    </author>
+    <author>
+      <name>Fanjia Yan</name>
+    </author>
+    <author>
+      <name>Tianjun Zhang</name>
+    </author>
+    <author>
+      <name>Sida Wang</name>
+    </author>
+    <author>
+      <name>Armando Solar-Lezama</name>
+    </author>
+    <author>
+      <name>Koushik Sen</name>
+    </author>
+    <author>
+      <name>Ion Stoica</name>
+    </author>
+  </entry>
+</feed>

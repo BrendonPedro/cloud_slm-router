@@ -1,0 +1,16 @@
+2026-11-12T12:41:52Z 200 https://export.arxiv.org/api/query?id_list=2406.01574,2311.12022,2412.13147,2403.07974,2210.09261,2410.06526,2108.07732,1810.02508,2009.13081,2109.00122,2410.23123,2103.03874,2107.03374,2405.12209,1708.04299 -> arxiv_api_benchmarks.xml (fetched earlier this session)
+2026-11-12T12:41:52Z 200 https://aclanthology.org/2023.findings-acl.824.bib -> acl_2023.findings-acl.824.bib
+2026-11-12T12:41:53Z 200 https://aclanthology.org/P19-1050.bib -> acl_P19-1050.bib
+2026-11-12T12:41:54Z 200 https://aclanthology.org/2021.emnlp-main.300.bib -> acl_2021.emnlp-main.300.bib
+2026-11-12T12:41:55Z 200 https://api.crossref.org/works/10.3390/app11146421 -> crossref_10.3390_app11146421.json
+2026-11-12T12:41:56Z 200 https://api.crossref.org/works?query.bibliographic=Are+Your+LLMs+Capable+of+Stable+Reasoning&rows=5&select=DOI,title,author,container-title,page,issued,type -> crossref_query_stable_reasoning.json
+2026-11-12T12:41:59Z 200 https://api.crossref.org/works?query.bibliographic=MMLU-Pro+A+More+Robust+and+Challenging+Multi-Task+Language+Understanding+Benchmark&rows=5&select=DOI,title,author,container-title,page,issued,type -> crossref_query_mmlupro.json
+2026-11-12T12:42:00Z 200 https://api.crossref.org/works?query.bibliographic=LiveCodeBench+Holistic+and+Contamination+Free+Evaluation+of+Large+Language+Models+for+Code&rows=5&select=DOI,title,author,container-title,page,issued,type -> crossref_query_livecodebench.json
+2026-11-12T12:42:02Z 200 https://api.crossref.org/works?query.bibliographic=KOR-Bench+Benchmarking+Language+Models+on+Knowledge-Orthogonal+Reasoning+Tasks&rows=5&select=DOI,title,author,container-title,page,issued,type -> crossref_query_korbench.json
+2026-11-12T12:42:19Z 200 https://aclanthology.org/2025.findings-acl.905.bib -> acl_2025.findings-acl.905.bib
+2026-11-12T12:42:20Z 200 https://api.crossref.org/works/10.52202/079017-3018 -> crossref_10.52202_079017-3018.json
+2026-11-12T12:42:21Z 200 https://proceedings.iclr.cc/paper_files/paper/2025/hash/94074dd5a072d28ff75a76dabed43767-Abstract-Conference.html -> iclr2025_livecodebench.html
+2026-11-12T12:42:21Z 200 https://proceedings.iclr.cc/paper_files/paper/2025/hash/c6f5851a0d9cb435ed8b50e87bd6a257-Abstract-Conference.html -> iclr2025_korbench.html
+2026-11-12T12:42:30Z 200 https://proceedings.iclr.cc/paper_files/paper/137-/bibtex -> iclr2025_korbench.bib
+2026-11-12T12:42:30Z 200 https://proceedings.iclr.cc/paper_files/paper/3168-/bibtex -> iclr2025_livecodebench.bib
+2026-11-12T12:49:30Z 200 https://arxiv.org/html/2601.07206 -> arxiv_html_2601.07206.html (fetched 2026-11-12T12:41Z this session; LLMRouterBench paper, Table 9 maps each benchmark to its source paper)

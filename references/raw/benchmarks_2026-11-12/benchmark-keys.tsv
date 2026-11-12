@@ -1,0 +1,12 @@
+key	benchmark	status	identifier	primary record(s)	note
+bbh	BBH	peer-reviewed (ACL Anthology .bib)	doi:10.18653/v1/2023.findings-acl.824; arXiv:2210.09261	acl_2023.findings-acl.824.bib + arxiv_api_benchmarks.xml	author names as in the Anthology record
+korbench	KOR-Bench	peer-reviewed (ICLR 2025 proceedings .bib)	arXiv:2410.06526	iclr2025_korbench.bib + iclr2025_korbench.html + arxiv_api_benchmarks.xml	proceedings record spells the 2nd author "Du, Xeron" (arXiv: Xinrun Du); initial is the same
+mbpp	MBPP	preprint (arXiv API record)	arXiv:2108.07732	arxiv_api_benchmarks.xml	no proceedings record; cited as a preprint
+finqa	FinQA	peer-reviewed (ACL Anthology .bib)	doi:10.18653/v1/2021.emnlp-main.300; arXiv:2109.00122	acl_2021.emnlp-main.300.bib + arxiv_api_benchmarks.xml	
+medqa	MedQA	peer-reviewed (Crossref record)	doi:10.3390/app11146421; arXiv:2009.13081	crossref_10.3390_app11146421.json + arxiv_api_benchmarks.xml	Applied Sciences 11(14), article 6421
+meld	MELD	peer-reviewed (ACL Anthology .bib)	doi:10.18653/v1/P19-1050; arXiv:1810.02508	acl_P19-1050.bib + arxiv_api_benchmarks.xml	
+kandk	Knights and Knaves (K&K)	preprint (arXiv API record)	arXiv:2410.23123	arxiv_api_benchmarks.xml	the paper LLMRouterBench Table 9 cites for K&K
+mmlupro	MMLU-Pro	peer-reviewed (Crossref record)	doi:10.52202/079017-3018; arXiv:2406.01574	crossref_10.52202_079017-3018.json + crossref_query_mmlupro.json + arxiv_api_benchmarks.xml	NeurIPS 37, pp. 95266-95290
+gpqa	GPQA	preprint (arXiv API record)	arXiv:2311.12022	arxiv_api_benchmarks.xml	LLMRouterBench cites it at the "First Conference on Language Modeling"; no proceedings record was fetched, so the venue is not promoted
+livemathbench	LiveMathBench	peer-reviewed (ACL Anthology .bib)	doi:10.18653/v1/2025.findings-acl.905; arXiv:2412.13147	acl_2025.findings-acl.905.bib + crossref_query_stable_reasoning.json + arxiv_api_benchmarks.xml	
+livecodebench	LiveCodeBench	peer-reviewed (ICLR 2025 proceedings .bib)	arXiv:2403.07974	iclr2025_livecodebench.bib + iclr2025_livecodebench.html + arxiv_api_benchmarks.xml	proceedings record gives the 2nd author as "Han" only (arXiv: King Han)

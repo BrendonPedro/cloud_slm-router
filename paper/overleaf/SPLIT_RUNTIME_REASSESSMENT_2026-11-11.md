@@ -1,4 +1,6 @@
-# Split runtime reassessment (2026-11-11)
+# Split runtime reassessment (2026-11-11; corrected the same day, see §11)
+
+Correction pass (2026-11-11, later): the required-speedup figures in §5 and §6 were recomputed with the gate's own strict pass predicate (CI lower bound > 0). The first version reported a full pass at f = 0.705 (1.42×); the correct figure is f = 0.689 (1.45×). The Δ ≥ 3.0 figure (f = 0.83, 1.2×) is unchanged. §11 records the root cause, a second finding about floating-point comparison in the frozen gate code, and the scope of the DGX Spark statement. E1-OPT is a draft protocol, not frozen and not pre-registered; wording below was changed accordingly.
 
 Scope: CPU-only reanalysis of the archived E0 profiles, a runtime and framework audit from current documentation and source, a corrected hardware audit, and a GO/NO-GO decision for an optimised-runtime follow-up. No GPU was used, no inference was run, no paid instance was started, E0 and its tag `e0-prereg-v1` are untouched, nothing is committed or pushed.
 
@@ -13,7 +15,7 @@ E0 was pre-registered on 2026-11-08 with one implementation freedom: "a two-proc
 2. Reusing the stock Qwen3 decoder layers made the split provably the same computation: bitwise equality with the unsplit model on CPU (LOCAL_VALIDATION, 41 checks) was the Q gate's foundation.
 3. Freezing the runtime before data prevented post-hoc tuning. The cost was pre-stated as threat 1 (PREREG §11): "SPLIT runs in an eager HF runtime while EDGE and REMOTE run in vLLM. This penalises SPLIT's latency … It is never used to overturn a FAIL." The Stage-3 REMOTE-HF cell that would have separated "this runtime" from "split itself" was never reached, because G-UB2 stopped first.
 
-What the measurement then showed (Stage 2, one H200, `server_compute_ns` of single-token steps, 36 usable requests per profile): fitted decode-step intercept 70.7 / 66.9 / 61.3 / 50.2 ms at k = 1 / 3 / 5 / 9 (62 / 58 / 56 / 46 layers). The H200 datasheet roofline for the same segments (weights 56.6 GB at k = 3 over 4.8 TB/s) is 11.8 ms at k = 3. Ratio 5.7. Per layer: about 1.2 to 1.4 ms measured against 0.2 ms roofline. The edge segment on the RTX 3090 (6 layers + LM head at k = 3) measured 11.7 ms against a 7.9 ms roofline (68 %). A fixed cost of roughly 1 ms per layer that does not scale with the GPU's bandwidth is the signature of per-kernel launch latency and Python dispatch in an eager loop (about 15 to 20 kernels per Qwen3 layer plus the cache bookkeeping), which CUDA-graph replay removes. Prefill was also slow (146 ms for 256 tokens at k = 3 against a 14.6 ms roofline) but prefill is under 1 % of a typical request's time in this workload (median 524 generated tokens).
+What the measurement then showed (Stage 2, one H200, `server_compute_ns` of single-token steps, 36 usable requests per profile): fitted decode-step intercept 70.7 / 66.9 / 61.3 / 50.2 ms at k = 1 / 3 / 5 / 9 (62 / 58 / 56 / 46 layers). The H200 datasheet roofline for the same segments (weights 56.6 GB at k = 3 over 4.8 TB/s) is 11.8 ms at k = 3. Ratio 5.7. Per layer: about 1.2 to 1.4 ms measured against 0.2 ms roofline. The edge segment on the RTX 3090 (6 layers + LM head at k = 3) measured 11.7 ms against a 7.9 ms roofline (68 %). A roughly constant per-layer cost of about 1 ms across the segment is consistent with per-kernel launch latency and Python dispatch in an eager loop (about 15 to 20 kernels per Qwen3 layer plus cache bookkeeping). This is a hypothesis: no CUDA profiler run exists. CUDA-graph replay removes exactly that overhead and leaves memory traffic unchanged, so the optimised runtime tests the hypothesis directly. The roofline is an optimistic lower bound on the step, not a level an implementation is known to reach; the four quantities to keep apart are the bandwidth roofline (lower bound), the measured effective bandwidth (what a runtime attains), a theoretical impossibility (a bound below the threshold at the roofline) and an implementation inefficiency (a measured step above the roofline). Prefill was also slow (146 ms for 256 tokens at k = 3 against a 14.6 ms roofline) but prefill is under 1 % of a typical request's time in this workload (median 524 generated tokens).
 
 ## 2. What vLLM supports (checked 2026-11-10 against the main branch)
 
@@ -64,16 +66,18 @@ Method. `e0_r.py` (commit 81461b6) is imported unmodified. The only change is a 
 4. Is the server term the dominant difference: yes, it is the only difference.
 5. Any other measured term preventing a pass: at the best cell no. The edge segment (11.7 ms + 0.7 ms per 1,000 context tokens at k = 3, cap 12 GB, × 0.9) and the competitor profile are also in the bound; with a perfectly fast server (f = 0) the best cell reaches +15.25 and 9 of 10 no-raw-text cells pass, so the edge term alone does not stop a pass. The S1 quality gap caps what any runtime can recover (+15.25). At D ≥ 300 s the 8B-AWQ thinking competitor (U = 0.63) beats non-thinking SPLIT (0.58) at any speed; thinking SPLIT needs a server step below about 27 ms (f ≈ 0.4) to win at D = 600 s.
 
-### 5.2 Required server compute at the best cells
+### 5.2 Required server compute at the best cells (corrected; `reanalysis/threshold_audit.py`, 40-step bisection)
 
 | Target | any cell | 12 GB, D = 60 s | 16 GB, D = 60 s | 12 GB, D = 600 s | 16 GB, D = 600 s |
 |---|---|---|---|---|---|
 | Δ ≥ 0 (reach the competitor) | already (f = 1, +0.5) | f = 1 | f = 1 | f = 0.874 | f = 0.834 |
-| Δ ≥ +3.0 (the E0 gate) | **f = 0.830 (1.20×)** | 0.830 | 0.814 | 0.734 | 0.679 |
-| CI lower bound > 0 | f = 0.689 | 0.689 | 0.660 | 0.661 | 0.596 |
-| Full pass (Δ ≥ 3.0 and CI > 0) | **f = 0.705 (1.42×)** | 0.705 | 0.675 | 0.672 | 0.609 |
+| Δ ≥ +3.0 as `e0_r.py` computes it (float) | **f = 0.8297 (1.21×)** | 0.8297 | 0.8140 | 0.7344 | 0.6786 |
+| Δ ≥ +3.0 in exact arithmetic (Δ = 3.00; §11.3) | f = 0.8410 (1.19×) | 0.8410 | | | |
+| CI lower bound > 0 (strict) | f = 0.6888 | 0.6888 | 0.6602 | 0.6606 | 0.5958 |
+| **Full pass (Δ ≥ 3.0 and CI > 0), the gate's predicate** | **f = 0.6888 (1.45×)** | 0.6888 | 0.6602 | 0.6606 | 0.5958 |
+| withdrawn first-pass figure (CI ≥ 0) | 0.7054 (1.42×) | 0.7054 | 0.6754 | 0.6724 | 0.6094 |
 
-In milliseconds at k = 3: the raw measured step is 66.9 ms (60.2 ms after the 0.9 discount). Δ ≥ 3.0 needs a discounted server intercept ≤ 50.0 ms (raw ≤ 55.5 ms). A full pass needs ≤ 42.4 ms discounted (raw ≤ 47.2 ms). These are small improvements: a 1.2× and a 1.42× faster server step, against a measured-to-roofline ratio of 5.7×.
+Because Δ ≥ 3.0 is already satisfied where the CI first clears zero, the full-pass threshold equals the CI threshold in every column. In milliseconds at k = 3: the raw measured step is 66.9 ms (60.2 ms after the 0.9 discount). Δ ≥ 3.0 needs a raw server step ≤ 55.5 ms (49.9 ms discounted); a full pass needs raw ≤ 46.1 ms (41.5 ms discounted). These are a 1.21× and a 1.45× faster server step, against a measured-to-roofline ratio of 5.7×. The two speedups answer different questions: 1.21× is what the E0 rule needed to stop saying STOP; 1.45× is what a cell needs to pass with a CI above zero.
 
 ### 5.3 The curve: server scaling factor → best bounded advantage (no-raw-text cells, 12 and 16 GB)
 
@@ -81,9 +85,11 @@ In milliseconds at k = 3: the raw measured step is 66.9 ms (60.2 ms after the 0.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1.00 (measured, G-UB2) | 60.2 | +0.50 | −4.75 | 0 | 0 | −17.00 | +0.50 | −2.00 | −5.00 | −1.75 | −17.00 | +0.50 | −2.25 | −5.00 | −2.75 |
 | 0.90 | 54.2 | +2.25 | −3.25 | 0 | 0 | −14.75 | +2.25 | −1.75 | −5.00 | −0.25 | −15.25 | +2.25 | −1.75 | −5.00 | −0.75 |
-| 0.83 (gate) | 50.0 | +3.0 | −2.4 | 1 | 0 | | | | | | | | | | |
+| 0.8297 (gate, as computed) | 49.9 | +3.25 | −2.00 | 1 | 0 | | +3.25 | | | | | | | | |
+| 0.83 to 0.841 (Δ = 3.00 exactly; float says 2.9999999999999973) | 50.0 to 50.6 | +3.00 | −2.50 | 0 by code | 0 | | +3.00 | | | | | | | | |
 | 0.80 | 48.2 | +3.50 | −2.00 | 2 | 0 | −11.25 | +3.50 | −1.25 | −5.00 | +1.00 | −13.00 | +3.50 | −1.25 | −5.00 | +0.50 |
-| 0.705 (full pass) | 42.4 | +5.2 | +0.0 | 3 | 1 | | | | | | | | | | |
+| 0.7054 to 0.689 | 42.4 to 41.5 | +5.25 | **exactly 0.00** | 3 | **0** | | +5.25 | | | | | | | | |
+| **0.6888 (full pass)** | 41.5 | +5.50 | +0.25 | 3 | **1** | | +5.50 | | | | | | | | |
 | 0.70 | 42.1 | +5.25 | +0.00 | 3 | 0 | −6.75 | +5.25 | −0.50 | −5.00 | +4.00 | −7.75 | +4.50 | −0.50 | −5.00 | +2.50 |
 | 0.60 | 36.1 | +7.75 | +2.25 | 4 | 3 | −1.25 | +7.75 | −0.25 | −5.00 | +6.25 | −3.25 | +6.50 | −0.25 | −5.00 | +4.50 |
 | 0.50 | 30.1 | +9.50 | +4.00 | 4 | 4 | +1.00 | +9.50 | +0.25 | −5.00 | +7.25 | +0.75 | +8.75 | +0.00 | −5.00 | +6.50 |
@@ -94,7 +100,7 @@ In milliseconds at k = 3: the raw measured step is 66.9 ms (60.2 ms after the 0.
 | 0.10 | 6.0 | +13.50 | +8.25 | 8 | 8 | +13.50 | +12.50 | +0.25 | +8.75 | +11.75 | +11.75 | +12.25 | +0.25 | +5.75 | +11.75 |
 | 0.00 | 0.0 | +15.25 | +10.00 | 9 | 9 | +15.25 | +12.50 | +5.75 | +11.75 | +11.75 | +13.50 | +12.50 | +0.25 | +8.25 | +11.75 |
 
-(The f = 0.83 and 0.705 rows are the bisection results; the other rows are the grid in `out/curve.json`.) Figure: `main.tex` Fig. 5.
+(The 0.8297, 0.83 to 0.841, 0.7054 to 0.689 and 0.6888 rows come from `threshold_audit.py`; the other rows are the grid in `out/curve.json`, which now also contains f = 0.83, 0.75, 0.705, 0.70, 0.69, 0.689 and 0.688.) The first version of this table showed "1 passing cell" at 0.705 and 0 at 0.70; the 0.705 entry was hand-filled from a bisection that accepted CI low ≥ 0 and was wrong (§11.1). Figure: `main.tex` Fig. 5.
 
 Mechanism of the discontinuity (12 GB, D = 60 s, non-thinking SPLIT; 200 queries × 2 seeds; its total correct rate is 0.580):
 
@@ -103,10 +109,11 @@ Mechanism of the discontinuity (12 GB, D = 60 s, non-thinking SPLIT; 200 queries
 | 1.00 | 0.460 | 0.730 | 37.4 / 63.7 / 111.8 |
 | 0.83 | 0.485 | 0.762 | 32.0 / 54.6 / 95.7 |
 | 0.705 | 0.5075 | 0.805 | 28.0 / 47.8 / 83.9 |
+| 0.689 | 0.5100 | 0.812 | 27.5 / 46.9 / 82.4 |
 | 0.50 | 0.550 | 0.890 | 21.5 / 36.7 / 64.5 |
 | 0.00 | 0.580 | 0.983 | 5.7 / 9.8 / 17.5 |
 
-Between f = 1 and f = 0.705, 30 of the 400 query-seed pairs cross the 60-s deadline, 19 of them correct: +4.75 points. The competitor is fixed at U = 0.455 (8B-AWQ thinking, 61 % on time at 60 s, 0.63 correct). Per token at 800 tokens of context, the bound's SPLIT step is 71.7 ms (edge 11.0 + server 60.7, both discounted) against 8.9 ms for the 8B-AWQ competitor; 32B non-thinking answers have a median of 524 tokens (p90 1,553), 8B thinking answers a median of 4,851.
+Between f = 1 and f = 0.8297, 14 of the 400 query-seed pairs cross the 60-s deadline, 11 of them correct (+2.75 points); between f = 1 and f = 0.6888, 33 cross, 20 of them correct (+5.0 points). The competitor is fixed at U = 0.455 (8B-AWQ thinking, 61 % on time at 60 s, 0.63 correct). Per token at 800 tokens of context, the bound's SPLIT step is 71.7 ms (edge 11.0 + server 60.7, both discounted) against 8.9 ms for the 8B-AWQ competitor; 32B non-thinking answers have a median of 524 tokens (p90 1,553), 8B thinking answers a median of 4,851.
 
 ### 5.4 Link what-if (not part of the gate; the gate is zero-network by design)
 
@@ -136,7 +143,7 @@ A local-network link (≤ 1 ms) costs at most 0.5 points. A 20-ms wide-area link
 | H100 SXM | 3,350 | 16.9 ms, +11.75 pass | +10.25 pass | +8.75 pass |
 | H200 | 4,800 | 11.8 ms, +12.25 pass | +11.75 pass | +10.50 pass |
 
-Minimum **effective** server decode bandwidth: 1,127 GB/s for Δ ≥ 3.0 in some cell (server step 50.2 ms at k = 3); 1,322 GB/s for a full pass (42.8 ms). A GB10 is 4 to 5 times short at its roofline. Independent public measurements agree with the roofline: Qwen3-32B bf16 decodes at 3.7 tok/s on a DGX Spark (NVIDIA cuTile tutorial), q4 at 9 to 14 tok/s (Ollama blog, NVIDIA forum).
+Minimum **effective** server decode bandwidth, with the archived RTX 3090 edge and competitor profiles: 1,127 GB/s for Δ ≥ 3.0 in some cell (roofline server step 50.2 ms at k = 3); 1,357 GB/s for a full pass with CI > 0 (41.7 ms; the first version said 1,322 with CI ≥ 0). The roofline steps differ slightly from the scaled-measured steps of §5.2 because the roofline profile has its own slope and prefill terms. A GB10 is 4 to 5 times short at its roofline **for this edge**. Scope: this scan holds for the archived edge profiles only. A different edge device changes the split's six edge layers and every competitor, which runs all of its layers on the edge, so Δ is not monotone in edge speed and the scan is not a bound for every target edge (§11.4). Independent public measurements agree with the roofline: Qwen3-32B bf16 decodes at 3.7 tok/s on a DGX Spark (NVIDIA cuTile tutorial), q4 at 9 to 14 tok/s (Ollama blog, NVIDIA forum).
 
 ### 6.2 Correction of the previous pass
 
@@ -157,39 +164,62 @@ Minimum **effective** server decode bandwidth: 1,127 GB/s for Δ ≥ 3.0 in some
 
 What must be inspected physically or asked before the final experiment (RUNBOOK §1 of E1-OPT): for each lab machine, hostname, OS and kernel, CPU architecture, `nvidia-smi` (GPU name, memory, driver, compute capability), CUDA toolkit and PyTorch versions, free memory; the NIC speeds and the measured RTT and throughput between the two machines; who assigns roles; whether `tc netem` (CAP_NET_ADMIN) is allowed; whether the 2 × RTX 3090 edge server of the October manuscript still exists and whether it is the Asus machine.
 
-### 6.4 What the criterion implies for the lab pair, by role (derived, C)
+### 6.4 What the criterion implies for the lab pair, by role (derived, C; corrected scope)
 
-- DGX Spark as **server**: fails the desk gate at its roofline in every cell. No runtime can change this. If it is the only server, E1-OPT ends at Stage 0 with a hardware result.
-- DGX Spark as **edge**: its 128 GB holds Qwen3-32B whole, so the "edge too small" premise exists only as an emulated budget; its 273 GB/s makes both the split's edge segment and the 8B-AWQ competitor about 3.4 times slower than on the RTX 3090 (roofline ratio), which changes every profile. The gate must be re-run with measured profiles on that device (E1-OPT Stage 3).
-- Asus server as **server**: admissible only if its GPU's effective decode bandwidth is ≥ 1,127 GB/s (≥ 1,322 GB/s for a pass with CI > 0): A100 / H100 / H200 class or an RTX PRO 6000 Blackwell at ≥ 70 % efficiency; an RTX 3090 / 4090 / 6000 Ada class GPU fails even at 100 % efficiency.
-- Nothing above assigns roles. The inventory does.
+- DGX Spark as **server**, statement A (supported): combined with the archived RTX 3090 edge and competitor profiles, a 273 GB/s server fails the bound in every cell at its roofline (best −5.0 at 16 GB, D = 600 s). Statement B ("cannot be the server under any target edge") is **not** supported: a slower edge lowers the competitor's on-time utility, so the bound must be recomputed with profiles measured on the actual target edge (E1-OPT Stage 3). The Spark's 128 GB does hold the server segment (57 GiB at k = 3), so it is server-feasible under the inventory rules.
+- DGX Spark as **edge**: its 128 GB holds Qwen3-32B whole, so the "edge too small" premise exists only as an emulated budget; its 273 GB/s makes both the split's edge segment and the 8B-AWQ competitor slower than on the RTX 3090 (roofline ratio about 3.4), which changes every profile in both directions. Fresh profiles are required.
+- Asus server as **server**: feasible iff one of its GPUs holds ≥ 59 GiB at k = 3 (≥ 55 GiB at k = 5). A 24 GB GPU cannot. With the archived edge profiles, its GPU's effective decode bandwidth would need ≥ 1,127 GB/s for Δ ≥ 3 and ≥ 1,357 GB/s for a pass: A100 / H100 / H200 class, or an RTX PRO 6000 Blackwell at ≥ 70 % efficiency for Δ ≥ 3 only; an RTX 3090 / 4090 / 6000 Ada fails even at 100 % efficiency. These figures are a screen, not the decision.
+- Nothing above assigns roles. The inventory does (PREREG_E1OPT §6.3), from memory fit and software availability, before any measurement.
 
 ## 7. GO / NO-GO for an optimised Split follow-up
 
 | Criterion | Finding | Met? |
 |---|---|---|
 | 1. Technically credible implementation that preserves the research question | Option E keeps E0's modules, weights, cut, ownership, wire content and sampling; CPU tests show prefix mode bitwise equal to E0 and HF, static mode token-identical on greedy decoding | yes |
-| 2. Required speedup plausibly reachable | 1.2× (gate) and 1.42× (full pass) needed; measured runtime is 5.7× above the roofline with a launch-bound per-layer signature; CUDA graphs target exactly that | yes |
+| 2. Required speedup plausibly reachable | 1.21× (Δ ≥ 3, as computed; 1.19× exact) and 1.45× (full pass) needed, with the archived edge profiles; the measured runtime is 5.7× above the roofline; the roughly constant per-layer cost is consistent with launch and dispatch overhead, which CUDA graphs remove directly; the roofline is a lower bound, not a promise | yes, as a hypothesis to test |
 | 3. Answers something E0 did not | E0 could not separate "this runtime" from "split itself" (threat 1; Stage 3 not reached) | yes |
-| 4. Testable on the Asus server and DGX Spark | conditional: the DGX Spark cannot be the server (public bandwidth); the Asus machine's GPU is unknown; E1-OPT Stage 0 is a desk gate on the inventory that stops before any GPU time if the pair cannot host the server segment | conditional |
-| 5. Could materially change the deployment conclusion | at f ≤ 0.70 the best cell passes with CI > 0 and 3 to 9 cells reach Δ ≥ 3; the Split conclusion would flip in the 12/16 GB, no-raw-text, D = 60 s regime (and D = 600 s with thinking SPLIT at f ≤ 0.4) | yes |
+| 4. Testable on the Asus server and DGX Spark | conditional: the Asus machine's GPU is unknown; the DGX Spark is server-feasible by memory but fails the archived-edge bound; E1-OPT Stage 0 is an inventory and role-feasibility check (memory fit, software, link) with no performance input, and the first performance decision uses fresh profiles from both machines | conditional |
+| 5. Could materially change the deployment conclusion | at f ≤ 0.6888 the best cell passes with CI > 0 and 3 to 9 cells reach Δ ≥ 3; the Split conclusion would flip in the 12/16 GB, no-raw-text, D = 60 s regime (and D = 600 s with thinking SPLIT at f ≤ 0.4) | yes |
 
-**Decision: GO, as a pre-registered experiment (E1-OPT) whose first stage is a desk hardware gate.** Not GO for "more time is available"; GO because the gap between the measured step and the required step is 1.2× while the gap between the measured step and the hardware limit is 5.7×, and because the E0 archive cannot answer the design question. NO-GO conditions are inside the pre-registration: the desk gate (server bandwidth), the equivalence gate (Q after one fix), and the bound gates after each measured segment.
+**Decision: GO, as a follow-up protocol (E1-OPT, draft, to be frozen by tag before any GPU executes its code) whose first stage is an inventory and role-feasibility check.** Re-examined after the correction: the audit moved the full-pass requirement from 1.42× to 1.45× and left Δ ≥ 3 at 1.21×; neither changes the reasoning. GO because the gap between the measured step and the required step is 1.2× to 1.45× while the gap between the measured step and the hardware limit is 5.7×, and because the E0 archive cannot answer the design question. NO-GO conditions are inside the protocol: the feasibility check (memory fit, software availability, link), the equivalence gate (Q after one fix, no timings), and G-UB-E1 after fresh profiles from both target machines. The follow-up is not pre-registered until `e1opt-prereg-v1` exists.
 
 What this does not say: that an optimised runtime will pass. The quality headroom caps the advantage at +15.25; the real link, the real edge GPU and server contention all subtract from the bound; and at 16 GB the S1 CIs include zero. The follow-up can end in "removed with a runtime within X % of the roofline", which would close threat 1 for this design.
 
-## 8. Implications for the final Asus / DGX Spark testing
+## 8. Implications for the final Asus / DGX Spark testing (corrected)
 
-1. The final test is E1-OPT Stage 4 (joint cells over the lab link) and nothing in the current manuscript is that test. The manuscript now says so.
-2. Before any code runs on the lab machines: the Stage-0 inventory and desk gate. If the DGX Spark is the only server-class box, the lab pair cannot host this split; the paper then reports the bandwidth criterion as the deployment result and the E0 STOP as a screen.
-3. If the Asus server has an A100 / H100 / H200-class GPU: E1-OPT runs end to end on the lab pair, with the DGX Spark as the (emulated-budget) edge and all edge profiles re-measured there.
-4. Software risks on the DGX Spark, from public sources: aarch64 wheels, FlashAttention-2 for sm_121 (source build), vLLM on a CUDA-13 nightly track. The E1 runtime's SDPA fallback and CUDA graphs do not need FlashAttention, but the edge competitor needs vLLM; its availability on the Spark must be checked at Stage 0.
-5. No rented GPU is needed for the decision; a rented H200 Stage 2 would only screen the runtime on a server class the lab may not have, and is the user's call.
+1. The final test is E1-OPT Stage 4 (joint cells over the lab link) and nothing in the current manuscript is that test. The manuscript says so.
+2. Before any code runs on the lab machines: the Stage-0 inventory and the feasibility and role rules of PREREG_E1OPT §6. No archived profile and no datasheet-bandwidth bound decides anything at Stage 0. The runtime is then frozen (Stage 1a) before any GPU executes E1 code.
+3. Every profile in the final decision is measured on the physical lab machines (split edge segment, every eligible competitor, memory fit, server segment, link). Archived RTX 3090 or H200 profiles are screening material only, even if a GPU model matches.
+4. If the Asus server has a GPU with ≥ 59 GiB: it is server-feasible; the DGX Spark would then be the (emulated-budget) edge unless its GPU bandwidth is higher. If the Asus server's largest GPU has 24 GB: it cannot be the server, and the DGX Spark is the only server-feasible machine; whether it passes the bound is then measured, not assumed.
+5. Software risks on the DGX Spark, from public sources: aarch64 wheels, FlashAttention-2 for sm_121 (source build), vLLM on a CUDA-13 nightly track. The E1 runtime's compatibility fallback (SDPA, eager step) covers the first two without any speed comparison; the edge competitor needs vLLM, whose availability is a Stage-0 inventory item.
+6. No rented GPU is needed for the decision; a rented Stage 2 would be a labelled screen only.
 
-## 9. What was built tonight (CPU only; nothing run on a GPU)
+## 9. What was built (CPU only; nothing run on a GPU; revised in the correction pass; completed in the implementation pass, §12)
 
-`~/research/LLMRouterBench/diagnostics/deployment_e1opt/`: `PREREG_E1OPT.md` (draft, to freeze by tag), `IMPLEMENTATION_PLAN.md`, `RUNBOOK.md`, `README.md`; `e1_spec.py`, `e1_static_cache.py` (fixed-shape KV, prefix and static modes), `e1_segment.py` (Segment, GraphedStep with CUDA-graph capture and CPU fallback, USplitEdge, LocalMiddle), `e1_attention.py` (registered `e1_static` kernel: `flash_attn_with_kvcache` on CUDA, SDPA fallback), `e1_protocol.py` (E0 message set, version 2, buffers allocated once), `e1_memory.py`, `e1_bench.py` (`profile-segment` in E0's schema, `gate-ub` calling E0's gate), `tests/test_e1_cpu.py` (9 tests, all pass, including Qwen3-0.6B real weights: prefix mode bitwise equal to HF and to E0's runtime; static mode greedy tokens equal to HF; wire byte accounting; refusals; E0 directory unchanged since commit 81461b6; tag `e0-prereg-v1` at `1b277b3`), `reanalysis/` (the three scripts and their outputs).
+`~/research/LLMRouterBench/diagnostics/deployment_e1opt/`: `PREREG_E1OPT.md` (draft protocol, revision 2, to freeze by tag; not pre-registered), `IMPLEMENTATION_PLAN.md`, `RUNBOOK.md`, `README.md`; `e1_spec.py`, `e1_static_cache.py` (fixed-shape KV, prefix and static modes), `e1_segment.py` (Segment, GraphedStep with CUDA-graph capture and CPU fallback, USplitEdge, LocalMiddle), `e1_attention.py` (registered `e1_static` kernel: `flash_attn_with_kvcache` on CUDA, SDPA fallback), `e1_protocol.py` (E0 message set, version 2, buffers allocated once), `e1_memory.py`, `e1_bench.py` (`profile-segment` in E0's schema, `gate-ub` calling E0's gate), `tests/test_e1_cpu.py` (9 tests, all pass, including Qwen3-0.6B real weights: prefix mode bitwise equal to HF and to E0's runtime; static mode greedy tokens equal to HF; wire byte accounting; refusals; E0 directory unchanged since commit 81461b6; tag `e0-prereg-v1` at `1b277b3`), `tests/test_reanalysis.py` (7 tests: f = 1 bitwise reproduction, strict predicate, per-cell monotonicity, both thresholds, float rule), `reanalysis/` (four scripts and their outputs, including `threshold_audit.py`).
 
 ## 10. One next research question
 
-With the server segment of the U-split executed by a runtime frozen before measurement and running near its bandwidth roofline, does Qwen3-32B keep a ≥ 3.0-point on-time advantage over the best edge-feasible model at an emulated 12 GB budget, D = 60 s, under a no-raw-text policy, on the laboratory's edge and server machines?
+With the server segment of the U-split executed by a runtime frozen before any GPU performance measurement, does Qwen3-32B keep a ≥ 3.0-point on-time advantage over the best edge-feasible model at an emulated 12 GB budget, D = 60 s, under a no-raw-text policy, on the laboratory's two machines in the roles the inventory assigns, with every profile measured there?
+
+## 11. Correction pass (2026-11-11, later the same day)
+
+### 11.1 Root cause of the f = 0.705 versus f = 0.700 inconsistency
+`server_speedup_curve.py` bisected the "full pass" on `min(Δ − 3, CI_low) ≥ 0`, which accepts CI_low = 0 exactly. The gate (`e0_r.py` line 206) uses `delta_pt >= 3.0 and ci95[0] > 0`, strict. With binary scores and 200 × 2 queries the bootstrap statistic is a multiple of 0.25 pt, and the 2.5th percentile of the 12 GB / 60 s cell is exactly 0.0 for f in (0.6888, 0.7054]. The bisection therefore returned 0.7054; the "1 passing cell" in the 0.705 table row was hand-filled from that result and was wrong; the 0.70 row came from the gate's own `pass` flag and was right. No cell loses a pass as f decreases: per-cell U_SPLIT, Δ, CI_low and pass are monotone non-increasing in f on a 0.005 grid (`out/fine_grid.json`, 201 points, zero violations), because a faster server only lowers Split's time per query and per replicate while the competitor and the quality are unchanged, and each replicate's re-selected maxima are maxima of non-decreasing quantities.
+
+### 11.2 Corrected figures
+Δ ≥ 3.0 at f = 0.8297 (1.21×, raw step 55.5 ms), unchanged. Full pass at f = 0.6888 (1.45×, raw 46.1 ms), where the 12 GB / 60 s cell has Δ = +5.50 and CI [+0.25, +10.25]. Pass bandwidth 1,357 GB/s (was 1,322). f = 1 reproduces every evaluated G-UB2 cell bitwise (Δ, CI, pass, selected actions). Regression tests: `tests/test_reanalysis.py`.
+
+### 11.3 Second finding: floating-point comparison in the frozen gate code
+At f in [0.8297, 0.8410] the 12 GB / 60 s cell has U_SPLIT = 0.485 and U_comp = 0.455, so Δ = 3.00 exactly, but `(0.485 − 0.455) × 100` evaluates to 2.9999999999999973 and `e0_r.py` does not count it as ≥ 3.0. E0's own result (+0.5, −17, …) was nowhere near a boundary and is unaffected. For E1-OPT the draft protocol pre-specifies rounding to 10^-6 pt before comparison (`e1_spec.decide_cell`, PREREG_E1OPT §7.2) and reports E0's flag alongside; the reviewer must approve or delete that rule before tagging. In exact arithmetic Δ ≥ 3 is reached at f = 0.8410 (1.19×); the strict-pass threshold is the same under both rules.
+
+### 11.4 Scope of the DGX Spark statement
+Supported: with the archived RTX 3090 edge and competitor profiles, a 273 GB/s server fails the bound in every cell at its roofline. Not supported: that it fails for every target edge. The competitor runs all of its layers on the edge; the split runs six. A slower edge therefore lowers the competitor's on-time utility more than the split's, Δ is not monotone in edge speed, and no edge-independent bound below +3.0 exists from the archived data. The Stage-0 performance STOP of the first draft, which used those archived profiles, was removed for this reason.
+
+### 11.5 Wording corrected
+"Signature of launch overhead" became "consistent with launch and dispatch overhead; a hypothesis, no profiler run"; "pre-registered E1-OPT" became "E1-OPT follow-up protocol, draft, not frozen" throughout this document, the manuscript, the audit and the review notes.
+
+
+## 12. Implementation pass (2026-11-11, later): every executable component now exists
+
+Added to `~/research/LLMRouterBench/diagnostics/deployment_e1opt/` (all CPU-tested, 51 tests across seven files, see its README): `e1_freeze.py` (freeze record writer and checker: hashes of all 27 E1 files and of the E0 files E1 imports, versions, per-device runtime branch with reason, roles, decision rule; refuses on any mismatch), `e1_inventory.py` (Stage-0 inventory and deterministic role feasibility: memory fit, software, one server GPU, link; no bandwidth, no timing), `e1_provenance.py` (every row carries experiment, stage, machine, GPU, freeze hash, target/screening, model, cut, class, branch; the gates reject anything else), `e1_equivalence.py` (Stage 1b; `assert_no_timing_fields` guards every output), `e1_profile.py` (Stages 2 and 3; E0's `edge-fit` reused unchanged for competitors), `e1_joint.py` (Stage 4; HELLO whitelisted and carrying the freeze hash; fail closed), `e1_gate.py` (E0's gate code behind the provenance check, plus the approved rounded-decision sidecar). PREREG_E1OPT.md revision 3 records the five approved decisions; RUNBOOK.md revision 3 gives the commands per stage. Status stays DRAFT: the tag `e1opt-prereg-v1` is the user's action after review.
